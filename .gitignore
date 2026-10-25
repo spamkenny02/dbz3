@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+roms/
+*.sfc
+*.smc
+*.ips
+*.bps
+*.bin
+.DS_Store
