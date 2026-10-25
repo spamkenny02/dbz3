@@ -16,6 +16,7 @@ Research and tooling for a homebrew ROM patch that adds a replayable, branching 
 - [x] Inspect the supplied French ROM headers and hashes.
 - [x] Map top-level state dispatchers and identify a three-position mode-selector candidate.
 - [x] Compare the supplied French *La Légende Saien* ROM as a reference for event/script architecture.
+- [x] Add byte-level checks for the recorded state tables and selector limits.
 - [ ] Confirm visible menu labels and graphics/tilemap data at runtime.
 - [ ] Confirm battle start/result/return hooks.
 - [ ] Implement the first story-scene prototype.
@@ -30,10 +31,11 @@ Python 3.10+; standard library only.
 ```bash
 python tools/inspect_rom.py "path/to/Dragon Ball Z - Ultime Menace (France).sfc" --min-fill 4096
 python tools/compare_roms.py "path/to/Ultime Menace.sfc" "path/to/La Legende Saien.sfc"
+python tools/verify_known_layout.py "path/to/Dragon Ball Z - Ultime Menace (France).sfc"
 python -m unittest discover -s tests -v
 ```
 
-See `docs/` for current static-analysis notes and `docs/patch-spec-format.md` for the guarded IPS format.
+See docs/ for current static-analysis notes and docs/patch-spec-format.md for the guarded IPS format. The known-layout verifier expects the exact ROM SHA-256 documented in docs/analysis-results.md.
 
 ## Copyright / distribution
 
