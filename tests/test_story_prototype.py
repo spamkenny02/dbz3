@@ -16,6 +16,11 @@ class StoryPrototypeAssetsTests(unittest.TestCase):
     def test_font_is_64_snes_2bpp_tiles(self):
         self.assertEqual(len(make_font()), 64 * 16)
 
+    def test_font_interleaves_bitplanes_per_scanline(self):
+        glyph = make_font()[(ord('A') - 32) * 16:(ord('A') - 31) * 16]
+        self.assertEqual(glyph[0::2], bytes([0x38, 0x44, 0x44, 0x7C, 0x44, 0x44, 0x44, 0]))
+        self.assertEqual(glyph[1::2], bytes(8))
+
     def test_every_map_is_a_full_32_by_32_tilemap(self):
         maps = make_maps()
         self.assertEqual(set(maps), set(MAP_OFFSETS))
@@ -34,14 +39,14 @@ class StoryPrototypeAssetsTests(unittest.TestCase):
 
     def test_code_assembles_with_all_short_branches_in_range(self):
         code, labels = assemble_code()
-        self.assertEqual(len(code), 1093)
-        self.assertEqual(hashlib.sha256(code).hexdigest(), "b744e87c7db3cf8d08674678373625821745954f7765e8ce72f4e8fc4be058fa")
+        self.assertEqual(len(code), 1332)
+        self.assertEqual(hashlib.sha256(code).hexdigest(), "4280c10dd303e2813b623815ad9b87c6ffada9f34401df524418253bca30a380")
         self.assertLess(CODE_ROM_START + len(code), FONT_OFFSET)
         expected_labels = {
-            "StoryInit": 0x8054, "StoryFrame": 0x806C, "MenuInit": 0x814C,
-            "MenuFrame": 0x816A, "DrawScreen": 0x822A,
-            "NativeMenuAddStory": 0x8337, "StorySelectState": 0x846E,
-            "StoryReturnToNativeMenu": 0x8483,
+            "StoryInit": 0x8054, "StoryFrame": 0x806F, "MenuInit": 0x814F,
+            "MenuFrame": 0x816D, "DrawScreen": 0x822D,
+            "NativeMenuAddStory": 0x840E, "StorySelectState": 0x8545,
+            "StoryReturnToNativeMenu": 0x855A,
         }
         for name, address in expected_labels.items():
             self.assertEqual(labels[name], address)
@@ -107,6 +112,7 @@ class StoryPrototypeAssetsTests(unittest.TestCase):
                         db = pull(1)
                     elif op == 0x28:
                         p = pull(1)
+                        break  # saved context restored; next LDA/CLC replays the hook
                     elif op in (0xA9, 0xA2):
                         idx = 0 if op == 0xA9 else 1
                         size = 1 if p & (0x20 if idx == 0 else 0x10) else 2
