@@ -517,7 +517,7 @@ def assemble_code() -> tuple[bytes, dict[str, int]]:
     # Non-returning Story B path: unwind StoryFrame's saved P/DBR first.
     a.label("StoryReturnToNativeMenu")
     a.emit(0x28, 0xAB, 0xE2, 0x20, 0xA9, 0x02, 0x8F, 0x78, 0x18, 0x7E)
-    a.emit(0xA9, 0x00, 0x8F, 0x79, 0x18, 0x7E, 0xA9, 0x0D)
+    a.emit(0xA9, 0x00, 0x8F, 0x79, 0x18, 0x7E, 0xA9, 0x06)
     a.emit(0x5C, 0x7A, 0x80, 0x80)  # return to native state 6/submode 2
 
     a.label("NativeMainConfirm")
@@ -628,7 +628,6 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
         patched[offset:offset + len(tilemap)] = tilemap
 
     expected = {
-        0x7F90: bytes.fromhex("06"),
         0x00E9: bytes.fromhex("F9 80 80"),
         0x00F1: bytes.fromhex("FB 80 80"),
         0x02D3: bytes.fromhex("E3 82 80"),
@@ -641,7 +640,6 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
         0x1FA9C9: bytes.fromhex("AD 6B 19 1A"),
     }
     replacements = {
-        0x7F90: bytes.fromhex("0D"),
         0x00E9: bytes.fromhex("00 80 C0"),
         0x00F1: bytes.fromhex("02 80 C0"),
         0x02D3: bytes.fromhex("2A 80 C0"),
@@ -728,11 +726,11 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
         },
         "notes": [
             "New code/data are placed in appended LoROM banks C0-FF, not in the old FF-filled range that has existing references.",
-            "The original French menu is shown directly at boot; HISTOIRE occupies its first two-row slot, followed by COMBAT, CHAMPIONNAT and OPTION.",
+            "After the original introduction, HISTOIRE occupies the first slot of the native French menu, followed by COMBAT, CHAMPIONNAT and OPTION.",
             "The main title selector at $196B changes from 0..2 to 0..3; confirmation of index 0 enters Story state 12; indices 1-3 route to the three native modes.",
             "The first story slice has two intro pages, a two-way choice, and two distinct short endings.",
             "No SRAM is added; cursor/page/route flags are volatile WRAM only.",
-            "Boot state 13 initializes the native title/menu resources and opens the four-choice selector directly. Story B returns through the same initialization.",
+            "Original boot state 6 and the Goku/Vegeta introduction are preserved. HISTOIRE is first in the subsequent native menu. Story B returns to the original title flow.",
             "This is not emulator-tested. Validate 4 MiB LoROM mapping, boot, native menu label visibility, DMA, controller input, mode routing and transitions in Mesen/bsnes before release.",
         ],
     }

@@ -1,7 +1,7 @@
-> **Latest: Native Histoire v4.** Opens the native menu directly at startup,
-> with HISTOIRE first and selected by default. Tested with Snes9x 1.61.
-> [Download IPS](patches/Ultime-Menace-Native-Histoire-v4.ips)
-> · [Validation and limits](docs/native-histoire-v4.md).
+> **Latest: Native Histoire v5.** Restores the original Goku/Vegeta intro.
+> HISTOIRE remains first and selected in the following native menu.
+> [Download IPS](patches/Ultime-Menace-Native-Histoire-v5.ips)
+> · [Validation and limits](docs/native-histoire-v5.md).
 > Apply to the original French ROM, not an older patched version.
 
 # DBZ3 — Ultime Menace Story Mode Hack
