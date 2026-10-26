@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Compile an editor graph into a text-scene campaign with real native battles.
+"""Compile editor compositions and scene graphs into SNES story campaigns.
 
-Original intro/menu preserved. No SRAM. SB2 image composition is not compiled.
+Original intro/menu preserved. No SRAM. Static compositions use Mode 3 BG1.
 """
 import argparse, hashlib, json, tempfile, textwrap, unicodedata, sys
 from pathlib import Path
@@ -10,7 +10,8 @@ import build_story_prototype as base
 ROOT = Path(__file__).resolve().parents[1]
 MODEL_DIR = ROOT / 'editor' if (ROOT / 'editor' / 'model.py').is_file() else ROOT
 sys.path.insert(0, str(MODEL_DIR))
-from model import load_project, validate
+from model import load_project, validate, Assets, compose
+from story_graphics import encode, page_image, Payloads
 
 FIGHTER_IDS={'Goku':0,'Vegeta':1,'Gohan':2,'Goten':3,'Trunks':4,
              'Majin Buu':5,'Dabra':6,'C18':7,'Petit Buu':8,'Trunks (futur)':9}
@@ -41,22 +42,31 @@ def ascii_text(s):
     s=s.replace('…','...').replace('’',"'").replace('œ','oe').replace('—','-')
     return unicodedata.normalize('NFKD',s).encode('ascii','ignore').decode().upper()
 
-def compile_campaign(data,rom):
+def compile_campaign(data,rom,assets=None):
     errors=validate(data)
     if errors:raise ValueError('\n'.join(errors))
     scenes=data['scenes'];ids={s['id']:i for i,s in enumerate(scenes)}
     if len(scenes)>200:raise ValueError('Maximum 200 nodes for this compiler')
-    maps=[];pages=[]
+    maps=[];pages=[];pool=Payloads();graphics=[];graphic_cache={}
+    needs_assets=any(s.get('background') or s.get('actors') for s in scenes)
+    if needs_assets and assets is None:raise ValueError('Le projet contient des graphismes : chargez son catalogue assets/catalog.json avant de construire la ROM.')
+    if assets is not None:
+        errors=validate(data,assets.items)
+        if errors:raise ValueError('\n'.join(errors))
     def add_map(lines,cursor=None):
-        index=len(maps);bank=0xc2+index//16;address=0x8000+(index%16)*0x800
-        if bank>=0x100:raise ValueError('Campaign exceeds expanded ROM')
-        maps.append(base.make_map(lines,cursor));return bank,address
+        tilemap=base.make_map(lines,cursor);pointer=pool.put(tilemap)
+        maps.append(tilemap);return pointer>>16,pointer&65535
     # Dialogue is paginated instead of silently truncating editor text.
     for i,s in enumerate(scenes):
+        graphical=bool(s.get('background') or s.get('actors'))
+        composition=compose(s,assets,dialogue=False) if graphical else None
         lines=[]
         for paragraph in ascii_text(s.get('dialogue','')).splitlines():
             lines.extend(textwrap.wrap(paragraph,28) or [''])
-        chunks=[lines[j:j+9] for j in range(0,len(lines),9)] or [[]]
+        per_page=4 if graphical else 9
+        chunks=[lines[j:j+per_page] for j in range(0,len(lines),per_page)] or [[]]
+        if graphical and s.get('choices') and s['kind']!='combat' and len(chunks[-1])>2:
+            chunks.append([])
         for n,chunk in enumerate(chunks):
             rows=[(2,ascii_text(s['name'])[:30],1,'center')]
             rows += [(5+k*2,line,0,'left:2') for k,line in enumerate(chunk)]
@@ -74,7 +84,14 @@ def compile_campaign(data,rom):
             variants=[]
             for selected in range(max(1,len(options))):
                 cursor=(12+selected*4 if s['kind']=='combat' else 16+selected*3) if options else None
-                variants.append(add_map(rows,cursor))
+                if graphical:
+                    screen=page_image(composition,ascii_text(s['name']),chunk,[ascii_text(o) for o in options],selected,s['kind']=='combat')
+                    key=screen.tobytes()
+                    if key not in graphic_cache:
+                        encoded=encode(screen);gid=len(graphics);graphic_cache[key]=gid
+                        graphics.append(pool.image(encoded))
+                    variants.append(('graphic',graphic_cache[key]))
+                else:variants.append(add_map(rows,cursor))
             pages.append(dict(scene=i,part=n,parts=len(chunks),variants=variants,options=options))
     first={i:next(j for j,p in enumerate(pages) if p['scene']==i) for i in range(len(scenes))}
     if len(pages)>250:raise ValueError('Dialogue pagination exceeds 250 pages')
@@ -136,9 +153,12 @@ def compile_campaign(data,rom):
         a.label(f'map{n}');a.put(COUNT,len(p['variants']))
         # Clamp a shared 0..2 cursor to the number of choices on this page.
         a.lda(CHOICE);a.emit(0xc9,len(p['variants']));a.branch(0x90,f'clamped{n}');a.put(CHOICE,0);a.label(f'clamped{n}')
-        for ci,(bank,address) in enumerate(p['variants']):
+        for ci,variant in enumerate(p['variants']):
             a.lda(CHOICE);a.emit(0xc9,ci);a.branch(0xd0,f'variant_skip{n}_{ci}')
-            a.put(MAP_BANK,bank);a.emit(0xa2,address&255,address>>8);a.jsl('Draw');a.jml('Rendered');a.label(f'variant_skip{n}_{ci}')
+            if variant[0]=='graphic':a.jsl(f'Graphic{variant[1]}')
+            else:
+                bank,address=variant;a.put(MAP_BANK,bank);a.emit(0xa2,address&255,address>>8);a.jsl('Draw')
+            a.jml('Rendered');a.label(f'variant_skip{n}_{ci}')
         a.jml('Rendered')
     a.label('Rendered');a.emit(0xc2,0x30,0x7a,0xfa,0x68,0x28,0x6b)
     # Intercept only a completed story battle returning through the native flow.
@@ -158,17 +178,40 @@ def compile_campaign(data,rom):
     old=bytes.fromhex('8e 02 43 a9 c0 8d 04 43');new=bytes.fromhex('8e 02 43 af 60 1e 7e 8d 04 43')
     if draw.count(old)!=1:raise ValueError('Renderer DMA signature changed')
     a.emit(*draw.replace(old,new))
+    # Bitmap renderer: Mode 3 BG1, 256 colors, map at VRAM byte F000.
+    # Each routine uses only bank-contained DMA payloads, under forced blank.
+    def write(addr,value):a.emit(0xa9,value,0x8d,addr&255,addr>>8)
+    def dma(pointer,length,register,mode,dest=None):
+        if dest is not None:write(0x2116,dest&255);write(0x2117,dest>>8)
+        for addr,value in {0x4300:mode,0x4301:register,0x4302:pointer&255,0x4303:pointer>>8&255,0x4304:pointer>>16,0x4305:length&255,0x4306:length>>8,0x420b:1}.items():write(addr,value)
+    for gi,gfx in enumerate(graphics):
+        a.label(f'Graphic{gi}')
+        a.emit(0x08,0x8b,0xc2,0x30,0x48,0xda,0x5a,0xe2,0x20,0xa9,0,0x48,0xab)
+        a.lda(0x7e0b43);a.emit(0x48);a.put(0x7e0b43,0);write(0x4200,0);write(0x2100,0x80)
+        shadows={0x0b2a:3,0x0b2b:0,0x0b2c:0x78,0x0b2d:0,0x0b2e:0,0x0b30:0,0x0b31:0,0x0b39:1,0x0b3a:0,0x0b3d:0,0x0b3e:0,0x0b45:0,0x0b27:15,**{n:0 for n in range(0x0b68,0x0b78)}}
+        for addr,value in shadows.items():a.put(0x7e0000+addr,value)
+        for addr in range(0x83,0x93):a.put(0x7e0000+addr,0)
+        # SNES renders scanline 1 first: VOFS -1 retains bitmap row zero.
+        for addr in (0x7e0085,0x7e0086,0x7e0b6a,0x7e0b6b):a.put(addr,255)
+        for addr,value in {0x2105:3,0x2106:0,0x2107:0x78,0x210b:0,0x212c:1,0x212d:0,0x2130:0,0x2131:0,0x2115:0x80}.items():write(addr,value)
+        write(0x210d,0);write(0x210d,0);write(0x210e,255);write(0x210e,255)
+        for pointer,length,dest in gfx['segments']:dma(pointer,length,0x18,1,dest)
+        dma(gfx['map'],0x800,0x18,1,0x7800)
+        write(0x2121,0);dma(gfx['palette'],512,0x22,0)
+        write(0x2100,15)
+        a.emit(0x68,0x09,0x80);a.sta(0x7e0b43);a.emit(0x8d,0,0x42,0xc2,0x30,0x7a,0xfa,0x68,0xab,0x28,0x6b)
     code=a.finish()
     if len(code)>0x8000:raise ValueError('Campaign code exceeds bank C1')
     rom[CODE_OFFSET:CODE_OFFSET+len(code)]=code
-    for n,tilemap in enumerate(maps):
-        offset=0x210000+n*0x800;rom[offset:offset+0x800]=tilemap
+    # Legacy text maps also go through the same allocator to avoid overlap.
+    # Their addresses were reserved while constructing page variants.
+    pool.install(rom)
     rom[base.INIT_TABLE_OFFSET+12*3:base.INIT_TABLE_OFFSET+13*3]=base.pointer3(0xc10000+a.labels['Init'])
     rom[base.FRAME_TABLE_OFFSET+12*3:base.FRAME_TABLE_OFFSET+13*3]=base.pointer3(0xc10000+a.labels['Frame'])
     if rom[0x7a:0x80]!=bytes.fromhex('e2 20 a2 fe 1f 9a'):raise ValueError('Native transition signature changed')
     rom[0x7a:0x80]=bytes([0x5c])+base.pointer3(0xc10000+a.labels['Transition'])+bytes.fromhex('ea ea')
     base.update_checksum(rom)
-    return dict(scenes=len(scenes),pages=len(pages),maps=len(maps),code_bytes=len(code),labels={k:f'C1:{v:04X}' for k,v in a.labels.items()},graphics_compiled=False,arena_ids=ARENA_IDS,fighter_ids=FIGHTER_IDS)
+    return dict(page_scenes=[dict(scene=scenes[p['scene']]['id'],kind=scenes[p['scene']]['kind'],part=p['part'],options=len(p['options']),graphics=[v[1] if v[0]=='graphic' else None for v in p['variants']]) for p in pages],scenes=len(scenes),pages=len(pages),maps=len(maps),code_bytes=len(code),labels={k:f'C1:{v:04X}' for k,v in a.labels.items()},graphics_compiled=bool(graphics),graphic_variants=len(graphics),graphic_metrics=[g['metrics'] for g in graphics],payload_end=hex(pool.cursor),arena_ids=ARENA_IDS,fighter_ids=FIGHTER_IDS)
 
 def build(rom_path,project_path,out_rom,out_ips,report_path):
     paths=[Path(p).resolve() for p in (rom_path,project_path,out_rom,out_ips,report_path)]
@@ -177,7 +220,12 @@ def build(rom_path,project_path,out_rom,out_ips,report_path):
     with tempfile.TemporaryDirectory() as d:
         tmp=Path(d);base.build(Path(rom_path),tmp/'base.sfc',tmp/'base.ips')
         rom=bytearray((tmp/'base.sfc').read_bytes())
-    report=compile_campaign(data,rom);original=Path(rom_path).read_bytes();ips=base.make_ips(original,bytes(rom))
+    assets=None
+    if any(s.get('background') or s.get('actors') for s in data['scenes']):
+        catalog=(Path(project_path).resolve().parent/data.get('catalog','assets/catalog.json')).resolve()
+        if not catalog.is_file():raise ValueError(f'Catalogue graphique introuvable : {catalog}. Chargez le catalogue dans l’éditeur.')
+        assets=Assets(catalog)
+    report=compile_campaign(data,rom,assets);original=Path(rom_path).read_bytes();ips=base.make_ips(original,bytes(rom))
     for path,payload in [(out_rom,rom),(out_ips,ips)]:Path(path).parent.mkdir(parents=True,exist_ok=True);Path(path).write_bytes(payload)
     report.update(rom_sha256=hashlib.sha256(rom).hexdigest(),ips_sha256=hashlib.sha256(ips).hexdigest(),base_sha256=base.BASE_SHA256,emulator_tested=False)
     Path(report_path).write_text(json.dumps(report,indent=2)+'\n');return report

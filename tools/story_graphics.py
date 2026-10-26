@@ -5,6 +5,9 @@ when they fit. Quantize only when a composition exceeds the hardware palette.
 """
 import hashlib
 from PIL import Image, ImageDraw
+
+def pixels_of(image):
+    return image.get_flattened_data() if hasattr(image,'get_flattened_data') else image.getdata()
 from build_story_prototype import FONT5X7
 
 SIZE=(256,224)
@@ -49,14 +52,14 @@ def page_image(composition,title,lines,options=(),selected=0,combat=False):
 
 def encode(image):
     if image.size!=SIZE:raise ValueError('SNES scene must be 256x224')
-    source=image.convert('RGB');values=[rgb555(p) for p in source.getdata()]
+    source=image.convert('RGB');values=[rgb555(p) for p in pixels_of(source)]
     reserved=[rgb555(c) for c in (BLACK,WHITE,YELLOW)]
     original_colors=len(set(values));quantized=len(set(values)|set(reserved))>256
     if quantized:
         # Reserve exact UI colors after reducing artwork to at most 253 colors.
         rounded=Image.new('RGB',SIZE);rounded.putdata([rgb8(v) for v in values])
         reduced=rounded.quantize(colors=253,method=Image.Quantize.MEDIANCUT,dither=Image.Dither.NONE).convert('RGB')
-        rv=[rgb555(p) for p in reduced.getdata()]
+        rv=[rgb555(p) for p in pixels_of(reduced)]
         values=[v if v in reserved else rv[i] for i,v in enumerate(values)]
     palette=reserved+sorted(set(values)-set(reserved))
     if len(palette)>256:raise ValueError('Palette exceeds 256 colors')
@@ -80,7 +83,8 @@ def encode(image):
     return dict(tiles=b''.join(tiles),tilemap=tilemap,cgram=cgram,
                 metrics=dict(source_rgb555_colors=original_colors,palette_colors=len(palette),
                              quantized=quantized,tiles=len(tiles),
-                             expected_rgb_sha256=hashlib.sha256(pixels.tobytes()).hexdigest()),
+                             expected_rgb_sha256=hashlib.sha256(pixels.tobytes()).hexdigest(),
+                             expected_rgb555_sha256=hashlib.sha256(b''.join(v.to_bytes(2,'little') for v in values)).hexdigest()),
                 expected=pixels)
 
 def decode(tiles,tilemap,cgram):

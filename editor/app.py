@@ -62,7 +62,7 @@ class Editor(tk.Tk):
         self.canvas.bind('<Button-1>',self.drag_begin);self.canvas.bind('<B1-Motion>',self.drag);self.canvas.bind('<ButtonRelease-1>',lambda e:self.mark())
         self.preview_info=tk.StringVar();ttk.Label(center,textvariable=self.preview_info,foreground='#b4a6e5',wraplength=520).pack(anchor='w',pady=8)
         self.path_buttons=ttk.Frame(center);self.path_buttons.pack(fill='x',pady=8)
-        ttk.Label(center,text='Projet JSON et aperçu local. La réinsertion graphique dans la ROM n’est pas encore intégrée.',foreground='#aab0c3',wraplength=520).pack(anchor='w',pady=10)
+        ttk.Label(center,text='Export ROM : décors et personnages fixes, dialogues, choix et combats. 256 couleurs maximum par écran.',foreground='#aab0c3',wraplength=520).pack(anchor='w',pady=10)
         self.name=tk.StringVar();self.kind=tk.StringVar(value='dialogue')
         ttk.Label(right,text='SCÈNE',font=(self.ui_font,11,'bold')).pack(anchor='w')
         ttk.Entry(right,textvariable=self.name).pack(fill='x',pady=5);self.name.trace_add('write',lambda *a:self.change_name())
@@ -94,7 +94,7 @@ class Editor(tk.Tk):
             e=ttk.Combobox(row,textvariable=var,values=FIGHTERS,state='readonly',width=14);e.pack(side='left',fill='x',expand=True);e.bind('<<ComboboxSelected>>',lambda e:self.update_scene())
         self.selectable=tk.BooleanVar();self.arena=tk.StringVar(value='plaine_rocheuse')
         ttk.Checkbutton(right,text='Le joueur choisit son combattant parmi les deux',variable=self.selectable,command=self.update_scene).pack(anchor='w')
-        ttk.Label(right,text='Arène prévue (identifiants ROM à confirmer)').pack(anchor='w')
+        ttk.Label(right,text='Arène du combat (décor narratif indépendant)').pack(anchor='w')
         arena_box=ttk.Combobox(right,textvariable=self.arena,values=ARENAS,state='readonly');arena_box.pack(fill='x');arena_box.bind('<<ComboboxSelected>>',lambda e:self.update_scene())
         ttk.Label(right,text='Suite si le joueur gagne / perd').pack(anchor='w')
         self.win=tk.StringVar();self.lose=tk.StringVar();self.win_box=ttk.Combobox(right,textvariable=self.win,state='readonly');self.lose_box=ttk.Combobox(right,textvariable=self.lose,state='readonly')
@@ -333,20 +333,28 @@ class Editor(tk.Tk):
         except Exception as e:messagebox.showerror('Enregistrement',str(e))
     def build_rom(self):
         self.update_scene()
-        errors=validate(self.data)
+        errors=validate(self.data,self.assets.items if self.assets else None)
         if errors:messagebox.showerror('Projet incomplet','\n'.join(errors));return
+        if any(s.get('background') or s.get('actors') for s in self.data['scenes']) and self.assets is None:
+            messagebox.showerror('Catalogue manquant','Chargez le catalogue utilisé par les décors et personnages avant de construire.');return
         rom=filedialog.askopenfilename(title='ROM française originale Butoden 3 (2 Mio)',filetypes=[('ROM SNES','*.sfc *.smc')])
         if not rom:return
-        output=filedialog.asksaveasfilename(title='Nouvelle ROM (scènes texte + combats)',defaultextension='.sfc',filetypes=[('ROM SNES','*.sfc')])
+        output=filedialog.asksaveasfilename(title='Nouvelle ROM (scènes graphiques + combats)',defaultextension='.sfc',filetypes=[('ROM SNES','*.sfc')])
         if not output:return
+        if self.path and self.path.resolve() in {Path(output).resolve(),Path(output).with_suffix('.ips').resolve(),Path(output).with_suffix('.json').resolve()}:
+            messagebox.showerror('Nom de sortie','Choisissez un autre nom : le rapport de construction ne doit pas remplacer votre projet JSON.');return
         script=ROOT/'tools/build_story_campaign.py'
         if not script.exists():script=ROOT.parent/'tools/build_story_campaign.py'
         try:
             with tempfile.TemporaryDirectory() as d:
-                source=Path(d)/'project.json';save_project(self.data,source)
+                source=Path(d)/'project.json';export_data=json.loads(json.dumps(self.data))
+                if self.assets:export_data['catalog']=str(self.assets.path)
+                save_project(export_data,source)
                 result=subprocess.run([sys.executable,str(script),rom,str(source),'--out-rom',output,'--out-ips',str(Path(output).with_suffix('.ips')),'--report',str(Path(output).with_suffix('.json'))],capture_output=True,text=True)
                 if result.returncode:raise ValueError(result.stderr or result.stdout)
-            messagebox.showinfo('Construction terminée','ROM et IPS créés. Les scènes sont affichées en texte ; les compositions SB2 ne sont pas encore réinsérées. Testez votre parcours dans un émulateur.')
+            report=json.loads(result.stdout)
+            count=report.get('graphic_variants',0);reduced=sum(m['quantized'] for m in report.get('graphic_metrics',[]))
+            messagebox.showinfo('Construction terminée',f'ROM et IPS créés. {count} écran(s) graphique(s) intégré(s).\n{reduced} palette(s) réduite(s) à 256 couleurs.\nLes personnages sont des calques fixes ; le décor du combat est celui de son arène. Testez le parcours dans un émulateur.')
         except Exception as error:messagebox.showerror('Construction',str(error))
     def export_png(self):
         if not self.assets:return
