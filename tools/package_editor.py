@@ -12,9 +12,9 @@ def package(output):
             if file.is_file():z.write(file,file.name)
         for name in TOOLS:z.write(ROOT/'tools'/name,'tools/'+name)
         for name in ('README.md','snes9x-export.patch'):z.write(ROOT/'emulator-tools'/name,'emulator-tools/'+name)
-        doc=ROOT/'docs/campaign-v8-graphics.md'
-        if doc.exists():z.write(doc,'GRAPHIQUES_V8.md')
-        z.writestr('DEMARRER.txt','Installez : py -3 -m pip install -r requirements.txt\nCopiez votre dossier assets/ existant a cote de app.py.\nLancez Lancer_editeur.bat et ouvrez votre projet JSON.\nLes decors et personnages fixes sont maintenant exportes dans la ROM.\nConstruire ROM / IPS demande la ROM francaise originale de 2 Mio.\nLes arenes de combat sont independantes des decors de dialogue.\n')
+        doc=ROOT/'docs/first-scene-sb2-v9.md'
+        if doc.exists():z.write(doc,'PREMIERE_SCENE_SB2_V9.md')
+        z.writestr('DEMARRER.txt','Installez : py -3 -m pip install -r requirements.txt\nCopiez votre dossier assets/ existant a cote de app.py.\nLancez Lancer_editeur.bat puis Creer la premiere scene SB2.\nChoisissez les ROMs FR originales de SB2 (2 Mio) et SB3 (2 Mio), puis sauvegardez le nouveau projet JSON.\nChoisissez la piste musicale SB2, enregistrez et construisez une nouvelle ROM a partir de SB3 originale.\nLes arenes de combat sont independantes des decors de dialogue.\n')
     return output
 
 if __name__=='__main__':

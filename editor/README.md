@@ -1,3 +1,27 @@
+# Première scène SB2 — v9
+
+Copiez votre dossier `assets/` à côté de `app.py`, lancez le BAT et cliquez
+**Créer la première scène SB2**. Choisissez les ROMs françaises originales
+SB2 et SB3 de 2 Mio puis un nouveau projet JSON. Le catalogue est sauvegardé
+avant l'ajout de Goten et des ressources privées de police/musique.
+
+La première scène apparaît sous huit phases éditables : décor, Gohan, dialogue
+des deux frères, réponse de Goten, combat, deux répliques de résultat et fin.
+Les phases d'apparition avancent seules ; les dialogues utilisent la police
+native et le texte progressif dans le jeu. A complète le texte avant d'avancer ;
+B revient au menu. Les poses restent fixes, en Super Saiyan.
+
+Le champ **Musique SB2 · piste** sélectionne la ressource musicale à intégrer.
+Les numéros 4 à 21 sont proposés ; 4 et 5 ont reçu un test complet en émulateur.
+Le lecteur de parcours local n'est pas un lecteur audio. Pour entendre la piste,
+construisez la ROM et jouez-la. Le pilote sonore SB3 est restauré avant le combat.
+
+Enregistrez, puis cliquez **Construire ROM / IPS** avec la ROM SB3 originale de
+2 Mio, jamais une ancienne sortie patchée. Voir `PREMIERE_SCENE_SB2_V9.md` dans
+le ZIP pour les étapes détaillées et les essais.
+
+---
+
 # Atelier scénario — graphismes v8
 
 Les décors et les personnages placés dans l'éditeur sont maintenant convertis

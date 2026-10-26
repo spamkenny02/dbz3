@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Validate the SB2-style first scene, typewriter, music and native battle return.
 Requires the diagnostic core's read-only APURAM export 45 for driver checking.
-Outcome coverage injects a KO unless --natural is supplied.
+Outcome coverage manipulates health unless --natural is supplied.
 """
 import argparse,array,ctypes as C,hashlib,json
 from pathlib import Path
@@ -19,7 +19,7 @@ def run(core,rom_path,manifest_path,second=False,lose=False,natural=False):
             values=array.array('h',C.string_at(data,n*4));peaks[category]=max(peaks[category],max(map(abs,values)))
         return n
     s.lib.retro_set_audio_sample_batch(audio)
-    verified=[];keys=set();entered=None;returned=False;selected=False;last_action=-200;stable=None;since=0;finished=False;typewriter_samples=[];skipped=False;skip_page=None
+    verified=[];keys=set();entered=None;returned=False;selected=False;last_action=-200;stable=None;since=0;finished=False;typewriter_samples=[];skipped=False;skip_page=None;health_changed=False
     driver_prefix=native_sb3_packages(raw)[0][0][0][1][:64]
     for frame in range(20000):
         buttons=set()
@@ -27,6 +27,8 @@ def run(core,rom_path,manifest_path,second=False,lose=False,natural=False):
         if 900<=frame<903 or 1200<=frame<1203:buttons={8}
         key=(ram[0x20],ram[0x22],ram[0x1e54],ram[0x1e55])
         if key!=stable:stable=key;since=frame
+        if key[:2]==(12,12) and ram[0x1e64]==2:
+            s.buttons=set();s.run();continue
         if key[:2]==(12,12):
             page=manifest['page_scenes'][key[2]];scene=page['scene']
             assert ram[0x1e66]==0,('SPC upload failed',frame,scene)
@@ -57,7 +59,9 @@ def run(core,rom_path,manifest_path,second=False,lose=False,natural=False):
                 entered=frame;assert ram[0x500]==(3 if second else 2) and ram[0x700]==(2 if second else 3)
                 assert s.memory(45,65536)[0x800:0x840]==driver_prefix,'SB3 SPC driver was not restored'
             if not natural and frame-entered>180:
-                hp=0x562 if lose else 0x762;ram[hp]=ram[hp+1]=0
+                hp=0x562 if lose else 0x762
+                if not lose or not health_changed:
+                    ram[hp]=1 if lose else 0;ram[hp+1]=0;health_changed=True
         s.buttons=buttons;s.run()
     assert finished and returned and skipped and len(typewriter_samples)>3
     assert peaks['sb2']>0 and peaks['sb3_battle']>0,peaks

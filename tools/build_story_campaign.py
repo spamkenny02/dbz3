@@ -297,7 +297,7 @@ def build(rom_path,project_path,out_rom,out_ips,report_path):
         if not catalog.is_file():raise ValueError(f'Catalogue graphique introuvable : {catalog}. Chargez le catalogue dans l’éditeur.')
         assets=Assets(catalog)
     style=None
-    if data.get('sb2_style'):style=json.loads((Path(project_path).resolve().parent/data['sb2_style']).resolve().read_text())
+    if data.get('sb2_style'):style=json.loads((Path(project_path).resolve().parent/data['sb2_style']).resolve().read_text(encoding='utf-8'))
     report=compile_campaign(data,rom,assets,style);original=Path(rom_path).read_bytes();ips=base.make_ips(original,bytes(rom))
     for path,payload in [(out_rom,rom),(out_ips,ips)]:Path(path).parent.mkdir(parents=True,exist_ok=True);Path(path).write_bytes(payload)
     report.update(rom_sha256=hashlib.sha256(rom).hexdigest(),ips_sha256=hashlib.sha256(ips).hexdigest(),base_sha256=base.BASE_SHA256,emulator_tested=False)

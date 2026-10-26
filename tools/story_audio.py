@@ -31,7 +31,7 @@ def append_audio(a,pool,style,track,rom):
         label=tag('IPL');ok=tag('IPLOK');a.emit(0xc2,0x20,0xa0,0xff,0xff);a.label(label);a.emit(0xad,0x40,0x21,0xc9,0xaa,0xbb);a.branch(0xf0,ok);a.emit(0x88);a.branch(0xd0,label);a.emit(0xe2,0x20);a.jml('AudioFail');a.label(ok);a.emit(0xe2,0x20)
     def save():
         a.emit(0x08,0x8b,0xc2,0x30,0x48,0xda,0x5a,0xe2,0x20,0xa9,0,0x48,0xab)
-        a.lda(0x7e0b43);a.emit(0x48);write(0x4200,0);a.put(0x7e0b43,0);a.put(AUDIO_ERROR,0)
+        a.lda(0x7e0b43);a.emit(0x48);write(0x4200,0);a.put(0x7e0b43,0);a.put(AUDIO_ERROR,0);a.put(AUDIO_FLAG,2)
     def upload(packages,first_new):
         # Native drivers keep an IPL clone near 1900, inside the other driver's
         # image. First return to the real SPC boot ROM before replacing it.
@@ -68,7 +68,8 @@ def append_audio(a,pool,style,track,rom):
     sites=[]
     for gi,target in enumerate((0x80a982,0x80b0b6,0x80af6f)):
         a.label('AudioGate'+str(gi));a.emit(0x08,0xc2,0x20,0x48,0xe2,0x20);a.lda(AUDIO_FLAG);a.emit(0xc9,1)
-        skip=tag('SkipSound');a.branch(0xf0,skip);a.emit(0xc2,0x20,0x68,0x28,0x5c,target&255,target>>8&255,target>>16)
+        skip=tag('SkipSound');native_gate=tag('NativeSound');a.branch(0xd0,native_gate)
+        a.lda(0x7e0020);a.emit(0x29,0x7f,0xc9,12);a.branch(0xf0,skip);a.label(native_gate);a.emit(0xc2,0x20,0x68,0x28,0x5c,target&255,target>>8&255,target>>16)
         a.label(skip);a.emit(0xc2,0x20,0x68,0x28,0x6b)
         needle=bytes((0x22,target&255,target>>8&255,target>>16));found=bytes(rom[:0x300]).find(needle)
         if found<0:raise ValueError('Native NMI sound call changed')

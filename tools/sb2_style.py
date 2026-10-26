@@ -73,7 +73,7 @@ def extract(rom_path,out_path):
         blocks,pc=audio_package(rom,command)
         packages[str(command)]=dict(entry=pc,blocks=[dict(destination=d,data=base64.b64encode(b).decode()) for d,b in blocks])
     data=dict(format='sb2-native-style',version=1,source_sha256=SB2_SHA,font=base64.b64encode(font).decode(),font_sha256=hashlib.sha256(font).hexdigest(),audio=packages)
-    out=Path(out_path);out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps(data,indent=2)+'\n');return data
+    out=Path(out_path);out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps(data,indent=2)+'\n',encoding='utf-8');return data
 
 if __name__=='__main__':
     import argparse

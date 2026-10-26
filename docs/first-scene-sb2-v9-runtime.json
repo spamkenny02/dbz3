@@ -1,0 +1,1343 @@
+{
+  "core": "Snes9x libretro upstream 1bcc369 with read-only diagnostic memory exports",
+  "unit_tests": 54,
+  "scope": "one complete first training scene",
+  "runs": {
+    "win": {
+      "second": false,
+      "lose": false,
+      "natural": false,
+      "frames": 2635,
+      "verified": [
+        {
+          "scene": "forest",
+          "page": 0,
+          "choice": 0,
+          "sha256": "8d0ac002ce664b38620713ebb16ea1a92449de7907b574e06e0cbae7dfea59a4"
+        },
+        {
+          "scene": "arrival",
+          "page": 1,
+          "choice": 0,
+          "sha256": "72351087e6d9354030f175d5aa26a1391c7076a4cc227b2cbc9622f0282f5dcd"
+        },
+        {
+          "scene": "gohan",
+          "page": 2,
+          "choice": 0,
+          "sha256": "02063708adb6f923439d761170f4eb4565ec3e32958a96d7a78efd8c65bfa4a2"
+        },
+        {
+          "scene": "goten",
+          "page": 3,
+          "choice": 0,
+          "sha256": "5c0bb2fd7419aba4837ddcf9e03f05ae7bb333d4d4e78e93650cbaf49f697039"
+        },
+        {
+          "scene": "fight",
+          "page": 4,
+          "choice": 0,
+          "sha256": "f57fff6f9b63fa823cffe0bf23053b7a7030805f6101d2b514598b2cfc8f3bc9"
+        },
+        {
+          "scene": "win",
+          "page": 5,
+          "choice": 0,
+          "sha256": "5343abf4cd68d0d03648e18ed630fef5d240d88d37d927bb599475d7da5d714e"
+        },
+        {
+          "scene": "end",
+          "page": 7,
+          "choice": 0,
+          "sha256": "d50bf9e73053ebda39d5637585b4b5d06bae0124f3d02f3726c56faba27659d6"
+        }
+      ],
+      "audio_peaks": {
+        "sb2": 11267,
+        "sb3_battle": 21886
+      },
+      "sb3_spc_restored": true,
+      "b_returns_native_menu": true,
+      "a_finishes_text_first": true,
+      "typewriter_samples": [
+        {
+          "frame": 1394,
+          "letters": 0
+        },
+        {
+          "frame": 1397,
+          "letters": 1
+        },
+        {
+          "frame": 1400,
+          "letters": 2
+        },
+        {
+          "frame": 1403,
+          "letters": 3
+        },
+        {
+          "frame": 1406,
+          "letters": 4
+        },
+        {
+          "frame": 1409,
+          "letters": 5
+        },
+        {
+          "frame": 1412,
+          "letters": 6
+        },
+        {
+          "frame": 1415,
+          "letters": 7
+        },
+        {
+          "frame": 1418,
+          "letters": 8
+        },
+        {
+          "frame": 1421,
+          "letters": 9
+        },
+        {
+          "frame": 1424,
+          "letters": 10
+        },
+        {
+          "frame": 1427,
+          "letters": 11
+        },
+        {
+          "frame": 1430,
+          "letters": 12
+        },
+        {
+          "frame": 1431,
+          "letters": 65
+        }
+      ],
+      "rom_sha256": "e1fd66e6d75a78ed7af138dd3cd8a1f3ed102e7cb21f8a591937a3e3df8d7601"
+    },
+    "lose": {
+      "second": false,
+      "lose": true,
+      "natural": false,
+      "frames": 3023,
+      "verified": [
+        {
+          "scene": "forest",
+          "page": 0,
+          "choice": 0,
+          "sha256": "8d0ac002ce664b38620713ebb16ea1a92449de7907b574e06e0cbae7dfea59a4"
+        },
+        {
+          "scene": "arrival",
+          "page": 1,
+          "choice": 0,
+          "sha256": "72351087e6d9354030f175d5aa26a1391c7076a4cc227b2cbc9622f0282f5dcd"
+        },
+        {
+          "scene": "gohan",
+          "page": 2,
+          "choice": 0,
+          "sha256": "02063708adb6f923439d761170f4eb4565ec3e32958a96d7a78efd8c65bfa4a2"
+        },
+        {
+          "scene": "goten",
+          "page": 3,
+          "choice": 0,
+          "sha256": "5c0bb2fd7419aba4837ddcf9e03f05ae7bb333d4d4e78e93650cbaf49f697039"
+        },
+        {
+          "scene": "fight",
+          "page": 4,
+          "choice": 0,
+          "sha256": "f57fff6f9b63fa823cffe0bf23053b7a7030805f6101d2b514598b2cfc8f3bc9"
+        },
+        {
+          "scene": "lose",
+          "page": 6,
+          "choice": 0,
+          "sha256": "8b6d8f9169011c9896bf1c5d8c28806c30b468183555f8b084e0756ce2ea691d"
+        },
+        {
+          "scene": "end",
+          "page": 7,
+          "choice": 0,
+          "sha256": "d50bf9e73053ebda39d5637585b4b5d06bae0124f3d02f3726c56faba27659d6"
+        }
+      ],
+      "audio_peaks": {
+        "sb2": 11267,
+        "sb3_battle": 23604
+      },
+      "sb3_spc_restored": true,
+      "b_returns_native_menu": true,
+      "a_finishes_text_first": true,
+      "typewriter_samples": [
+        {
+          "frame": 1394,
+          "letters": 0
+        },
+        {
+          "frame": 1397,
+          "letters": 1
+        },
+        {
+          "frame": 1400,
+          "letters": 2
+        },
+        {
+          "frame": 1403,
+          "letters": 3
+        },
+        {
+          "frame": 1406,
+          "letters": 4
+        },
+        {
+          "frame": 1409,
+          "letters": 5
+        },
+        {
+          "frame": 1412,
+          "letters": 6
+        },
+        {
+          "frame": 1415,
+          "letters": 7
+        },
+        {
+          "frame": 1418,
+          "letters": 8
+        },
+        {
+          "frame": 1421,
+          "letters": 9
+        },
+        {
+          "frame": 1424,
+          "letters": 10
+        },
+        {
+          "frame": 1427,
+          "letters": 11
+        },
+        {
+          "frame": 1430,
+          "letters": 12
+        },
+        {
+          "frame": 1431,
+          "letters": 65
+        }
+      ],
+      "rom_sha256": "e1fd66e6d75a78ed7af138dd3cd8a1f3ed102e7cb21f8a591937a3e3df8d7601"
+    },
+    "second-win": {
+      "second": true,
+      "lose": false,
+      "natural": false,
+      "frames": 2756,
+      "verified": [
+        {
+          "scene": "forest",
+          "page": 0,
+          "choice": 0,
+          "sha256": "8d0ac002ce664b38620713ebb16ea1a92449de7907b574e06e0cbae7dfea59a4"
+        },
+        {
+          "scene": "arrival",
+          "page": 1,
+          "choice": 0,
+          "sha256": "72351087e6d9354030f175d5aa26a1391c7076a4cc227b2cbc9622f0282f5dcd"
+        },
+        {
+          "scene": "gohan",
+          "page": 2,
+          "choice": 0,
+          "sha256": "02063708adb6f923439d761170f4eb4565ec3e32958a96d7a78efd8c65bfa4a2"
+        },
+        {
+          "scene": "goten",
+          "page": 3,
+          "choice": 0,
+          "sha256": "5c0bb2fd7419aba4837ddcf9e03f05ae7bb333d4d4e78e93650cbaf49f697039"
+        },
+        {
+          "scene": "fight",
+          "page": 4,
+          "choice": 0,
+          "sha256": "f57fff6f9b63fa823cffe0bf23053b7a7030805f6101d2b514598b2cfc8f3bc9"
+        },
+        {
+          "scene": "fight",
+          "page": 4,
+          "choice": 1,
+          "sha256": "58ab4310a99bb155539583fddf3b2dd0ca61bb959e25b57a43c5c83a770f8d99"
+        },
+        {
+          "scene": "win",
+          "page": 5,
+          "choice": 0,
+          "sha256": "5343abf4cd68d0d03648e18ed630fef5d240d88d37d927bb599475d7da5d714e"
+        },
+        {
+          "scene": "end",
+          "page": 7,
+          "choice": 0,
+          "sha256": "d50bf9e73053ebda39d5637585b4b5d06bae0124f3d02f3726c56faba27659d6"
+        }
+      ],
+      "audio_peaks": {
+        "sb2": 11836,
+        "sb3_battle": 21883
+      },
+      "sb3_spc_restored": true,
+      "b_returns_native_menu": true,
+      "a_finishes_text_first": true,
+      "typewriter_samples": [
+        {
+          "frame": 1394,
+          "letters": 0
+        },
+        {
+          "frame": 1397,
+          "letters": 1
+        },
+        {
+          "frame": 1400,
+          "letters": 2
+        },
+        {
+          "frame": 1403,
+          "letters": 3
+        },
+        {
+          "frame": 1406,
+          "letters": 4
+        },
+        {
+          "frame": 1409,
+          "letters": 5
+        },
+        {
+          "frame": 1412,
+          "letters": 6
+        },
+        {
+          "frame": 1415,
+          "letters": 7
+        },
+        {
+          "frame": 1418,
+          "letters": 8
+        },
+        {
+          "frame": 1421,
+          "letters": 9
+        },
+        {
+          "frame": 1424,
+          "letters": 10
+        },
+        {
+          "frame": 1427,
+          "letters": 11
+        },
+        {
+          "frame": 1430,
+          "letters": 12
+        },
+        {
+          "frame": 1431,
+          "letters": 65
+        }
+      ],
+      "rom_sha256": "e1fd66e6d75a78ed7af138dd3cd8a1f3ed102e7cb21f8a591937a3e3df8d7601"
+    },
+    "second-lose": {
+      "second": true,
+      "lose": true,
+      "natural": false,
+      "frames": 3051,
+      "verified": [
+        {
+          "scene": "forest",
+          "page": 0,
+          "choice": 0,
+          "sha256": "8d0ac002ce664b38620713ebb16ea1a92449de7907b574e06e0cbae7dfea59a4"
+        },
+        {
+          "scene": "arrival",
+          "page": 1,
+          "choice": 0,
+          "sha256": "72351087e6d9354030f175d5aa26a1391c7076a4cc227b2cbc9622f0282f5dcd"
+        },
+        {
+          "scene": "gohan",
+          "page": 2,
+          "choice": 0,
+          "sha256": "02063708adb6f923439d761170f4eb4565ec3e32958a96d7a78efd8c65bfa4a2"
+        },
+        {
+          "scene": "goten",
+          "page": 3,
+          "choice": 0,
+          "sha256": "5c0bb2fd7419aba4837ddcf9e03f05ae7bb333d4d4e78e93650cbaf49f697039"
+        },
+        {
+          "scene": "fight",
+          "page": 4,
+          "choice": 0,
+          "sha256": "f57fff6f9b63fa823cffe0bf23053b7a7030805f6101d2b514598b2cfc8f3bc9"
+        },
+        {
+          "scene": "fight",
+          "page": 4,
+          "choice": 1,
+          "sha256": "58ab4310a99bb155539583fddf3b2dd0ca61bb959e25b57a43c5c83a770f8d99"
+        },
+        {
+          "scene": "lose",
+          "page": 6,
+          "choice": 0,
+          "sha256": "8b6d8f9169011c9896bf1c5d8c28806c30b468183555f8b084e0756ce2ea691d"
+        },
+        {
+          "scene": "end",
+          "page": 7,
+          "choice": 0,
+          "sha256": "d50bf9e73053ebda39d5637585b4b5d06bae0124f3d02f3726c56faba27659d6"
+        }
+      ],
+      "audio_peaks": {
+        "sb2": 11789,
+        "sb3_battle": 23895
+      },
+      "sb3_spc_restored": true,
+      "b_returns_native_menu": true,
+      "a_finishes_text_first": true,
+      "typewriter_samples": [
+        {
+          "frame": 1394,
+          "letters": 0
+        },
+        {
+          "frame": 1397,
+          "letters": 1
+        },
+        {
+          "frame": 1400,
+          "letters": 2
+        },
+        {
+          "frame": 1403,
+          "letters": 3
+        },
+        {
+          "frame": 1406,
+          "letters": 4
+        },
+        {
+          "frame": 1409,
+          "letters": 5
+        },
+        {
+          "frame": 1412,
+          "letters": 6
+        },
+        {
+          "frame": 1415,
+          "letters": 7
+        },
+        {
+          "frame": 1418,
+          "letters": 8
+        },
+        {
+          "frame": 1421,
+          "letters": 9
+        },
+        {
+          "frame": 1424,
+          "letters": 10
+        },
+        {
+          "frame": 1427,
+          "letters": 11
+        },
+        {
+          "frame": 1430,
+          "letters": 12
+        },
+        {
+          "frame": 1431,
+          "letters": 65
+        }
+      ],
+      "rom_sha256": "e1fd66e6d75a78ed7af138dd3cd8a1f3ed102e7cb21f8a591937a3e3df8d7601"
+    },
+    "natural-lose": {
+      "second": false,
+      "lose": true,
+      "natural": true,
+      "frames": 6893,
+      "verified": [
+        {
+          "scene": "forest",
+          "page": 0,
+          "choice": 0,
+          "sha256": "8d0ac002ce664b38620713ebb16ea1a92449de7907b574e06e0cbae7dfea59a4"
+        },
+        {
+          "scene": "arrival",
+          "page": 1,
+          "choice": 0,
+          "sha256": "72351087e6d9354030f175d5aa26a1391c7076a4cc227b2cbc9622f0282f5dcd"
+        },
+        {
+          "scene": "gohan",
+          "page": 2,
+          "choice": 0,
+          "sha256": "02063708adb6f923439d761170f4eb4565ec3e32958a96d7a78efd8c65bfa4a2"
+        },
+        {
+          "scene": "goten",
+          "page": 3,
+          "choice": 0,
+          "sha256": "5c0bb2fd7419aba4837ddcf9e03f05ae7bb333d4d4e78e93650cbaf49f697039"
+        },
+        {
+          "scene": "fight",
+          "page": 4,
+          "choice": 0,
+          "sha256": "f57fff6f9b63fa823cffe0bf23053b7a7030805f6101d2b514598b2cfc8f3bc9"
+        },
+        {
+          "scene": "lose",
+          "page": 6,
+          "choice": 0,
+          "sha256": "8b6d8f9169011c9896bf1c5d8c28806c30b468183555f8b084e0756ce2ea691d"
+        },
+        {
+          "scene": "end",
+          "page": 7,
+          "choice": 0,
+          "sha256": "d50bf9e73053ebda39d5637585b4b5d06bae0124f3d02f3726c56faba27659d6"
+        }
+      ],
+      "audio_peaks": {
+        "sb2": 11267,
+        "sb3_battle": 27773
+      },
+      "sb3_spc_restored": true,
+      "b_returns_native_menu": true,
+      "a_finishes_text_first": true,
+      "typewriter_samples": [
+        {
+          "frame": 1394,
+          "letters": 0
+        },
+        {
+          "frame": 1397,
+          "letters": 1
+        },
+        {
+          "frame": 1400,
+          "letters": 2
+        },
+        {
+          "frame": 1403,
+          "letters": 3
+        },
+        {
+          "frame": 1406,
+          "letters": 4
+        },
+        {
+          "frame": 1409,
+          "letters": 5
+        },
+        {
+          "frame": 1412,
+          "letters": 6
+        },
+        {
+          "frame": 1415,
+          "letters": 7
+        },
+        {
+          "frame": 1418,
+          "letters": 8
+        },
+        {
+          "frame": 1421,
+          "letters": 9
+        },
+        {
+          "frame": 1424,
+          "letters": 10
+        },
+        {
+          "frame": 1427,
+          "letters": 11
+        },
+        {
+          "frame": 1430,
+          "letters": 12
+        },
+        {
+          "frame": 1431,
+          "letters": 65
+        }
+      ],
+      "rom_sha256": "e1fd66e6d75a78ed7af138dd3cd8a1f3ed102e7cb21f8a591937a3e3df8d7601"
+    }
+  },
+  "second_track": {
+    "second": false,
+    "lose": false,
+    "natural": false,
+    "frames": 2625,
+    "verified": [
+      {
+        "scene": "forest",
+        "page": 0,
+        "choice": 0,
+        "sha256": "8d0ac002ce664b38620713ebb16ea1a92449de7907b574e06e0cbae7dfea59a4"
+      },
+      {
+        "scene": "arrival",
+        "page": 1,
+        "choice": 0,
+        "sha256": "72351087e6d9354030f175d5aa26a1391c7076a4cc227b2cbc9622f0282f5dcd"
+      },
+      {
+        "scene": "gohan",
+        "page": 2,
+        "choice": 0,
+        "sha256": "02063708adb6f923439d761170f4eb4565ec3e32958a96d7a78efd8c65bfa4a2"
+      },
+      {
+        "scene": "goten",
+        "page": 3,
+        "choice": 0,
+        "sha256": "5c0bb2fd7419aba4837ddcf9e03f05ae7bb333d4d4e78e93650cbaf49f697039"
+      },
+      {
+        "scene": "fight",
+        "page": 4,
+        "choice": 0,
+        "sha256": "f57fff6f9b63fa823cffe0bf23053b7a7030805f6101d2b514598b2cfc8f3bc9"
+      },
+      {
+        "scene": "win",
+        "page": 5,
+        "choice": 0,
+        "sha256": "5343abf4cd68d0d03648e18ed630fef5d240d88d37d927bb599475d7da5d714e"
+      },
+      {
+        "scene": "end",
+        "page": 7,
+        "choice": 0,
+        "sha256": "d50bf9e73053ebda39d5637585b4b5d06bae0124f3d02f3726c56faba27659d6"
+      }
+    ],
+    "audio_peaks": {
+      "sb2": 9804,
+      "sb3_battle": 19646
+    },
+    "sb3_spc_restored": true,
+    "b_returns_native_menu": true,
+    "a_finishes_text_first": true,
+    "typewriter_samples": [
+      {
+        "frame": 1393,
+        "letters": 0
+      },
+      {
+        "frame": 1396,
+        "letters": 1
+      },
+      {
+        "frame": 1399,
+        "letters": 2
+      },
+      {
+        "frame": 1402,
+        "letters": 3
+      },
+      {
+        "frame": 1405,
+        "letters": 4
+      },
+      {
+        "frame": 1408,
+        "letters": 5
+      },
+      {
+        "frame": 1411,
+        "letters": 6
+      },
+      {
+        "frame": 1414,
+        "letters": 7
+      },
+      {
+        "frame": 1417,
+        "letters": 8
+      },
+      {
+        "frame": 1420,
+        "letters": 9
+      },
+      {
+        "frame": 1423,
+        "letters": 10
+      },
+      {
+        "frame": 1426,
+        "letters": 11
+      },
+      {
+        "frame": 1429,
+        "letters": 12
+      },
+      {
+        "frame": 1430,
+        "letters": 65
+      }
+    ],
+    "rom_sha256": "2ec4ab5bb9fc819e80ab1c9bc75ca220c8b8a1daf4f5e6f8281686f2b01d22c3"
+  },
+  "gui": {
+    "preparation": true,
+    "native_font_preview": true,
+    "music_selection": 5,
+    "gui_build": true,
+    "exact_cli": true,
+    "project_nodes": 8
+  },
+  "standalone_zip": {
+    "preparation": true,
+    "full_build": true,
+    "space_and_accent_path": true,
+    "rom_matches_repository": true,
+    "ips_matches_repository": true,
+    "rom_sha256": "e1fd66e6d75a78ed7af138dd3cd8a1f3ed102e7cb21f8a591937a3e3df8d7601"
+  },
+  "intro": {
+    "matching": true,
+    "frames": {
+      "120": "2cbbeef1249170a43854962fa5b19fba628470c70beb9ce23e15a0f05cb891f2",
+      "300": "2cbbeef1249170a43854962fa5b19fba628470c70beb9ce23e15a0f05cb891f2",
+      "500": "3cc870370c9009efc78a93ab2205283daa5cf563d5958882fb57f32b65be1558",
+      "700": "c7363acacd529ddcd79c40e618ec8b50ce8ef8b6563f6aa608f518c83cf31a1d",
+      "849": "6122f4322c28a46cc7a57c9db184930a2aa9c3b09b0ef9f2c95ff6b1f128e7f7"
+    }
+  },
+  "earlier_campaign_regression": {
+    "graphic_checks": [
+      {
+        "page": 0,
+        "choice": 0,
+        "graphic": 0,
+        "rgb555_sha256": "7383b7059f7c3077ab043fb298234af8fd4c47f66e1febc20fa426d89c3caf2f"
+      },
+      {
+        "page": 1,
+        "choice": 0,
+        "graphic": 1,
+        "rgb555_sha256": "d16ff619f93b38e42d705c7542310b0b515fd4da602fb1f7707e451ccbbb983f"
+      },
+      {
+        "page": 2,
+        "choice": 0,
+        "graphic": 2,
+        "rgb555_sha256": "7debad46670ed6187565611684c0aaba66f8ab49e2c59beb257791a140681eb3"
+      },
+      {
+        "page": 3,
+        "choice": 0,
+        "graphic": 3,
+        "rgb555_sha256": "0b9503204431b1920e119df0bbf5a7d9b982717561c56b6221245ecfb3f2bea0"
+      },
+      {
+        "page": 4,
+        "choice": 0,
+        "graphic": 5,
+        "rgb555_sha256": "00c944e534708bfdda584857b4301c5d7c32b8564c974812ddb95fe02cbab78f"
+      },
+      {
+        "page": 6,
+        "choice": 0,
+        "graphic": 7,
+        "rgb555_sha256": "acfd199187bdfa5e20fef4d3b7d1a38f91f84893921b025e2109d7facd446ad1"
+      },
+      {
+        "page": 7,
+        "choice": 0,
+        "graphic": 8,
+        "rgb555_sha256": "23ca7f09027e4567a2614d411400f19769d28078fbb1dbe7a63e23f81910b259"
+      },
+      {
+        "page": 8,
+        "choice": 0,
+        "graphic": 9,
+        "rgb555_sha256": "a250a949ec9b50ffd40c96e69d00930bf4f9efc14c38ed16ba7fae5367881c2d"
+      },
+      {
+        "page": 9,
+        "choice": 0,
+        "graphic": 11,
+        "rgb555_sha256": "a145761933e054d3284802d7c932632f0f38c8493ec245b86d7ee1380bfd017c"
+      },
+      {
+        "page": 11,
+        "choice": 0,
+        "graphic": 13,
+        "rgb555_sha256": "6d268510266c56e5073522fb5dd1dfe80a3b2d933c7824d20794714619c223ae"
+      },
+      {
+        "page": 12,
+        "choice": 0,
+        "graphic": 14,
+        "rgb555_sha256": "e8fc2afa2fe6363268509d0a25b17646aa5f9d5ad3ea7ece13af6534e0f6c69a"
+      },
+      {
+        "page": 13,
+        "choice": 0,
+        "graphic": 15,
+        "rgb555_sha256": "fcaf1012c402be7c07c2f00984ef1068f7c65edf5dc4e3c3e603732d9e61de18"
+      },
+      {
+        "page": 14,
+        "choice": 0,
+        "graphic": 16,
+        "rgb555_sha256": "84c35f54888666154229b7544de759d19cbeaf1326d5d0ee50cb6dd969aa7ae0"
+      },
+      {
+        "page": 15,
+        "choice": 0,
+        "graphic": 17,
+        "rgb555_sha256": "c4a48cbb1532e1516311b0552d7114e212e3dedf05b9f81cbb51c3929914d7a7"
+      },
+      {
+        "page": 16,
+        "choice": 0,
+        "graphic": 18,
+        "rgb555_sha256": "437c0cf9d04ab89a7aefae89371371a090a8ddaac69808f3e7bc83eb5bfe3c12"
+      },
+      {
+        "page": 17,
+        "choice": 0,
+        "graphic": 19,
+        "rgb555_sha256": "978663dfaf5614609d91f6607f1c83cbdc32d9d7e84c6282dcf8b9f253577c84"
+      },
+      {
+        "page": 18,
+        "choice": 0,
+        "graphic": 20,
+        "rgb555_sha256": "36b2cbec1a4fa1c200f622e02e247429e3b34acf7f85478c148fa45c174094c4"
+      },
+      {
+        "page": 19,
+        "choice": 0,
+        "graphic": 21,
+        "rgb555_sha256": "069b131e35e9b2a4bd8bdfc53e1e808684d6679bd7f1f710cfcf2840091600ac"
+      },
+      {
+        "page": 20,
+        "choice": 0,
+        "graphic": 23,
+        "rgb555_sha256": "f124b91c0a8118f4b3dfdd11d86da2dd8cbb61d244345e10c8911184cf2afc8a"
+      },
+      {
+        "page": 23,
+        "choice": 0,
+        "graphic": 26,
+        "rgb555_sha256": "9731e52b35c7a9b7c2994a7f0711baf44e5da90500c01ac471ff363b18487579"
+      }
+    ],
+    "second_player": false,
+    "lose": false,
+    "natural_match": false,
+    "frames": 4194,
+    "combats": [
+      {
+        "scene": "duel_freres",
+        "player": "Gohan",
+        "cpu": "Goten",
+        "arena": 6,
+        "entry_frame": 1549,
+        "result": "win",
+        "returned_page": 4
+      },
+      {
+        "scene": "duel_saiyans",
+        "player": "Vegeta",
+        "cpu": "Trunks",
+        "arena": 5,
+        "entry_frame": 2353,
+        "result": "win",
+        "returned_page": 9
+      },
+      {
+        "scene": "duel_enfants",
+        "player": "Goten",
+        "cpu": "Trunks",
+        "arena": 0,
+        "entry_frame": 3577,
+        "result": "win",
+        "returned_page": 20
+      }
+    ],
+    "rom_sha256": "bbbf4b0182d610405db303e57484d3aeeedc792f99d0c1286818c5e2ed9fb8f4",
+    "buttons": [
+      [
+        1251,
+        [
+          8
+        ],
+        0
+      ],
+      [
+        1332,
+        [
+          8
+        ],
+        1
+      ],
+      [
+        1413,
+        [
+          8
+        ],
+        2
+      ],
+      [
+        1494,
+        [
+          8
+        ],
+        3
+      ],
+      [
+        2054,
+        [
+          8
+        ],
+        4
+      ],
+      [
+        2135,
+        [
+          8
+        ],
+        6
+      ],
+      [
+        2216,
+        [
+          8
+        ],
+        7
+      ],
+      [
+        2297,
+        [
+          8
+        ],
+        8
+      ],
+      [
+        2791,
+        [
+          8
+        ],
+        9
+      ],
+      [
+        2872,
+        [
+          8
+        ],
+        11
+      ],
+      [
+        2953,
+        [
+          8
+        ],
+        12
+      ],
+      [
+        3034,
+        [
+          8
+        ],
+        13
+      ],
+      [
+        3115,
+        [
+          8
+        ],
+        14
+      ],
+      [
+        3196,
+        [
+          8
+        ],
+        15
+      ],
+      [
+        3277,
+        [
+          8
+        ],
+        16
+      ],
+      [
+        3358,
+        [
+          8
+        ],
+        17
+      ],
+      [
+        3439,
+        [
+          8
+        ],
+        18
+      ],
+      [
+        3520,
+        [
+          8
+        ],
+        19
+      ],
+      [
+        4113,
+        [
+          8
+        ],
+        20
+      ],
+      [
+        4194,
+        [
+          8
+        ],
+        23
+      ]
+    ]
+  },
+  "native_modes": {
+    "combat": {
+      "scenario": "combat",
+      "states": {
+        "1040": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1160": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1260": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        },
+        "1320": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        },
+        "1360": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        },
+        "1450": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        },
+        "1800": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        }
+      },
+      "frame_sha256": {
+        "1040": "c78a0a4b101b7c08e0d036ec5b584f03a1cca57d7b019111f76c5b2f5720feab",
+        "1160": "3abde304298e7181134587944c3c42ea2689d7053a0b5c316cd4f6860ee060c8",
+        "1260": "f90480962e332e54f18fc6facea5bce81843fcf958d360b7c7eb3ee63bb91878",
+        "1320": "f90480962e332e54f18fc6facea5bce81843fcf958d360b7c7eb3ee63bb91878",
+        "1360": "f90480962e332e54f18fc6facea5bce81843fcf958d360b7c7eb3ee63bb91878",
+        "1450": "f90480962e332e54f18fc6facea5bce81843fcf958d360b7c7eb3ee63bb91878",
+        "1800": "f90480962e332e54f18fc6facea5bce81843fcf958d360b7c7eb3ee63bb91878"
+      },
+      "early_menu_frames": [
+        917,
+        918,
+        919,
+        920,
+        921,
+        922,
+        923,
+        924,
+        925,
+        926,
+        927,
+        928,
+        929,
+        930,
+        931,
+        932
+      ]
+    },
+    "championnat": {
+      "scenario": "championnat",
+      "states": {
+        "1040": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1160": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 2,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1260": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        },
+        "1320": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        },
+        "1360": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        },
+        "1450": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        },
+        "1800": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        }
+      },
+      "frame_sha256": {
+        "1040": "c78a0a4b101b7c08e0d036ec5b584f03a1cca57d7b019111f76c5b2f5720feab",
+        "1160": "1a83e06adec886dc0f8b7a73e18185a0b2f048a85e95b578ccdff78419595d2a",
+        "1260": "d2a23a7de3af6bf70d164a0ce45201371aca7624e30079d30cccab1cb6cf52e3",
+        "1320": "4bd5375991a8d5efa8b9883537183ec06546e26fa9a56e53203514983066a085",
+        "1360": "4bd5375991a8d5efa8b9883537183ec06546e26fa9a56e53203514983066a085",
+        "1450": "4bd5375991a8d5efa8b9883537183ec06546e26fa9a56e53203514983066a085",
+        "1800": "4bd5375991a8d5efa8b9883537183ec06546e26fa9a56e53203514983066a085"
+      },
+      "early_menu_frames": [
+        917,
+        918,
+        919,
+        920,
+        921,
+        922,
+        923,
+        924,
+        925,
+        926,
+        927,
+        928,
+        929,
+        930,
+        931,
+        932
+      ]
+    },
+    "option": {
+      "scenario": "option",
+      "states": {
+        "1040": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1160": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1260": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        },
+        "1320": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        },
+        "1360": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        },
+        "1450": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        },
+        "1800": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        }
+      },
+      "frame_sha256": {
+        "1040": "c78a0a4b101b7c08e0d036ec5b584f03a1cca57d7b019111f76c5b2f5720feab",
+        "1160": "1b526f4d58ba98bd06b1b429312655116f3f949c76c153ecb9d3c6478a8ff8d7",
+        "1260": "3c27044e1ded77367482e15037c9c34fa1c50fc7b625a6a0edec0dd9d5ce5f0a",
+        "1320": "3c27044e1ded77367482e15037c9c34fa1c50fc7b625a6a0edec0dd9d5ce5f0a",
+        "1360": "3c27044e1ded77367482e15037c9c34fa1c50fc7b625a6a0edec0dd9d5ce5f0a",
+        "1450": "3c27044e1ded77367482e15037c9c34fa1c50fc7b625a6a0edec0dd9d5ce5f0a",
+        "1800": "3c27044e1ded77367482e15037c9c34fa1c50fc7b625a6a0edec0dd9d5ce5f0a"
+      },
+      "early_menu_frames": [
+        917,
+        918,
+        919,
+        920,
+        921,
+        922,
+        923,
+        924,
+        925,
+        926,
+        927,
+        928,
+        929,
+        930,
+        931,
+        932
+      ]
+    }
+  },
+  "native_font": {
+    "decompressed_bytes": 16384,
+    "sha256": "ac85efac577d888f61d22e046e014a09b8e32340c9d71cb4c2ab24d445bddd71",
+    "matches_original_vram": true
+  },
+  "goten": {
+    "source": "original French SB3 standing OBJ pose",
+    "matches_native_obj_pixels": true,
+    "form": "Super Saiyan",
+    "scale_in_scene": 1.4
+  },
+  "ips_reconstruction": true,
+  "checksum_valid": true,
+  "new_windows_version_executed": false,
+  "health_manipulation": "Outcome coverage sets CPU health to zero for wins; for losses it reduces player health to one and lets the CPU land the final hit. The natural-loss run never changes health."
+}

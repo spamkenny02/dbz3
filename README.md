@@ -1,48 +1,36 @@
-# DBZ3 — Ultime Menace Story Mode
+# DBZ3 — première scène, présentation SB2 (v9)
 
-**V8 exports the editor's graphic compositions into the ROM.**
-Backgrounds and fixed actor layers, placement, scale, mirror and layer order
-are now compiled alongside dialogue, choices and three native battles.
-The original Goku/Vegeta intro and native HISTOIRE menu are preserved. No SRAM.
+La v9 se concentre sur l'entraînement Gohan/Goten : décor SB2 et fond violet,
+apparitions successives, police française originale, texte progressif, musique
+SB2 sélectionnable, choix du combattant et retour après victoire/défaite.
+L'intro Goku/Vegeta et les modes natifs SB3 sont conservés. Aucune SRAM.
 
-- [Download the graphics editor v8](releases/Atelier_Scenario_GUI_Graphiques_v8.zip)
-- [Instructions and limits](docs/campaign-v8-graphics.md)
-- [Snes9x evidence](docs/campaign-v8-runtime.json)
-- [Forest example project](editor/prelude_decor13.json)
-- [Earlier text-only v7 IPS](patches/Ultime-Menace-Histoire-Combats-v7.ips)
+- [Télécharger l'atelier première scène SB2 v9](releases/Atelier_Premiere_Scene_SB2_v9.zip)
+- [Installation, détails et limites](docs/first-scene-sb2-v9.md)
+- [Résultats des essais](docs/first-scene-sb2-v9-runtime.json)
 
-Extract the new editor ZIP into a new folder and copy your existing private
-`assets/` folder beside `app.py`. Install Pillow, launch `Lancer_editeur.bat`,
-open your project and use `Construire ROM / IPS`. Choose the original French
-2 MiB ROM and a separate output name. Start the result from reset without an
-old emulator state. The completion dialog reports graphic pages exported.
-
-The included `prelude_tournoi.json` has Gohan/Goten training, Vegeta/Trunks
-training, Goku's return and the children's final, with player selection and
-different win/loss responses. `prelude_decor13.json` sets the forest background
-on its first two nodes. Add your own actor layers from the local catalog.
-Narrative compositions are static; combat stages still use the selected native
-arena. Each composed page supports 256 colors; excess colors are reduced and
-reported. Capacity overflow fails the build.
-
-## CLI
-
-Python 3.10+ with Pillow:
+Décompressez dans un nouveau dossier et copiez votre dossier `assets/` existant
+à côté de `app.py`. Installez les dépendances puis lancez le BAT :
 
 ```
-python -m pip install -r editor/requirements.txt
-python tools/build_story_campaign.py original.sfc editor/prelude_decor13.json --out-rom build/story.sfc --out-ips build/story.ips --report build/story.json
-python -m unittest discover -s tests -v
-python tools/package_editor.py
+py -3 -m pip install -r requirements.txt
 ```
 
-The original ROM must have SHA-256
-`663116d015cad3398644608ca6f2506071ab23d38b03b4890e1a6caecb1a55aa`.
-The compiler resolves the project's catalog relative to its JSON file.
+Cliquez **Créer la première scène SB2**. Choisissez les deux ROMs françaises
+originales de 2 Mio (SB2 La Légende Saien, puis SB3 Ultime Menace), et enregistrez
+le nouveau projet JSON. Sélectionnez une piste SB2, enregistrez, puis construisez
+la ROM avec la ROM SB3 originale sous un nouveau nom. Démarrez sans ancien état
+émulateur. Il n'est pas nécessaire d'installer un émulateur pour préparer/exporter.
 
-## Distribution
+Le décor 13 d'origine est une bande centrale sur un fond violet dégradé. Les
+personnages ont des poses fixes ; Gohan vient du catalogue SB2 et Goten de SB3,
+en Super Saiyan. La musique SB2 est remplacée par le pilote SB3 avant le combat,
+puis rechargée pour la réplique de résultat. Le combat utilise encore la plaine
+rocheuse native. Les pistes 4 et 5 ont été vérifiées en jeu ; les autres numéros
+extraits n'ont pas chacun fait l'objet d'un parcours complet.
 
-This repository contains code, documentation and JSON examples. Commercial
-ROMs and extracted game art stay local. Build the graphical ROM/patch using
-your own ROM and private assets. The earlier v6/v7 patches remain archived;
-they do not gain graphic support without rebuilding through the new compiler.
+Les sources de la v8 et son exemple de campagne restent disponibles. Le lecteur
+local de l'éditeur simule le scénario ; il ne joue pas la musique ni le combat.
+Les ROMs, polices et musiques extraites restent privées. Le ZIP contient les
+outils d'extraction et de construction, sans ROM ni ressources commerciales.
+

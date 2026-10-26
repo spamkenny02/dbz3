@@ -1,0 +1,298 @@
+{
+  "format": "dbz3-story",
+  "version": 1,
+  "title": "Premier entraînement · présentation SB2",
+  "start": "forest",
+  "catalog": "assets/catalog.json",
+  "sb2_style": "assets/sb2_native_style.json",
+  "music": {
+    "source": "sb2",
+    "track": 4
+  },
+  "scenes": [
+    {
+      "id": "forest",
+      "name": "Les bois",
+      "kind": "dialogue",
+      "background": "background_0012",
+      "actors": [],
+      "dialogue": "",
+      "choices": [],
+      "next": "arrival",
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "plaine_rocheuse"
+      },
+      "presentation": "sb2",
+      "auto_frames": 45
+    },
+    {
+      "id": "arrival",
+      "name": "Gohan arrive",
+      "kind": "dialogue",
+      "background": "background_0012",
+      "actors": [
+        {
+          "id": "gohan",
+          "asset": "sprite_0005",
+          "x": 40,
+          "y": 60,
+          "scale": 1,
+          "flip": false,
+          "z": 0
+        }
+      ],
+      "dialogue": "",
+      "choices": [],
+      "next": "gohan",
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "plaine_rocheuse"
+      },
+      "presentation": "sb2",
+      "auto_frames": 35
+    },
+    {
+      "id": "gohan",
+      "name": "Gohan et Goten",
+      "kind": "dialogue",
+      "background": "background_0012",
+      "actors": [
+        {
+          "id": "gohan",
+          "asset": "sprite_0005",
+          "x": 40,
+          "y": 60,
+          "scale": 1,
+          "flip": false,
+          "z": 0
+        },
+        {
+          "id": "goten",
+          "asset": "goten_sb3_standing",
+          "x": 180,
+          "y": 83,
+          "scale": 1.4,
+          "flip": false,
+          "z": 1
+        }
+      ],
+      "dialogue": "Gohan : Le tournoi a lieu\ndans quelques jours.\nOn doit s'entraîner.",
+      "choices": [],
+      "next": "goten",
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "plaine_rocheuse"
+      },
+      "presentation": "sb2",
+      "auto_frames": 0
+    },
+    {
+      "id": "goten",
+      "name": "Entraînement",
+      "kind": "dialogue",
+      "background": "background_0012",
+      "actors": [
+        {
+          "id": "gohan",
+          "asset": "sprite_0005",
+          "x": 40,
+          "y": 60,
+          "scale": 1,
+          "flip": false,
+          "z": 0
+        },
+        {
+          "id": "goten",
+          "asset": "goten_sb3_standing",
+          "x": 180,
+          "y": 83,
+          "scale": 1.4,
+          "flip": false,
+          "z": 1
+        }
+      ],
+      "dialogue": "Goten : D'accord !\nJe vais tout donner !",
+      "choices": [],
+      "next": "fight",
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "plaine_rocheuse"
+      },
+      "presentation": "sb2",
+      "auto_frames": 0
+    },
+    {
+      "id": "fight",
+      "name": "Choix du combattant",
+      "kind": "combat",
+      "background": "background_0012",
+      "actors": [
+        {
+          "id": "gohan",
+          "asset": "sprite_0005",
+          "x": 40,
+          "y": 60,
+          "scale": 1,
+          "flip": false,
+          "z": 0
+        },
+        {
+          "id": "goten",
+          "asset": "goten_sb3_standing",
+          "x": 180,
+          "y": 83,
+          "scale": 1.4,
+          "flip": false,
+          "z": 1
+        }
+      ],
+      "dialogue": "",
+      "choices": [],
+      "next": null,
+      "combat": {
+        "player": "Gohan",
+        "opponent": "Goten",
+        "selectable": true,
+        "arena": "plaine_rocheuse",
+        "win": "win",
+        "lose": "lose"
+      },
+      "presentation": "sb2",
+      "auto_frames": 0
+    },
+    {
+      "id": "win",
+      "name": "Victoire",
+      "kind": "dialogue",
+      "background": "background_0012",
+      "actors": [
+        {
+          "id": "gohan",
+          "asset": "sprite_0005",
+          "x": 40,
+          "y": 60,
+          "scale": 1,
+          "flip": false,
+          "z": 0
+        },
+        {
+          "id": "goten",
+          "asset": "goten_sb3_standing",
+          "x": 180,
+          "y": 83,
+          "scale": 1.4,
+          "flip": false,
+          "z": 1
+        }
+      ],
+      "dialogue": "Bien joué !\nOn progresse tous les deux.",
+      "choices": [],
+      "next": "end",
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "plaine_rocheuse"
+      },
+      "presentation": "sb2",
+      "auto_frames": 0
+    },
+    {
+      "id": "lose",
+      "name": "Défaite",
+      "kind": "dialogue",
+      "background": "background_0012",
+      "actors": [
+        {
+          "id": "gohan",
+          "asset": "sprite_0005",
+          "x": 40,
+          "y": 60,
+          "scale": 1,
+          "flip": false,
+          "z": 0
+        },
+        {
+          "id": "goten",
+          "asset": "goten_sb3_standing",
+          "x": 180,
+          "y": 83,
+          "scale": 1.4,
+          "flip": false,
+          "z": 1
+        }
+      ],
+      "dialogue": "Pas mal ! On recommence\nune prochaine fois.",
+      "choices": [],
+      "next": "end",
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "plaine_rocheuse"
+      },
+      "presentation": "sb2",
+      "auto_frames": 0
+    },
+    {
+      "id": "end",
+      "name": "Fin de scène",
+      "kind": "ending",
+      "background": "background_0012",
+      "actors": [
+        {
+          "id": "gohan",
+          "asset": "sprite_0005",
+          "x": 40,
+          "y": 60,
+          "scale": 1,
+          "flip": false,
+          "z": 0
+        },
+        {
+          "id": "goten",
+          "asset": "goten_sb3_standing",
+          "x": 180,
+          "y": 83,
+          "scale": 1.4,
+          "flip": false,
+          "z": 1
+        }
+      ],
+      "dialogue": "Fin du premier\nentraînement.",
+      "choices": [],
+      "next": null,
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "plaine_rocheuse"
+      },
+      "presentation": "sb2",
+      "auto_frames": 0
+    }
+  ]
+}

@@ -105,7 +105,7 @@ def compose(s,assets,dialogue=True):
             if not toolroot.exists():toolroot=Path(__file__).resolve().parents[1]/'tools'
             sys.path.insert(0,str(toolroot))
             from sb2_style import NativeFont
-            font=NativeFont(base64.b64decode(json.loads(style.read_text())['font']))
+            font=NativeFont(base64.b64decode(json.loads(style.read_text(encoding='utf-8'))['font']))
             lines=[]
             for paragraph in s['dialogue'].replace('’',"'").splitlines():lines.extend(textwrap.wrap(paragraph,26) or [''])
             for n,line in enumerate(lines[:3]):font.draw(im,24,152+n*16,line)

@@ -11,8 +11,8 @@ from model import scene,save_project
 
 def extract_goten(rom):
     if hashlib.sha256(rom).hexdigest()!=BASE_SHA256:raise ValueError('ROM SB3 française originale requise')
-    recipe=json.loads(Path(__file__).with_name('goten_sb3_recipe.json').read_text());image=Image.new('RGBA',(recipe['width'],recipe['height']))
-    for obj in recipe['objects']:
+    recipe=json.loads(Path(__file__).with_name('goten_sb3_recipe.json').read_text(encoding='utf-8'));image=Image.new('RGBA',(recipe['width'],recipe['height']))
+    for obj in reversed(recipe['objects']):
         colors=[]
         for i in range(16):
             color=int.from_bytes(rom[obj['palette']+i*2:obj['palette']+i*2+2],'little');colors.append(((color&31)*255//31,(color>>5&31)*255//31,(color>>10&31)*255//31,255 if i else 0))
@@ -29,7 +29,7 @@ def prepare(sb2,sb3,catalog_path,output,track=4):
     catalog_path=Path(catalog_path).resolve()
     if Path(output).resolve() in {catalog_path,catalog_path.parent/'sb2_native_style.json'}:raise ValueError('Le nouveau projet doit avoir un nom distinct du catalogue et du style SB2.')
     if not 4<=track<=21:raise ValueError('Piste SB2 attendue entre 4 et 21')
-    root=catalog_path.parent;data=json.loads(catalog_path.read_text());items={a['id']:a for a in data['assets']}
+    root=catalog_path.parent;data=json.loads(catalog_path.read_text(encoding='utf-8'));items={a['id']:a for a in data['assets']}
     background=next((a['id'] for a in items.values() if a['kind']=='background' and 19 in a.get('source_scenes',[])),None)
     gohan=next((a['id'] for a in items.values() if a['kind']=='sprite' and a.get('name')=='Gohan'),None)
     if not background or not gohan:raise ValueError('Le catalogue SB2 doit contenir Décor scène 13 et Gohan')
@@ -39,7 +39,7 @@ def prepare(sb2,sb3,catalog_path,output,track=4):
     data['assets']=[a for a in data['assets'] if a['id']!=aid]+[record]
     backup=catalog_path.with_suffix('.json.bak')
     if not backup.exists():backup.write_bytes(catalog_path.read_bytes())
-    catalog_path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+    catalog_path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     actors=[dict(id='gohan',asset=gohan,x=40,y=164-items[gohan]['height'],scale=1,flip=False,z=0),dict(id='goten',asset=aid,x=180,y=164-round(sprite.height*1.4),scale=1.4,flip=False,z=1)]
     scenes=[]
     def add(key,name,text='',cast=2,next=None,kind='dialogue',auto=0):

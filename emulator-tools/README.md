@@ -1,11 +1,12 @@
 # Diagnostic Snes9x core for SB2 extraction
 
-The extractor uses normal libretro WRAM/VRAM access plus three read-only
+The extractor uses normal libretro WRAM/VRAM access plus four read-only
 snapshot pointers added by `snes9x-export.patch`:
 
 - memory ID 42: 512 bytes of RGB555 CGRAM
 - memory ID 43: 544 bytes of OAM
 - memory ID 44: 32 KiB of register mirror / FillRAM
+- memory ID 45: 64 KiB of SPC RAM, used to verify driver swaps and restoration
 
 These IDs are a local diagnostic extension, not standard libretro IDs.
 The GUI can edit the included catalog without any emulator installed.
