@@ -39,14 +39,14 @@ class StoryPrototypeAssetsTests(unittest.TestCase):
 
     def test_code_assembles_with_all_short_branches_in_range(self):
         code, labels = assemble_code()
-        self.assertEqual(len(code), 1332)
-        self.assertEqual(hashlib.sha256(code).hexdigest(), "4280c10dd303e2813b623815ad9b87c6ffada9f34401df524418253bca30a380")
+        self.assertEqual(len(code), 1420)
+        self.assertEqual(hashlib.sha256(code).hexdigest(), "d5aed5d6720ffbfbddb5b5f69bf540473a98df28537f5473e18582087e221a0d")
         self.assertLess(CODE_ROM_START + len(code), FONT_OFFSET)
         expected_labels = {
             "StoryInit": 0x8054, "StoryFrame": 0x806F, "MenuInit": 0x814F,
             "MenuFrame": 0x816D, "DrawScreen": 0x822D,
-            "NativeMenuAddStory": 0x840E, "StorySelectState": 0x8545,
-            "StoryReturnToNativeMenu": 0x855A,
+            "NativeMenuAddStory": 0x840E, "StorySelectState": 0x8568,
+            "StoryReturnToNativeMenu": 0x857D,
         }
         for name, address in expected_labels.items():
             self.assertEqual(labels[name], address)
@@ -58,7 +58,7 @@ class StoryPrototypeAssetsTests(unittest.TestCase):
         start = labels["NativeMenuAddStory"] - CODE_CPU_START
         end = labels["StorySelectState"] - CODE_CPU_START
         overlay = code[start:end]
-        self.assertEqual(overlay.count(bytes.fromhex("9F 00 60 7E")), 32)
+        self.assertEqual(overlay.count(bytes.fromhex("9F 00 60 7E")), 33)
         expected_top = [
             0x2F02, 0x2F03, 0x2F04, 0x2F05, 0x2F28, 0x2F29, 0x2F2A, 0x2F2B,
             0x2F20, 0x2F21, 0x2F04, 0x2F05, 0x2F26, 0x2F27, 0x2EEC, 0x2EED,
@@ -89,6 +89,7 @@ class StoryPrototypeAssetsTests(unittest.TestCase):
                         stack.append((value >> shift) & 255)
                 def pull(size):
                     return sum(stack.pop() << (8 * i) for i in range(size))
+                memory = {0x7E80C0 + i: (i * 17 + 23) & 255 for i in range(384)}
                 pc = 0
                 while pc < len(overlay):
                     op = overlay[pc]
@@ -118,8 +119,24 @@ class StoryPrototypeAssetsTests(unittest.TestCase):
                         size = 1 if p & (0x20 if idx == 0 else 0x10) else 2
                         regs[idx] = int.from_bytes(overlay[pc:pc+size], "little")
                         pc += size
+                    elif op == 0xBF:
+                        address = int.from_bytes(overlay[pc:pc+3], 'little') + regs[1]
+                        regs[0] = memory.get(address, 0) | (memory.get(address+1, 0) << 8)
+                        pc += 3
                     elif op == 0x9F:
-                        pc += 3  # STA long,X does not touch the stack
+                        address = int.from_bytes(overlay[pc:pc+3], 'little') + regs[1]
+                        memory[address] = regs[0] & 255
+                        memory[address+1] = regs[0] >> 8
+                        pc += 3
+                    elif op == 0xE0:
+                        value = int.from_bytes(overlay[pc:pc+2], 'little')
+                        p = (p & ~1) | int(regs[1] >= value)
+                        pc += 2
+                    elif op == 0x90:
+                        delta = int.from_bytes(overlay[pc:pc+1], 'little', signed=True)
+                        pc += 1
+                        if not p & 1:
+                            pc += delta
                     elif op == 0xE8:
                         regs[1] = (regs[1] + 1) & (255 if p & 0x10 else 65535)
                     elif op == 0x22:
@@ -127,6 +144,8 @@ class StoryPrototypeAssetsTests(unittest.TestCase):
                         break
                     else:
                         self.fail(f"Unexpected overlay opcode {op:02X}")
+                self.assertEqual(bytes(memory[0x7E6080+i] for i in range(384)),
+                                 bytes(memory[0x7E80C0+i] for i in range(384)))
                 self.assertEqual(stack, [0xCA, 0xFE, 0x42])
                 self.assertEqual(regs, original)
                 self.assertEqual(db, 0x7E)

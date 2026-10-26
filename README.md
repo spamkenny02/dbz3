@@ -1,7 +1,7 @@
-> **Latest: Native Histoire v3.** Adds HISTOIRE to the original title menu.
-> Tested with Snes9x 1.61: native menu, both prologue routes and the three
-> original menu entries. [Download IPS](patches/Ultime-Menace-Native-Histoire-v3.ips)
-> · [Validation and limits](docs/native-histoire-v3.md).
+> **Latest: Native Histoire v4.** Opens the native menu directly at startup,
+> with HISTOIRE first and selected by default. Tested with Snes9x 1.61.
+> [Download IPS](patches/Ultime-Menace-Native-Histoire-v4.ips)
+> · [Validation and limits](docs/native-histoire-v4.md).
 > Apply to the original French ROM, not an older patched version.
 
 # DBZ3 — Ultime Menace Story Mode Hack

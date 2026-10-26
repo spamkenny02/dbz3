@@ -476,12 +476,23 @@ def assemble_code() -> tuple[bytes, dict[str, int]]:
     # Fix widths BEFORE saving registers: all pushes and pulls must be
     # 16-bit even when the native caller arrives with M=1 or X=1.
     a.emit(0x08, 0x8B, 0xC2, 0x30, 0x48, 0xDA, 0x5A)  # PHP, PHB, REP #$30, PHA, PHX, PHY
-    a.emit(0xA2, 0x90, 0x01)  # row 6, x=8: byte offset $0190 in $7E:6000
+    # Reconstruct the three original entries one slot lower from the
+    # immutable decompressed map, avoiding a repeated in-place shift.
+    a.emit(0xA2, 0x00, 0x00)
+    a.label("CopyNativeEntries")
+    a.emit(0xBF, 0xC0, 0x80, 0x7E, 0x9F, 0x80, 0x60, 0x7E,
+           0xE8, 0xE8, 0xE0, 0x80, 0x01)
+    a.branch(0x90, "CopyNativeEntries")
+    a.emit(0xA2, 0x00, 0x00, 0xA9, 0x00, 0x2C)
+    a.label("BlankFirstEntry")
+    a.emit(0x9F, 0x00, 0x60, 0x7E, 0xE8, 0xE8, 0xE0, 0x80, 0x00)
+    a.branch(0x90, "BlankFirstEntry")
+    a.emit(0xA2, 0x10, 0x00)  # first slot, x=8
     for tile in (0x2F02, 0x2F03, 0x2F04, 0x2F05, 0x2F28, 0x2F29,
                  0x2F2A, 0x2F2B, 0x2F20, 0x2F21, 0x2F04, 0x2F05,
                  0x2F26, 0x2F27, 0x2EEC, 0x2EED):
         a.emit(0xA9, tile & 0xFF, tile >> 8, 0x9F, 0x00, 0x60, 0x7E, 0xE8, 0xE8)
-    a.emit(0xA2, 0xD0, 0x01)  # row 7, x=8: byte offset $01D0
+    a.emit(0xA2, 0x50, 0x00)  # second tile row, x=8
     for tile in (0x2F12, 0x2F13, 0x2F14, 0x2F15, 0x2F38, 0x2F39,
                  0x2F3A, 0x2F3B, 0x2F30, 0x2F31, 0x2F14, 0x2F15,
                  0x2F36, 0x2F37, 0x2EFC, 0x2EFD):
@@ -506,15 +517,25 @@ def assemble_code() -> tuple[bytes, dict[str, int]]:
     # Non-returning Story B path: unwind StoryFrame's saved P/DBR first.
     a.label("StoryReturnToNativeMenu")
     a.emit(0x28, 0xAB, 0xE2, 0x20, 0xA9, 0x02, 0x8F, 0x78, 0x18, 0x7E)
-    a.emit(0xA9, 0x00, 0x8F, 0x79, 0x18, 0x7E, 0xA9, 0x06)
+    a.emit(0xA9, 0x00, 0x8F, 0x79, 0x18, 0x7E, 0xA9, 0x0D)
     a.emit(0x5C, 0x7A, 0x80, 0x80)  # return to native state 6/submode 2
 
     a.label("NativeMainConfirm")
-    a.emit(0xAF, 0x6B, 0x19, 0x7E, 0xC9, 0x03)
+    a.emit(0xAF, 0x6B, 0x19, 0x7E, 0xC9, 0x00)
     a.branch(0xF0, "NativeMainStory")
-    a.emit(0xAD, 0x6B, 0x19, 0x1A, 0x5C, 0xCD, 0xA9, 0xBF)
+    a.emit(0xAD, 0x6B, 0x19, 0x5C, 0xCD, 0xA9, 0xBF)
     a.label("NativeMainStory")
     a.emit(0xA9, 0x0C, 0x64, 0x93, 0x5C, 0x7A, 0x80, 0x80)
+
+    a.label("DirectMenuInit")
+    a.emit(0xE2, 0x20, 0xA9, 0x06, 0x85, 0x20, 0x85, 0x22,
+           0xA9, 0x02, 0x8D, 0x78, 0x18, 0x9C, 0x79, 0x18,
+           0xA9, 0x0C, 0x85, 0x23,
+           0x22, 0x6D, 0x82, 0xBF, 0x22, 0xFA, 0x85, 0xBF,
+           0x22, 0x4B, 0x87, 0xBF,
+           0xE2, 0x20, 0xA9, 0x0A, 0x85, 0x23, 0xA9, 0x04, 0x85, 0x24,
+           0x64, 0x25, 0x9C, 0x6B, 0x19, 0x9C, 0xA0, 0x18,
+           0x5C, 0x71, 0x81, 0xBF)
 
     return a.finish(), a.labels
 
@@ -587,7 +608,7 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
 
     init_ptrs = read_ptrs(base, 0x00F9, 12)
     frame_ptrs = read_ptrs(base, 0x02E3, 11)
-    init_ptrs += [((BANK << 16) | labels["StoryInit"]), ((BANK << 16) | labels["MenuInit"])]
+    init_ptrs += [((BANK << 16) | labels["StoryInit"]), ((BANK << 16) | labels["DirectMenuInit"])]
     frame_ptrs += [0x808304, ((BANK << 16) | labels["StoryFrame"]), ((BANK << 16) | labels["MenuFrame"])]
     if len(init_ptrs) != 14 or len(frame_ptrs) != 14:
         raise AssertionError("Expected global state indices 0..13")
@@ -607,6 +628,7 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
         patched[offset:offset + len(tilemap)] = tilemap
 
     expected = {
+        0x7F90: bytes.fromhex("06"),
         0x00E9: bytes.fromhex("F9 80 80"),
         0x00F1: bytes.fromhex("FB 80 80"),
         0x02D3: bytes.fromhex("E3 82 80"),
@@ -619,6 +641,7 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
         0x1FA9C9: bytes.fromhex("AD 6B 19 1A"),
     }
     replacements = {
+        0x7F90: bytes.fromhex("0D"),
         0x00E9: bytes.fromhex("00 80 C0"),
         0x00F1: bytes.fromhex("02 80 C0"),
         0x02D3: bytes.fromhex("2A 80 C0"),
@@ -628,7 +651,7 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
         0x1FAA79: bytes.fromhex("A9 03"),
         0x1FA9ED: bytes.fromhex("A9 03"),
         0x1FAA0C: bytes.fromhex("C9 03"),
-        0x1FA9C9: bytes((0x5C, labels["NativeMainConfirm"] & 0xFF, (labels["StorySelectState"] >> 8) & 0xFF, BANK)),
+        0x1FA9C9: bytes((0x5C, labels["NativeMainConfirm"] & 0xFF, (labels["NativeMainConfirm"] >> 8) & 0xFF, BANK)),
     }
     for offset, old in expected.items():
         if base[offset:offset + len(old)] != old:
@@ -649,7 +672,7 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
         raise AssertionError("Story initializer pointer failed post-build verification")
     if read_ptrs(patched, FRAME_TABLE_OFFSET, 14)[12] != ((BANK << 16) | labels["StoryFrame"]):
         raise AssertionError("Story frame pointer failed post-build verification")
-    if read_ptrs(patched, INIT_TABLE_OFFSET, 14)[13] != ((BANK << 16) | labels["MenuInit"]):
+    if read_ptrs(patched, INIT_TABLE_OFFSET, 14)[13] != ((BANK << 16) | labels["DirectMenuInit"]):
         raise AssertionError("Menu initializer pointer failed post-build verification")
     if read_ptrs(patched, FRAME_TABLE_OFFSET, 14)[13] != ((BANK << 16) | labels["MenuFrame"]):
         raise AssertionError("Menu frame pointer failed post-build verification")
@@ -705,11 +728,11 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
         },
         "notes": [
             "New code/data are placed in appended LoROM banks C0-FF, not in the old FF-filled range that has existing references.",
-            "The original French menu remains in place; HISTOIRE is written into its reserved fourth two-row slot using the original 16x16 glyph tiles.",
-            "The main title selector at $196B changes from 0..2 to 0..3; confirmation of index 3 enters Story state 12 while indices 0-2 retain original routing.",
+            "The original French menu is shown directly at boot; HISTOIRE occupies its first two-row slot, followed by COMBAT, CHAMPIONNAT and OPTION.",
+            "The main title selector at $196B changes from 0..2 to 0..3; confirmation of index 0 enters Story state 12; indices 1-3 route to the three native modes.",
             "The first story slice has two intro pages, a two-way choice, and two distinct short endings.",
             "No SRAM is added; cursor/page/route flags are volatile WRAM only.",
-            "The title Start path remains the original transition into state 6/submode 2. Story B returns to the native title flow; A opens the selector after the input delay.",
+            "Boot state 13 initializes the native title/menu resources and opens the four-choice selector directly. Story B returns through the same initialization.",
             "This is not emulator-tested. Validate 4 MiB LoROM mapping, boot, native menu label visibility, DMA, controller input, mode routing and transitions in Mesen/bsnes before release.",
         ],
     }

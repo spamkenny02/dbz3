@@ -14,16 +14,14 @@ core, rom, scenario = sys.argv[1:]
 lib = c.CDLL(core)
 frame = 0
 screens = {}
-actions = [(420, 3), (900, 8)]
+actions = []
 if scenario in ('gohan', 'vegeta'):
-    actions += [(1050, 5), (1090, 5), (1130, 5), (1200, 8),
-                (1300, 8), (1340, 8), (1420, 8), (1480, 0)]
+    actions = [(300, 8), (400, 8), (440, 8), (520, 8), (580, 0)]
     if scenario == 'vegeta':
-        actions += [(1380, 5)]
+        actions += [(480, 5)]
 else:
     index = ['combat', 'championnat', 'option'].index(scenario)
-    actions += [(1050 + i * 40, 5) for i in range(index)]
-    actions += [(1200, 8)]
+    actions = [(260 + i * 40, 5) for i in range(index + 1)] + [(400, 8)]
 
 ENV = c.CFUNCTYPE(c.c_bool, c.c_uint, c.c_void_p)
 VID = c.CFUNCTYPE(None, c.c_void_p, c.c_uint, c.c_uint, c.c_size_t)
@@ -40,7 +38,7 @@ def environment(command, data):
 
 @VID
 def video(data, width, height, pitch):
-    if data and frame in (1040, 1160, 1260, 1320, 1360, 1450, 1800):
+    if data and frame in (220, 280, 340, 420, 460, 550, 900):
         screens[frame] = hashlib.sha256(c.string_at(data, pitch * height)).hexdigest()
 
 @AUD
@@ -82,25 +80,26 @@ lib.retro_get_memory_data.argtypes = [c.c_uint]
 lib.retro_get_memory_data.restype = c.c_void_p
 ram = (c.c_ubyte * 131072).from_address(lib.retro_get_memory_data(2))
 states = {}
-for frame in range(1801):
+for frame in range(901):
     lib.retro_run()
-    if frame in (1040, 1160, 1260, 1320, 1360, 1450, 1800):
+    if frame in (220, 280, 340, 420, 460, 550, 900):
         states[frame] = dict(global_state=ram[0x20], frame_state=ram[0x22],
                              screen=ram[0x23], main_cursor=ram[0x196B],
                              submenu=ram[0x25], page=ram[0x1FF51], route=ram[0x1FF52])
 assert len(screens) == 7, 'Missing rendered frames'
-assert states[1040]['global_state'] == 6 and states[1040]['screen'] == 12
+assert states[220]['global_state'] == 6 and states[220]['screen'] == 12
+assert states[220]['main_cursor'] == 0  # no controller input needed to reach menu
 if scenario in ('gohan', 'vegeta'):
-    assert states[1160]['main_cursor'] == 3
-    assert states[1260]['global_state'] == states[1260]['frame_state'] == 12
-    assert states[1320]['page'] == 1
-    assert states[1360]['page'] == 2
-    assert states[1450]['page'] == 3
-    assert states[1450]['route'] == (scenario == 'vegeta')
-    assert states[1800]['global_state'] == 6  # B returns to native title flow
-    assert len({screens[i] for i in (1260, 1320, 1360, 1450)}) == 4
+    assert states[340]['global_state'] == states[340]['frame_state'] == 12
+    assert states[420]['page'] == 1
+    assert states[460]['page'] == 2
+    assert states[550]['page'] == 3
+    assert states[550]['route'] == (scenario == 'vegeta')
+    assert states[900]['global_state'] == 6 and states[900]['screen'] == 12
+    assert states[900]['main_cursor'] == 0
+    assert len({screens[i] for i in (340, 420, 460, 550)}) == 4
 else:
-    assert states[1260]['global_state'] == 6
-    assert states[1260]['submenu'] == ['combat', 'championnat', 'option'].index(scenario) + 2
+    assert states[460]['global_state'] == 6
+    assert states[460]['submenu'] == ['combat', 'championnat', 'option'].index(scenario) + 2
 lib.retro_deinit()
 print(json.dumps(dict(scenario=scenario, states=states, frame_sha256=screens), indent=2))
