@@ -1,0 +1,39 @@
+{
+  "status": "experimental_static_build_not_emulator_tested",
+  "base_rom_sha256": "663116d015cad3398644608ca6f2506071ab23d38b03b4890e1a6caecb1a55aa",
+  "prototype_rom_sha256": "7a2ed8cb8eda9166c21b637e770a917ebbda44499bbe5959b0f90bc5cbd7f50b",
+  "ips_sha256": "9a2a3b85e251baacae573c3a2494925282e2f08ca2364cd405a96bf1e57dc8d4",
+  "ips_size_bytes": 22492,
+  "prototype_rom_size_bytes": 2097152,
+  "code_size_bytes": 743,
+  "code_start": "BE:985A",
+  "code_end_exclusive": "BE:9B41",
+  "init_table_file_offset": "0x1F1806",
+  "frame_table_file_offset": "0x1F1830",
+  "state_12": {
+    "init": "BE:985A",
+    "frame": "BE:9872",
+    "purpose": "branching story prototype"
+  },
+  "state_13": {
+    "init": "BE:9956",
+    "frame": "BE:9974",
+    "purpose": "custom four-choice menu"
+  },
+  "renderer": "BE:9A34",
+  "reserved_wram": ["0x7FFF50", "0x7FFF51", "0x7FFF52"],
+  "sram_size_code": 0,
+  "checksum_matches_sum": true,
+  "ips_round_trip_verified": true,
+  "automated_unit_tests": 14,
+  "emulator_tested": false,
+  "battle_transition_integrated": false,
+  "features": [
+    "four-choice text menu",
+    "original options 0-2 route to original confirmation block",
+    "two story intro pages",
+    "two-way Gohan/Vegeta branch",
+    "two short endings",
+    "no SRAM or persistent save"
+  ]
+}
