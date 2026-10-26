@@ -13,27 +13,28 @@ import json
 from pathlib import Path
 
 BASE_SHA256 = "663116d015cad3398644608ca6f2506071ab23d38b03b4890e1a6caecb1a55aa"
-ROM_SIZE = 0x200000
-BANK = 0xBE
-PATCH_START = 0x1F1806
-PATCH_END = 0x1F8000
+ROM_SIZE = 0x200000  # supplied base image: 2 MiB
+EXPANDED_SIZE = 0x400000  # expanded LoROM image: 4 MiB, using banks C0-FF
+BANK = 0xC0
+PATCH_START = 0x200000
+PATCH_END = 0x207000  # end of the custom tilemap payload, exclusive
 INIT_TABLE_OFFSET = PATCH_START
 FRAME_TABLE_OFFSET = PATCH_START + 14 * 3
 CODE_ROM_START = PATCH_START + 14 * 3 * 2
-CODE_CPU_START = 0x985A
-FONT_OFFSET = 0x1F2000
-FONT_CPU = 0xA000
+CODE_CPU_START = 0x8054
+FONT_OFFSET = 0x201000
+FONT_CPU = 0x9000
 MAP_OFFSETS = {
-    "menu_0": 0x1F2400,
-    "menu_1": 0x1F2C00,
-    "menu_2": 0x1F3400,
-    "menu_3": 0x1F3C00,
-    "story_0": 0x1F4400,
-    "story_1": 0x1F4C00,
-    "choice_gohan": 0x1F5400,
-    "choice_vegeta": 0x1F5C00,
-    "ending_gohan": 0x1F6400,
-    "ending_vegeta": 0x1F6C00,
+    "menu_0": 0x202000,
+    "menu_1": 0x202800,
+    "menu_2": 0x203000,
+    "menu_3": 0x203800,
+    "story_0": 0x204000,
+    "story_1": 0x204800,
+    "choice_gohan": 0x205000,
+    "choice_vegeta": 0x205800,
+    "ending_gohan": 0x206000,
+    "ending_vegeta": 0x206800,
 }
 MAP_CPU = {name: 0x8000 + (offset & 0x7FFF) for name, offset in MAP_OFFSETS.items()}
 STORY_CURSOR = 0x7FFF50
@@ -274,7 +275,7 @@ def assemble_code() -> tuple[bytes, dict[str, int]]:
     # State 12: narrative scene. Story state is volatile WRAM; no SRAM is used.
     a.label("StoryInit")
     a.emit(0x08, 0xE2, 0x20, 0xA9, 0x00, 0x8F, 0x51, 0xFF, 0x7F,
-           0x8F, 0x52, 0xFF, 0x7F, 0x28, 0xC2, 0x10, 0xA2, 0x00, 0xC4)
+           0x8F, 0x52, 0xFF, 0x7F, 0x28, 0xC2, 0x10, 0xA2, 0x00, 0xC0)
     a.jsl("DrawScreen")
     a.emit(0x6B)
 
@@ -298,24 +299,24 @@ def assemble_code() -> tuple[bytes, dict[str, int]]:
     a.emit(0x28, 0xAB, 0x6B)
 
     a.label("StoryToPage1")
-    a.emit(0xA9, 0x01, 0x8F, 0x51, 0xFF, 0x7F, 0xC2, 0x10, 0xA2, 0x00, 0xCC)
+    a.emit(0xA9, 0x01, 0x8F, 0x51, 0xFF, 0x7F, 0xC2, 0x10, 0xA2, 0x00, 0xC8)
     a.jsl("DrawScreen")
     a.emit(0x28, 0xAB, 0x6B)
 
     a.label("StoryToChoice")
     a.emit(0xA9, 0x02, 0x8F, 0x51, 0xFF, 0x7F, 0xA9, 0x00, 0x8F, 0x52, 0xFF, 0x7F)
-    a.emit(0xC2, 0x10, 0xA2, 0x00, 0xD4)
+    a.emit(0xC2, 0x10, 0xA2, 0x00, 0xD0)
     a.jsl("DrawScreen")
     a.emit(0x28, 0xAB, 0x6B)
 
     a.label("StorySelectRoute")
     a.emit(0xAF, 0x52, 0xFF, 0x7F)
     a.branch(0xF0, "StoryEndingGohan")
-    a.emit(0xA9, 0x03, 0x8F, 0x51, 0xFF, 0x7F, 0xC2, 0x10, 0xA2, 0x00, 0xEC)
+    a.emit(0xA9, 0x03, 0x8F, 0x51, 0xFF, 0x7F, 0xC2, 0x10, 0xA2, 0x00, 0xE8)
     a.jsl("DrawScreen")
     a.emit(0x28, 0xAB, 0x6B)
     a.label("StoryEndingGohan")
-    a.emit(0xA9, 0x03, 0x8F, 0x51, 0xFF, 0x7F, 0xC2, 0x10, 0xA2, 0x00, 0xE4)
+    a.emit(0xA9, 0x03, 0x8F, 0x51, 0xFF, 0x7F, 0xC2, 0x10, 0xA2, 0x00, 0xE0)
     a.jsl("DrawScreen")
     a.emit(0x28, 0xAB, 0x6B)
 
@@ -329,7 +330,7 @@ def assemble_code() -> tuple[bytes, dict[str, int]]:
     a.label("StoryToggleRoute")
     a.emit(0xE2, 0x20, 0xAF, 0x52, 0xFF, 0x7F, 0x49, 0x01, 0x8F, 0x52, 0xFF, 0x7F)
     a.branch(0xF0, "StoryDrawGohanChoice")
-    a.emit(0xC2, 0x10, 0xA2, 0x00, 0xDC)
+    a.emit(0xC2, 0x10, 0xA2, 0x00, 0xD8)
     a.jsl("DrawScreen")
     a.emit(0x28, 0xAB, 0x6B)
     a.label("StoryDrawGohanChoice")
@@ -348,7 +349,7 @@ def assemble_code() -> tuple[bytes, dict[str, int]]:
     # Run the complete original submode-2 initializer (including its common
     # tail) to prepare mode variables, then replace only its display.
     a.emit(0x22, 0x04, 0x81, 0xBF)
-    a.emit(0xA9, 0x00, 0x8F, 0x50, 0xFF, 0x7F, 0x28, 0xAB, 0xC2, 0x10, 0xA2, 0x00, 0xA4)
+    a.emit(0xA9, 0x00, 0x8F, 0x50, 0xFF, 0x7F, 0x28, 0xAB, 0xC2, 0x10, 0xA2, 0x00, 0xA0)
     a.jsl("DrawScreen")
     a.emit(0x6B)
 
@@ -401,7 +402,7 @@ def assemble_code() -> tuple[bytes, dict[str, int]]:
     a.branch(0xF0, "MenuMap1")
     a.emit(0xC9, 0x02)
     a.branch(0xF0, "MenuMap2")
-    a.emit(0xC2, 0x10, 0xA2, 0x00, 0xBC)
+    a.emit(0xC2, 0x10, 0xA2, 0x00, 0xB8)
     a.jsl("DrawScreen")
     a.branch(0x80, "MenuDone")
     a.label("MenuMap0")
@@ -409,11 +410,11 @@ def assemble_code() -> tuple[bytes, dict[str, int]]:
     a.jsl("DrawScreen")
     a.branch(0x80, "MenuDone")
     a.label("MenuMap1")
-    a.emit(0xC2, 0x10, 0xA2, 0x00, 0xAC)
+    a.emit(0xC2, 0x10, 0xA2, 0x00, 0xA8)
     a.jsl("DrawScreen")
     a.branch(0x80, "MenuDone")
     a.label("MenuMap2")
-    a.emit(0xC2, 0x10, 0xA2, 0x00, 0xB4)
+    a.emit(0xC2, 0x10, 0xA2, 0x00, 0xB0)
     a.jsl("DrawScreen")
     a.label("MenuDone")
     a.emit(0x28, 0xAB, 0x6B)
@@ -441,12 +442,12 @@ def assemble_code() -> tuple[bytes, dict[str, int]]:
            0xA9, 0x80, 0x8D, 0x15, 0x21,
            0xA9, 0x00, 0x8D, 0x16, 0x21, 0x8D, 0x17, 0x21,
            0xA9, 0x01, 0x8D, 0x00, 0x43, 0xA9, 0x18, 0x8D, 0x01, 0x43,
-           0xA9, 0x00, 0x8D, 0x02, 0x43, 0xA9, 0xA0, 0x8D, 0x03, 0x43,
-           0xA9, 0xBE, 0x8D, 0x04, 0x43, 0xA9, 0x00, 0x8D, 0x05, 0x43,
+           0xA9, 0x00, 0x8D, 0x02, 0x43, 0xA9, 0x90, 0x8D, 0x03, 0x43,
+           0xA9, 0xC0, 0x8D, 0x04, 0x43, 0xA9, 0x00, 0x8D, 0x05, 0x43,
            0xA9, 0x04, 0x8D, 0x06, 0x43, 0xA9, 0x01, 0x8D, 0x0B, 0x42,
            0xFA, 0xA9, 0x00, 0x8D, 0x16, 0x21, 0xA9, 0x20, 0x8D, 0x17, 0x21,
            0xA9, 0x01, 0x8D, 0x00, 0x43, 0xA9, 0x18, 0x8D, 0x01, 0x43,
-           0x8E, 0x02, 0x43, 0xA9, 0xBE, 0x8D, 0x04, 0x43,
+           0x8E, 0x02, 0x43, 0xA9, 0xC0, 0x8D, 0x04, 0x43,
            0xA9, 0x00, 0x8D, 0x05, 0x43, 0xA9, 0x08, 0x8D, 0x06, 0x43,
            0xA9, 0x01, 0x8D, 0x0B, 0x42,
            0xA9, 0x0F, 0x8D, 0x00, 0x21,
@@ -456,24 +457,37 @@ def assemble_code() -> tuple[bytes, dict[str, int]]:
 
 
 def make_ips(base: bytes, patched: bytes) -> bytes:
+    """Create IPS records, including appended bytes when the output ROM expands."""
+    if len(patched) < len(base):
+        raise ValueError("This project does not support shrinking the ROM")
+    if len(patched) > 0x1000000:
+        raise ValueError("IPS format supports offsets only up to 16 MiB")
     out = bytearray(b"PATCH")
     i = 0
-    while i < len(base):
-        if base[i] == patched[i]:
+    while i < len(patched):
+        old = base[i] if i < len(base) else 0
+        if old == patched[i]:
             i += 1
             continue
         start = i
-        while i < len(base) and base[i] != patched[i] and i - start < 0xFFFF:
+        payload = bytearray()
+        while i < len(patched) and i - start < 0xFFFF:
+            old = base[i] if i < len(base) else 0
+            if old == patched[i]:
+                break
+            payload.append(patched[i])
             i += 1
-        payload = patched[start:i]
-        if start > 0xFFFFFF:
-            raise ValueError("IPS offset exceeds 24-bit format")
         out.extend(start.to_bytes(3, "big"))
         out.extend(len(payload).to_bytes(2, "big"))
         out.extend(payload)
+    if len(patched) > len(base):
+        # IPS patchers usually extend to the last record. This explicit final
+        # byte guarantees a 4 MiB output even though the expanded tail is zero.
+        out.extend((len(patched) - 1).to_bytes(3, "big"))
+        out.extend(b"\x00\x01")
+        out.append(patched[-1])
     out.extend(b"EOF")
     return bytes(out)
-
 
 def read_ptrs(data: bytes, offset: int, count: int) -> list[int]:
     return [int.from_bytes(data[offset + 3*i:offset + 3*i + 3], "little") for i in range(count)]
@@ -494,8 +508,8 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
         raise ValueError(f"Expected a 2 MiB ROM, got {len(base)} bytes")
     if digest != BASE_SHA256:
         raise ValueError(f"Base ROM SHA-256 mismatch: expected {BASE_SHA256}, got {digest}")
-    if base[PATCH_START:PATCH_END] != b"\xFF" * (PATCH_END - PATCH_START):
-        raise ValueError("Candidate insertion area is not entirely FF on this ROM")
+    if base[0x7FD7] != 0x0B:
+        raise ValueError(f"Unexpected base ROM-size header code: 0x{base[0x7FD7]:02X}")
 
     # These three WRAM bytes have no direct long-address references in the base
     # ROM. Runtime memory traces are still required before treating them as proven free.
@@ -508,7 +522,6 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
     if CODE_ROM_START + len(code) > FONT_OFFSET:
         raise ValueError(f"Code overlaps font data: end=0x{CODE_ROM_START + len(code):X}, font=0x{FONT_OFFSET:X}")
 
-    # Preserve all 12 existing initializer pointers (state indices 0-11).
     init_ptrs = read_ptrs(base, 0x00F9, 12)
     frame_ptrs = read_ptrs(base, 0x02E3, 11)
     init_ptrs += [((BANK << 16) | labels["StoryInit"]), ((BANK << 16) | labels["MenuInit"])]
@@ -518,18 +531,13 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
 
     font = make_font()
     maps = make_maps()
-    patched = bytearray(base)
-    region = bytearray(b"\xFF" * (PATCH_END - PATCH_START))
+    # Expand to standard 4 MiB LoROM size, using new banks C0-FF for custom code/data.
+    patched = bytearray(base + (b"\x00" * (EXPANDED_SIZE - len(base))))
     init_bytes = b"".join(pointer3(p) for p in init_ptrs)
     frame_bytes = b"".join(pointer3(p) for p in frame_ptrs)
-    rel_init = INIT_TABLE_OFFSET - PATCH_START
-    rel_frame = FRAME_TABLE_OFFSET - PATCH_START
-    region[rel_init:rel_init + len(init_bytes)] = init_bytes
-    region[rel_frame:rel_frame + len(frame_bytes)] = frame_bytes
-    rel_code = CODE_ROM_START - PATCH_START
-    region[rel_code:rel_code + len(code)] = code
-    patched[PATCH_START:PATCH_END] = region
-
+    patched[INIT_TABLE_OFFSET:INIT_TABLE_OFFSET + len(init_bytes)] = init_bytes
+    patched[FRAME_TABLE_OFFSET:FRAME_TABLE_OFFSET + len(frame_bytes)] = frame_bytes
+    patched[CODE_ROM_START:CODE_ROM_START + len(code)] = code
     patched[FONT_OFFSET:FONT_OFFSET + len(font)] = font
     for name, offset in MAP_OFFSETS.items():
         tilemap = maps[name]
@@ -543,10 +551,10 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
         0x1F9A54: bytes.fromhex("A9 06"),
     }
     replacements = {
-        0x00E9: bytes.fromhex("06 98 BE"),
-        0x00F1: bytes.fromhex("08 98 BE"),
-        0x02D3: bytes.fromhex("30 98 BE"),
-        0x02DB: bytes.fromhex("32 98 BE"),
+        0x00E9: bytes.fromhex("00 80 C0"),
+        0x00F1: bytes.fromhex("02 80 C0"),
+        0x02D3: bytes.fromhex("2A 80 C0"),
+        0x02DB: bytes.fromhex("2C 80 C0"),
         0x1F9A54: bytes.fromhex("A9 0D"),
     }
     for offset, old in expected.items():
@@ -554,9 +562,12 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
             raise ValueError(f"Original hook mismatch at 0x{offset:X}: expected {old.hex()}, got {base[offset:offset+len(old)].hex()}")
         patched[offset:offset + len(old)] = replacements[offset]
 
+    patched[0x7FD7] = 0x0C
     update_checksum(patched)
-    if len(patched) != ROM_SIZE:
-        raise AssertionError("Patched ROM size changed")
+    if len(patched) != EXPANDED_SIZE:
+        raise AssertionError("Expanded ROM is not 4 MiB")
+    if patched[0x7FD7] != 0x0C:
+        raise AssertionError("ROM-size header does not declare 4 MiB")
     if sum(patched) & 0xFFFF != int.from_bytes(patched[0x7FDE:0x7FE0], "little"):
         raise AssertionError("SNES checksum does not match byte sum")
     if (int.from_bytes(patched[0x7FDC:0x7FDE], "little") ^ int.from_bytes(patched[0x7FDE:0x7FE0], "little")) != 0xFFFF:
@@ -586,6 +597,8 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
         "output_ips": str(out_ips),
         "output_ips_bytes": len(ips),
         "rom_bytes": len(patched),
+        "rom_expanded_from_bytes": ROM_SIZE,
+        "rom_size_header_code": "0x0C (4 MiB)",
         "code_bytes": len(code),
         "code_rom_start": f"0x{CODE_ROM_START:06X}",
         "code_rom_end_exclusive": f"0x{CODE_ROM_START + len(code):06X}",
@@ -596,8 +609,8 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
         "menu_maps": {name: f"0x{offset:06X}" for name, offset in MAP_OFFSETS.items()},
         "checks": {
             "base_hash": True,
-            "insertion_area_was_ff": True,
-            "state_tables_relocated": True,
+            "expanded_rom_4mb": True,
+            "state_tables_relocated_to_new_bank": True,
             "state_12_story": True,
             "state_13_menu": True,
             "start_hook": True,
@@ -606,18 +619,18 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
             "battle_hook_integrated": False,
         },
         "notes": [
+            "New code/data are placed in appended LoROM banks C0-FF, not in the old FF-filled range that has existing references.",
             "The custom menu is a self-contained black-background text UI with a new 5x7 bitmap font.",
             "Menu options 0-2 seed the original selector variable and enter the original mode-confirmation routine; option 3 enters Story state 12.",
             "The first story slice has two intro pages, a two-way choice, and two distinct short endings.",
             "No SRAM is added; cursor/page/route flags are volatile WRAM only.",
-            "This is not emulator-tested. Validate boot, DMA, controller input, mode routing and transitions in Mesen/bsnes before using it as a release patch.",
+            "This is not emulator-tested. Validate 4 MiB LoROM mapping, boot, DMA, controller input, mode routing and transitions in Mesen/bsnes before release.",
         ],
     }
     if report_path:
         report_path.parent.mkdir(parents=True, exist_ok=True)
         report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return report
-
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
