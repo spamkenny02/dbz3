@@ -1,31 +1,37 @@
 {
   "status": "experimental_static_build_not_emulator_tested",
   "base_rom_sha256": "663116d015cad3398644608ca6f2506071ab23d38b03b4890e1a6caecb1a55aa",
-  "prototype_rom_sha256": "7a2ed8cb8eda9166c21b637e770a917ebbda44499bbe5959b0f90bc5cbd7f50b",
-  "ips_sha256": "9a2a3b85e251baacae573c3a2494925282e2f08ca2364cd405a96bf1e57dc8d4",
-  "ips_size_bytes": 22492,
-  "prototype_rom_size_bytes": 2097152,
+  "prototype_rom_sha256": "95176c4951fb6e11c69b285bc823669dbee3dda376e7d15bd9a42f3bf1a4a885",
+  "ips_sha256": "bd7c4a3f0776bd8c3a28a068de463460b199d41b72bc3db3656b44d3ec72d4f8",
+  "ips_size_bytes": 6909,
+  "prototype_rom_size_bytes": 4194304,
+  "base_rom_size_bytes": 2097152,
+  "rom_size_header_code": "0x0C (4 MiB LoROM)",
   "code_size_bytes": 743,
-  "code_start": "BE:985A",
-  "code_end_exclusive": "BE:9B41",
-  "init_table_file_offset": "0x1F1806",
-  "frame_table_file_offset": "0x1F1830",
+  "code_start": "C0:8054",
+  "code_end_exclusive": "C0:833B",
+  "init_table_file_offset": "0x200000",
+  "init_table_cpu_address": "C0:8000",
+  "frame_table_file_offset": "0x20002A",
+  "frame_table_cpu_address": "C0:802A",
   "state_12": {
-    "init": "BE:985A",
-    "frame": "BE:9872",
+    "init": "C0:8054",
+    "frame": "C0:806C",
     "purpose": "branching story prototype"
   },
   "state_13": {
-    "init": "BE:9956",
-    "frame": "BE:9974",
+    "init": "C0:8150",
+    "frame": "C0:816E",
     "purpose": "custom four-choice menu"
   },
-  "renderer": "BE:9A34",
+  "renderer": "C0:822E",
+  "font": "C0:9000",
+  "menu_and_story_maps_file_range": "0x202000-0x207000",
   "reserved_wram": ["0x7FFF50", "0x7FFF51", "0x7FFF52"],
   "sram_size_code": 0,
   "checksum_matches_sum": true,
   "ips_round_trip_verified": true,
-  "automated_unit_tests": 14,
+  "automated_unit_tests": 22,
   "emulator_tested": false,
   "battle_transition_integrated": false,
   "features": [
@@ -34,6 +40,8 @@
     "two story intro pages",
     "two-way Gohan/Vegeta branch",
     "two short endings",
-    "no SRAM or persistent save"
-  ]
+    "no SRAM or persistent save",
+    "expanded from 2 MiB to 4 MiB LoROM using banks C0-FF"
+  ],
+  "safety_note": "The original FF-filled range at 0x1F1806-0x1F8000 was not overwritten because existing code references it."
 }
