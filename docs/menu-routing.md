@@ -19,7 +19,7 @@
 
 ## Global state tables
 
-The initializer dispatcher at 80:80D1 uses a 24-bit pointer table beginning at file offset `0xF9). The original table contains 12 entries (indices 0-11); entry 11 points to the special initializer 81:915B. The frame dispatcher at 80:82C5 uses a table beginning at `0x2E3) with 11 normal entries (indices 0-10).
+The initializer dispatcher at 80:80D1 uses a 24-bit pointer table beginning at file offset `0xF9`. The original table contains 12 entries (indices 0-11); entry 11 points to the special initializer 81:915B. The frame dispatcher at 80:82C5 uses a table beginning at `0x2E3` with 11 normal entries (indices 0-10).
 
 The prototype relocates and extends both tables:
 
