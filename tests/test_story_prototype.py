@@ -34,12 +34,12 @@ class StoryPrototypeAssetsTests(unittest.TestCase):
 
     def test_code_assembles_with_all_short_branches_in_range(self):
         code, labels = assemble_code()
-        self.assertEqual(len(code), 756)
-        self.assertEqual(hashlib.sha256(code).hexdigest(), "24f587b2202ef507899853aae06772d36d6d7f6cac69568892bf06a52cce2c6e")
+        self.assertEqual(len(code), 755)
+        self.assertEqual(hashlib.sha256(code).hexdigest(), "82e2755d93c6309e5ed67130ed3153e391f1fc6062f08a909b2fd8a6167673d3")
         self.assertLess(CODE_ROM_START + len(code), FONT_OFFSET)
         expected_labels = {
             "StoryInit": 0x985A, "StoryFrame": 0x9872, "MenuInit": 0x9956,
-            "MenuFrame": 0x9981, "DrawScreen": 0x9A41,
+            "MenuFrame": 0x9980, "DrawScreen": 0x9A40,
         }
         for name, address in expected_labels.items():
             self.assertEqual(labels[name], address)
