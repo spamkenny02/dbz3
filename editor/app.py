@@ -6,7 +6,7 @@ import tkinter as tk
 from tkinter import ttk,filedialog,messagebox
 from PIL import Image,ImageTk
 sys.path.insert(0,str(Path(__file__).resolve().parent))
-from model import Assets,compose,actor_image,project,scene,duplicate,save_project,load_project,validate
+from model import Assets,compose,actor_image,project,scene,duplicate,save_project,load_project,validate,FIGHTERS,ARENAS,combat_sides,combat_target
 
 ROOT=Path(__file__).resolve().parent
 
@@ -88,10 +88,15 @@ class Editor(tk.Tk):
             entry.bind('<KeyRelease>',lambda e:self.update_scene());combo.bind('<<ComboboxSelected>>',lambda e:self.update_scene());self.choice_fields.append((label,target,combo))
         ttk.Label(right,text='Suite automatique (sans choix)').pack(anchor='w',pady=(6,2))
         self.next=tk.StringVar();self.next_box=ttk.Combobox(right,textvariable=self.next,state='readonly');self.next_box.pack(fill='x');self.next_box.bind('<<ComboboxSelected>>',lambda e:self.update_scene())
-        ttk.Label(right,text='Combat : noms descriptifs / victoire / défaite').pack(anchor='w',pady=(8,2))
+        ttk.Label(right,text='COMBAT · joueur / adversaire').pack(anchor='w',pady=(8,2))
         self.player=tk.StringVar();self.opponent=tk.StringVar();row=ttk.Frame(right);row.pack(fill='x')
         for var in (self.player,self.opponent):
-            e=ttk.Entry(row,textvariable=var,width=14);e.pack(side='left',fill='x',expand=True);e.bind('<KeyRelease>',lambda e:self.update_scene())
+            e=ttk.Combobox(row,textvariable=var,values=FIGHTERS,state='readonly',width=14);e.pack(side='left',fill='x',expand=True);e.bind('<<ComboboxSelected>>',lambda e:self.update_scene())
+        self.selectable=tk.BooleanVar();self.arena=tk.StringVar(value='foret')
+        ttk.Checkbutton(right,text='Le joueur choisit son combattant parmi les deux',variable=self.selectable,command=self.update_scene).pack(anchor='w')
+        ttk.Label(right,text='Arène prévue (identifiants ROM à confirmer)').pack(anchor='w')
+        arena_box=ttk.Combobox(right,textvariable=self.arena,values=ARENAS,state='readonly');arena_box.pack(fill='x');arena_box.bind('<<ComboboxSelected>>',lambda e:self.update_scene())
+        ttk.Label(right,text='Suite si le joueur gagne / perd').pack(anchor='w')
         self.win=tk.StringVar();self.lose=tk.StringVar();self.win_box=ttk.Combobox(right,textvariable=self.win,state='readonly');self.lose_box=ttk.Combobox(right,textvariable=self.lose,state='readonly')
         for box in (self.win_box,self.lose_box):box.pack(fill='x',pady=2);box.bind('<<ComboboxSelected>>',lambda e:self.update_scene())
 
@@ -121,6 +126,7 @@ class Editor(tk.Tk):
             choice=(s.get('choices',[])+[{}]*3)[i];label.set(choice.get('label',''));target.set(self.target_name(choice.get('target')))
         self.next.set(self.target_name(s.get('next')));combat=s.get('combat',{})
         self.player.set(combat.get('player',''));self.opponent.set(combat.get('opponent',''));self.win.set(self.target_name(combat.get('win')));self.lose.set(self.target_name(combat.get('lose')))
+        self.selectable.set(combat.get('selectable',False));self.arena.set(combat.get('arena','foret'))
         self.loading=False;self.refresh_actors();self.render()
     def change_name(self):
         if self.loading:return
@@ -130,7 +136,7 @@ class Editor(tk.Tk):
         if self.loading:return
         s=self.selected();s['kind']=self.kind.get();s['dialogue']=self.dialogue.get('1.0','end-1c')
         s['choices']=[dict(label=label.get(),target=self.targets.get(target.get())) for label,target,_ in self.choice_fields if label.get().strip() or self.targets.get(target.get())]
-        s['next']=self.targets.get(self.next.get());s['combat']=dict(player=self.player.get(),opponent=self.opponent.get(),win=self.targets.get(self.win.get()),lose=self.targets.get(self.lose.get()))
+        s['next']=self.targets.get(self.next.get());s['combat']=dict(selectable=self.selectable.get(),arena=self.arena.get(),player=self.player.get(),opponent=self.opponent.get(),win=self.targets.get(self.win.get()),lose=self.targets.get(self.lose.get()))
         self.mark();self.render()
     def load_catalog(self,path):
         self.assets=Assets(path);self.refresh_assets();self.status.set(f'{len(self.assets.items)} ressources · {len(self.assets.catalog.get("scenes",[]))} scènes validées · {len(self.assets.catalog.get("errors",[]))} identifiants non couverts')
@@ -222,13 +228,44 @@ class Editor(tk.Tk):
         for child in self.path_buttons.winfo_children():child.destroy()
         paths=[(c['label'],c.get('target')) for c in s.get('choices',[])]
         if s.get('next'):paths.append(('Continuer →',s['next']))
-        if s.get('kind')=='combat':paths.extend([('Victoire',s['combat'].get('win')),('Défaite',s['combat'].get('lose'))])
+        if s.get('kind')=='combat':paths.extend([('Simuler victoire joueur',s['combat'].get('win')),('Simuler défaite joueur',s['combat'].get('lose'))])
         for label,target in paths:ttk.Button(self.path_buttons,text=label or '?',command=lambda t=target:self.follow(t)).pack(side='left',padx=2)
     def follow(self,target):
         for index,s in enumerate(self.data['scenes']):
             if s['id']==target:self.show_scene(index);return
         messagebox.showwarning('Destination','Choisissez une scène de destination.')
-    def play(self):self.follow(self.data['start'])
+    def play(self):
+        errors=validate(self.data)
+        if errors:messagebox.showerror('Projet incomplet','\n'.join(errors));return
+        self.play_scene(self.data['start'])
+    def play_scene(self,sid,selected=None):
+        s=next(s for s in self.data['scenes'] if s['id']==sid)
+        win=tk.Toplevel(self);win.title('Lecture du scénario · simulation locale');win.geometry('600x550')
+        ttk.Label(win,text=s['name'],font=(self.ui_font,15,'bold')).pack(pady=10)
+        if self.assets:
+            photo=ImageTk.PhotoImage(compose(s,self.assets).resize((512,448),Image.Resampling.NEAREST))
+            label=ttk.Label(win,image=photo);label.image=photo;label.pack()
+        ttk.Label(win,text=s.get('dialogue',''),wraplength=550).pack(pady=8)
+        def go(target):
+            win.destroy()
+            if target:self.play_scene(target)
+        if s['kind']=='combat':
+            c=s['combat']
+            if c.get('selectable') and selected is None:
+                ttk.Label(win,text='Quel personnage veux-tu incarner ?').pack()
+                def choose(fighter):win.destroy();self.play_scene(sid,fighter)
+                for fighter in (c['player'],c['opponent']):ttk.Button(win,text=fighter,command=lambda f=fighter:choose(f)).pack()
+            else:
+                player,opponent=combat_sides(s,selected)
+                ttk.Label(win,text=f'Joueur : {player} / CPU : {opponent} · {c.get("arena","foret")}').pack()
+                ttk.Label(win,text='Simulation du résultat uniquement : aucun émulateur lancé.').pack()
+                for winner in (player,opponent):
+                    ttk.Button(win,text=f'{winner} gagne',command=lambda w=winner:go(combat_target(s,w,selected))).pack()
+        elif s.get('choices'):
+            for choice in s['choices']:ttk.Button(win,text=choice['label'],command=lambda t=choice['target']:go(t)).pack()
+        elif s.get('next'):ttk.Button(win,text='Continuer',command=lambda:go(s['next'])).pack()
+        else:ttk.Label(win,text='Fin du parcours').pack()
+
     def set_start(self):self.data['start']=self.selected()['id'];self.refresh_scenes();self.mark()
     def add_scene(self):self.data['scenes'].append(scene());self.refresh_scenes();self.show_scene(len(self.data['scenes'])-1);self.mark()
     def copy_scene(self):self.data['scenes'].append(duplicate(self.selected()));self.refresh_scenes();self.show_scene(len(self.data['scenes'])-1);self.mark()
@@ -283,7 +320,7 @@ class Editor(tk.Tk):
             path=filedialog.askopenfilename(filetypes=[('Projet scénario','*.json')])
         if not path:return
         try:
-            data=load_project(path);catalog=(Path(path).resolve().parent/data['catalog']).resolve();self.load_catalog(catalog)
+            data=load_project(path);catalog=(Path(path).resolve().parent/data['catalog']).resolve();self.load_catalog(catalog) if catalog.exists() else None
             self.data=data;self.path=Path(path).resolve();self.current=0;self.refresh_scenes();self.show_scene(0);self.dirty=False;self.title('DBZ • Atelier scénario')
         except Exception as e:messagebox.showerror('Projet',str(e))
     def save(self):

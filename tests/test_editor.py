@@ -3,7 +3,7 @@ from pathlib import Path
 from PIL import Image
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'editor'));sys.path.insert(0,str(ROOT/'tools'))
-from model import project,scene,validate,duplicate,save_project,load_project,Assets,compose
+from model import project,scene,validate,duplicate,save_project,load_project,Assets,compose,combat_sides,combat_target
 from snes_graphics import objects,split_objects
 from extract_sb2_assets import probe_rom
 
@@ -34,6 +34,34 @@ class SceneTests(unittest.TestCase):
         original=bytes(raw);out=probe_rom(original,2)
         self.assertEqual(original,bytes(raw));self.assertEqual(out[0x7fa0],5);self.assertNotEqual(out,original)
         with self.assertRaises(ValueError):probe_rom(bytes(0x400000),2)
+
+class CombatTests(unittest.TestCase):
+    def prelude(self):return load_project(ROOT/'editor/prelude_tournoi.json')
+    def test_both_players_and_results_rejoin_story(self):
+        data=self.prelude();by_id={s['id']:s for s in data['scenes']}
+        for s in data['scenes']:
+            if s['kind']!='combat':continue
+            c=s['combat']
+            for player in (c['player'],c['opponent']):
+                actual,enemy=combat_sides(s,player)
+                self.assertEqual(actual,player);self.assertNotEqual(enemy,player)
+                self.assertEqual(combat_target(s,player,player),c['win'])
+                self.assertEqual(combat_target(s,enemy,player),c['lose'])
+                self.assertEqual(by_id[c['win']]['next'],by_id[c['lose']]['next'])
+    def test_invalid_duel_and_missing_result_rejected(self):
+        data=self.prelude();s=next(s for s in data['scenes'] if s['kind']=='combat')
+        s['combat']['opponent']=s['combat']['player'];s['combat']['win']=None
+        self.assertGreaterEqual(len(validate(data)),2)
+    def test_every_node_reachable_and_no_dead_end_before_finale(self):
+        data=self.prelude();by_id={s['id']:s for s in data['scenes']};seen=set();todo=[data['start']]
+        while todo:
+            sid=todo.pop()
+            if sid in seen:continue
+            seen.add(sid);s=by_id[sid]
+            links=[s.get('next')]+[c['target'] for c in s.get('choices',[])]+[s['combat'].get(k) for k in ('win','lose')]
+            if s['kind']!='ending':self.assertTrue(any(links),sid)
+            todo.extend(t for t in links if t)
+        self.assertEqual(seen,set(by_id))
 
 class SpriteTests(unittest.TestCase):
     def test_4bpp_palette_zero_transparency_and_flip(self):

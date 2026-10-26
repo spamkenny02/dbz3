@@ -7,9 +7,27 @@ from PIL import Image, ImageDraw, ImageFont
 
 WIDTH, HEIGHT = 256, 224
 
+# Stable authoring keys; ROM numeric IDs must be verified separately.
+FIGHTERS = ('Gohan', 'Goten', 'Vegeta', 'Trunks', 'Goku', 'Piccolo', 'Kaioshin', 'Dabra', 'Majin Buu', 'C18')
+ARENAS = ('foret', 'salle_gravite', 'tournoi')
+
+def combat_sides(s, selected=None):
+    """Resolve a real pair, without interpreting the winner as the player."""
+    c = s['combat']
+    player = selected if c.get('selectable') else c['player']
+    pair = (c['player'], c['opponent'])
+    if player not in pair: raise ValueError('Personnage hors du duel')
+    return player, pair[1] if player == pair[0] else pair[0]
+
+def combat_target(s, winner, selected=None):
+    player, opponent = combat_sides(s, selected)
+    if winner not in (player, opponent): raise ValueError('Vainqueur hors du duel')
+    return s['combat']['win' if winner == player else 'lose']
+
+
 def scene(name='Nouvelle scène'):
     return dict(id='scene_'+uuid.uuid4().hex[:8],name=name,kind='dialogue',background=None,
-                actors=[],dialogue='',choices=[],next=None,combat={'player':'','opponent':'','win':None,'lose':None})
+                actors=[],dialogue='',choices=[],next=None,combat={'player':'','opponent':'','win':None,'lose':None,'selectable':False,'arena':'foret'})
 
 def project():
     first=scene('Introduction')
@@ -29,6 +47,18 @@ def validate(data,assets=None):
             if not choice.get('label','').strip() or not choice.get('target'):errors.append(f'{name} : choix incomplet')
         for aid in [s.get('background')]+[a.get('asset') for a in s.get('actors',[])]:
             if aid and assets is not None and aid not in assets:errors.append(f'{name} : ressource {aid} absente')
+        if s.get('kind') == 'combat':
+            c = s.get('combat', {})
+            if c.get('player') not in FIGHTERS or c.get('opponent') not in FIGHTERS:
+                errors.append(f'{name} : combattants non reconnus')
+            elif c['player'] == c['opponent']:
+                errors.append(f'{name} : le duel exige deux personnages distincts')
+            if not c.get('win') or not c.get('lose'):
+                errors.append(f'{name} : définir les suites victoire et défaite')
+            if c.get('arena', 'foret') not in ARENAS:
+                errors.append(f'{name} : arène non reconnue')
+            if s.get('choices') or s.get('next'):
+                errors.append(f'{name} : le combat utilise uniquement victoire/défaite')
         for actor in s.get('actors',[]):
             if not 0.1<=float(actor.get('scale',1))<=4:errors.append(f'{name} : échelle hors limites')
     return errors

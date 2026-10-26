@@ -1,0 +1,432 @@
+{
+  "format": "dbz3-story",
+  "version": 1,
+  "title": "Prélude au tournoi",
+  "start": "bois1",
+  "catalog": "assets/catalog.json",
+  "scenes": [
+    {
+      "id": "bois1",
+      "name": "Dans les bois",
+      "kind": "dialogue",
+      "background": null,
+      "actors": [],
+      "dialogue": "Goten : Le tournoi commence dans quelques jours !\nGohan : Alors entraînons-nous, mais sans détruire la forêt.",
+      "choices": [],
+      "next": "bois2",
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "foret"
+      },
+      "staging": {
+        "setting": "bois",
+        "cast": [
+          "Gohan",
+          "Goten"
+        ],
+        "status": "assets à associer dans le catalogue local"
+      }
+    },
+    {
+      "id": "bois2",
+      "name": "Les deux frères",
+      "kind": "dialogue",
+      "background": null,
+      "actors": [],
+      "dialogue": "Goten : Tu ne vas pas te retenir, hein ?\nGohan : Montre-moi plutôt tes progrès !",
+      "choices": [],
+      "next": "duel_freres",
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "foret"
+      },
+      "staging": {
+        "setting": "bois",
+        "cast": [
+          "Gohan",
+          "Goten"
+        ],
+        "status": "assets à associer dans le catalogue local"
+      }
+    },
+    {
+      "id": "duel_freres",
+      "name": "Entraînement Gohan / Goten",
+      "kind": "combat",
+      "background": null,
+      "actors": [],
+      "dialogue": "",
+      "choices": [],
+      "next": null,
+      "combat": {
+        "player": "Gohan",
+        "opponent": "Goten",
+        "win": "freres_win",
+        "lose": "freres_lose",
+        "selectable": true,
+        "arena": "foret"
+      },
+      "staging": {
+        "setting": "",
+        "cast": [],
+        "status": "assets à associer dans le catalogue local"
+      }
+    },
+    {
+      "id": "freres_win",
+      "name": "Victoire à l’entraînement",
+      "kind": "dialogue",
+      "background": null,
+      "actors": [],
+      "dialogue": "Le vainqueur : Voilà un bon entraînement !\nL’autre frère : La prochaine fois, je te bats !",
+      "choices": [],
+      "next": "vegeta1",
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "foret"
+      },
+      "staging": {
+        "setting": "",
+        "cast": [],
+        "status": "assets à associer dans le catalogue local"
+      }
+    },
+    {
+      "id": "freres_lose",
+      "name": "Défaite à l’entraînement",
+      "kind": "dialogue",
+      "background": null,
+      "actors": [],
+      "dialogue": "Le vainqueur : Ne baisse pas ta garde !\nL’autre frère : On remet ça après le tournoi !",
+      "choices": [],
+      "next": "vegeta1",
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "foret"
+      },
+      "staging": {
+        "setting": "",
+        "cast": [],
+        "status": "assets à associer dans le catalogue local"
+      }
+    },
+    {
+      "id": "vegeta1",
+      "name": "Chez Bulma",
+      "kind": "dialogue",
+      "background": null,
+      "actors": [],
+      "dialogue": "Bulma : Ne cassez pas encore la salle !\nVegeta : Trunks, approche. Voyons tes progrès.\nTrunks : Tu vas être surpris, papa !",
+      "choices": [],
+      "next": "duel_saiyans",
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "foret"
+      },
+      "staging": {
+        "setting": "salle de gravité",
+        "cast": [
+          "Vegeta",
+          "Trunks",
+          "Bulma"
+        ],
+        "status": "assets à associer dans le catalogue local"
+      }
+    },
+    {
+      "id": "duel_saiyans",
+      "name": "Entraînement Vegeta / Trunks",
+      "kind": "combat",
+      "background": null,
+      "actors": [],
+      "dialogue": "",
+      "choices": [],
+      "next": null,
+      "combat": {
+        "player": "Vegeta",
+        "opponent": "Trunks",
+        "win": "saiyans_win",
+        "lose": "saiyans_lose",
+        "selectable": true,
+        "arena": "salle_gravite"
+      },
+      "staging": {
+        "setting": "",
+        "cast": [],
+        "status": "assets à associer dans le catalogue local"
+      }
+    },
+    {
+      "id": "saiyans_win",
+      "name": "Fierté saiyanne",
+      "kind": "dialogue",
+      "background": null,
+      "actors": [],
+      "dialogue": "Le vainqueur : Un Saiyan doit toujours se dépasser.\nBulma : Très bien, les champions. Pause !",
+      "choices": [],
+      "next": "retour1",
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "foret"
+      },
+      "staging": {
+        "setting": "",
+        "cast": [],
+        "status": "assets à associer dans le catalogue local"
+      }
+    },
+    {
+      "id": "saiyans_lose",
+      "name": "Encore des progrès",
+      "kind": "dialogue",
+      "background": null,
+      "actors": [],
+      "dialogue": "Le vainqueur : Tu peux faire mieux que ça !\nBulma : Et vous pouvez aussi faire moins de bruit !",
+      "choices": [],
+      "next": "retour1",
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "foret"
+      },
+      "staging": {
+        "setting": "",
+        "cast": [],
+        "status": "assets à associer dans le catalogue local"
+      }
+    },
+    {
+      "id": "retour1",
+      "name": "Le retour de Goku",
+      "kind": "dialogue",
+      "background": null,
+      "actors": [],
+      "dialogue": "Goku : Salut tout le monde !\nChichi : Goku ! Tu es enfin là !\nGohan : Papa… tu nous as manqué.",
+      "choices": [],
+      "next": "retour2",
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "foret"
+      },
+      "staging": {
+        "setting": "rassemblement au tournoi",
+        "cast": [
+          "Goku",
+          "Piccolo",
+          "Vegeta",
+          "Gohan",
+          "Goten",
+          "Chichi"
+        ],
+        "status": "assets à associer dans le catalogue local"
+      }
+    },
+    {
+      "id": "retour2",
+      "name": "Père et fils",
+      "kind": "dialogue",
+      "background": null,
+      "actors": [],
+      "dialogue": "Gohan : Goten, voici notre père.\nGoten : Papa… ?\nGoku : Tu as drôlement grandi ! Viens ici !",
+      "choices": [],
+      "next": "retour3",
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "foret"
+      },
+      "staging": {
+        "setting": "",
+        "cast": [
+          "Goku",
+          "Goten",
+          "Gohan",
+          "Chichi"
+        ],
+        "status": "assets à associer dans le catalogue local"
+      }
+    },
+    {
+      "id": "retour3",
+      "name": "Avant le tournoi",
+      "kind": "dialogue",
+      "background": null,
+      "actors": [],
+      "dialogue": "Piccolo : Gardez vos forces pour les combats.\nVegeta : Kakarot, notre duel viendra.\nGoku : D’abord, allons encourager les petits !",
+      "choices": [],
+      "next": "tournoi1",
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "foret"
+      },
+      "staging": {
+        "setting": "",
+        "cast": [
+          "Piccolo",
+          "Vegeta",
+          "Goku",
+          "Gohan",
+          "Goten",
+          "Chichi"
+        ],
+        "status": "assets à associer dans le catalogue local"
+      }
+    },
+    {
+      "id": "tournoi1",
+      "name": "La finale des enfants",
+      "kind": "dialogue",
+      "background": null,
+      "actors": [],
+      "dialogue": "Annonceur : Goten contre Trunks !\nTrunks : Cette fois, pas de cadeau !\nGoten : D’accord ! Que le meilleur gagne !",
+      "choices": [],
+      "next": "duel_enfants",
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "foret"
+      },
+      "staging": {
+        "setting": "arène du tournoi",
+        "cast": [
+          "Goten",
+          "Trunks"
+        ],
+        "status": "assets à associer dans le catalogue local"
+      }
+    },
+    {
+      "id": "duel_enfants",
+      "name": "Finale Goten / Trunks",
+      "kind": "combat",
+      "background": null,
+      "actors": [],
+      "dialogue": "",
+      "choices": [],
+      "next": null,
+      "combat": {
+        "player": "Goten",
+        "opponent": "Trunks",
+        "win": "tournoi_win",
+        "lose": "tournoi_lose",
+        "selectable": true,
+        "arena": "tournoi"
+      },
+      "staging": {
+        "setting": "",
+        "cast": [],
+        "status": "assets à associer dans le catalogue local"
+      }
+    },
+    {
+      "id": "tournoi_win",
+      "name": "Champion des enfants",
+      "kind": "dialogue",
+      "background": null,
+      "actors": [],
+      "dialogue": "Le vainqueur : Oui ! J’ai gagné !\nLe finaliste : Bravo… mais je veux ma revanche !",
+      "choices": [],
+      "next": "suite",
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "foret"
+      },
+      "staging": {
+        "setting": "",
+        "cast": [],
+        "status": "assets à associer dans le catalogue local"
+      }
+    },
+    {
+      "id": "tournoi_lose",
+      "name": "Une belle finale",
+      "kind": "dialogue",
+      "background": null,
+      "actors": [],
+      "dialogue": "Le vainqueur : C’était un super combat !\nLe finaliste : La prochaine fois, la victoire sera pour moi !",
+      "choices": [],
+      "next": "suite",
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "foret"
+      },
+      "staging": {
+        "setting": "",
+        "cast": [],
+        "status": "assets à associer dans le catalogue local"
+      }
+    },
+    {
+      "id": "suite",
+      "name": "À vous de continuer",
+      "kind": "ending",
+      "background": null,
+      "actors": [],
+      "dialogue": "Le tournoi des adultes va commencer…\nAjoutez ici vos scènes, combats et embranchements.",
+      "choices": [],
+      "next": null,
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null,
+        "selectable": false,
+        "arena": "foret"
+      },
+      "staging": {
+        "setting": "",
+        "cast": [],
+        "status": "assets à associer dans le catalogue local"
+      }
+    }
+  ]
+}
