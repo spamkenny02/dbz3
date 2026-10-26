@@ -34,8 +34,6 @@ class StoryPrototypeAssetsTests(unittest.TestCase):
 
     def test_code_assembles_with_all_short_branches_in_range(self):
         code, labels = assemble_code()
-        print("REMOTE_CODE_HEX", code.hex())
-        print("REMOTE_LABELS", labels)
         self.assertEqual(len(code), 743)
         self.assertEqual(hashlib.sha256(code).hexdigest(), "36da4c1ac64ff9460e579aeb276354ea82e63463cb2d0626833c2faf1f6fed49")
         self.assertLess(CODE_ROM_START + len(code), FONT_OFFSET)
