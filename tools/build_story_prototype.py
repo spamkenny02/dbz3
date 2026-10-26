@@ -123,6 +123,10 @@ class Asm65816:
         self.emit(0x22, 0, 0, 0)
         self.fixups.append(("long", len(self.code) - 3, label))
 
+    def jml(self, label: str) -> None:
+        self.emit(0x5C, 0, 0, 0)
+        self.fixups.append(("long", len(self.code) - 3, label))
+
     def finish(self) -> bytes:
         for kind, pos, label in self.fixups:
             if label not in self.labels:
@@ -281,10 +285,10 @@ def assemble_code() -> tuple[bytes, dict[str, int]]:
 
     a.label("StoryFrame")
     a.emit(0x8B, 0x08, 0xE2, 0x20, 0xA9, 0x00, 0x48, 0xAB, 0xC2, 0x30)
+    # B returns to the original selector (state 6, submode 2).
     a.emit(0xAD, 0x6D, 0x00, 0x29, 0x00, 0x80)
     a.branch(0xF0, "StoryCheckA")
-    a.emit(0xE2, 0x20, 0xA9, 0x0D)
-    a.emit(0x5C, 0x7A, 0x80, 0x80)
+    a.jml("StoryReturnToNativeMenu")
     a.label("StoryCheckA")
     a.emit(0xC2, 0x20, 0xAD, 0x6D, 0x00, 0x29, 0x80, 0x00)
     a.branch(0xF0, "StoryChoiceMove")
@@ -453,6 +457,45 @@ def assemble_code() -> tuple[bytes, dict[str, int]]:
            0xA9, 0x0F, 0x8D, 0x00, 0x21,
            0x68, 0x8D, 0x43, 0x0B, 0x8D, 0x00, 0x42, 0x28, 0xAB, 0x6B)
 
+    # Called in the original selector initializer just before its normal PPU
+    # upload. The original map already reserves two rows for a fourth choice.
+    # Reuse the game's own 16x16 glyph tiles and palette so HISTOIRE matches the
+    # COMBAT / CHAMPIONNAT / OPTION lettering instead of drawing a new menu.
+    a.label("NativeMenuAddStory")
+    a.emit(0x08, 0x8B, 0x48, 0xDA, 0x5A, 0xC2, 0x30)  # PHP, PHB, PHA, PHX, PHY, REP #$30
+    a.emit(0xA2, 0x90, 0x01)  # row 6, x=8: byte offset $0190 in $7E:6000
+    for tile in (0x2F02, 0x2F03, 0x2F04, 0x2F05, 0x2F28, 0x2F29,
+                 0x2F2A, 0x2F2B, 0x2F20, 0x2F21, 0x2F04, 0x2F05,
+                 0x2F26, 0x2F27, 0x2EEC, 0x2EED):
+        a.emit(0xA9, tile & 0xFF, tile >> 8, 0x9F, 0x00, 0x60, 0x7E, 0xE8, 0xE8)
+    a.emit(0xA2, 0xD0, 0x01)  # row 7, x=8: byte offset $01D0
+    for tile in (0x2F12, 0x2F13, 0x2F14, 0x2F15, 0x2F38, 0x2F39,
+                 0x2F3A, 0x2F3B, 0x2F30, 0x2F31, 0x2F14, 0x2F15,
+                 0x2F36, 0x2F37, 0x2EFC, 0x2EFD):
+        a.emit(0xA9, tile & 0xFF, tile >> 8, 0x9F, 0x00, 0x60, 0x7E, 0xE8, 0xE8)
+    a.emit(0x7A, 0xFA, 0x68, 0xAB, 0x28)  # PLY, PLX, PLA, PLB, PLP
+    a.emit(0x22, 0x3C, 0x88, 0x80, 0x6B)  # run the original PPU/DMA upload, RTL
+
+    # The original selector has already copied $196C to $188C. At the final
+    # state-transition point, return A=6 for original modes or A=12 for Story.
+    # This preserves the original JML gateway and avoids leaving a JSL frame
+    # on the stack when the Story branch is selected.
+    a.label("StorySelectState")
+    a.emit(0x08, 0xE2, 0x20, 0xAF, 0x8C, 0x18, 0x7E, 0xC9, 0x03)
+    a.branch(0xF0, "StorySelectStory")
+    a.emit(0xA9, 0x06)
+    a.branch(0x80, "StorySelectStore")
+    a.label("StorySelectStory")
+    a.emit(0xA9, 0x0C)
+    a.label("StorySelectStore")
+    a.emit(0x64, 0x93, 0x28, 0x6B)  # STZ $93, PLP, RTL
+
+    # Non-returning Story B path: unwind StoryFrame's saved P/DBR first.
+    a.label("StoryReturnToNativeMenu")
+    a.emit(0x28, 0xAB, 0xE2, 0x20, 0xA9, 0x02, 0x8F, 0x78, 0x18, 0x7E)
+    a.emit(0xA9, 0x00, 0x8F, 0x79, 0x18, 0x7E, 0xA9, 0x06)
+    a.emit(0x5C, 0x7A, 0x80, 0x80)  # return to native state 6/submode 2
+
     return a.finish(), a.labels
 
 
@@ -548,14 +591,22 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
         0x00F1: bytes.fromhex("FB 80 80"),
         0x02D3: bytes.fromhex("E3 82 80"),
         0x02DB: bytes.fromhex("E5 82 80"),
-        0x1F9A54: bytes.fromhex("A9 06"),
+        0x1F9A54: bytes.fromhex("A9 06"),  # preserve original title -> native menu path
+        0x1F878A: bytes.fromhex("22 3C 88 80"),
+        0x1FAB92: bytes.fromhex("A9 02"),
+        0x1FABB1: bytes.fromhex("C9 02"),
+        0x1FAB25: bytes.fromhex("A9 06 64 93"),
     }
     replacements = {
         0x00E9: bytes.fromhex("00 80 C0"),
         0x00F1: bytes.fromhex("02 80 C0"),
         0x02D3: bytes.fromhex("2A 80 C0"),
         0x02DB: bytes.fromhex("2C 80 C0"),
-        0x1F9A54: bytes.fromhex("A9 0D"),
+        0x1F9A54: bytes.fromhex("A9 06"),
+        0x1F878A: bytes((0x22, labels["NativeMenuAddStory"] & 0xFF, (labels["NativeMenuAddStory"] >> 8) & 0xFF, BANK)),
+        0x1FAB92: bytes.fromhex("A9 03"),
+        0x1FABB1: bytes.fromhex("C9 03"),
+        0x1FAB25: bytes((0x22, labels["StorySelectState"] & 0xFF, (labels["StorySelectState"] >> 8) & 0xFF, BANK)),
     }
     for offset, old in expected.items():
         if base[offset:offset + len(old)] != old:
@@ -580,8 +631,16 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
         raise AssertionError("Menu initializer pointer failed post-build verification")
     if read_ptrs(patched, FRAME_TABLE_OFFSET, 14)[13] != ((BANK << 16) | labels["MenuFrame"]):
         raise AssertionError("Menu frame pointer failed post-build verification")
-    if patched[0x1F9A54:0x1F9A56] != bytes.fromhex("A9 0D"):
-        raise AssertionError("Start hook failed post-build verification")
+    if patched[0x1F9A54:0x1F9A56] != bytes.fromhex("A9 06"):
+        raise AssertionError("Original title-to-native-menu path was not preserved")
+    if patched[0x1FAB92:0x1FAB94] != bytes.fromhex("A9 03"):
+        raise AssertionError("Selector up-wrap does not allow the fourth entry")
+    if patched[0x1FABB1:0x1FABB3] != bytes.fromhex("C9 03"):
+        raise AssertionError("Selector down-limit does not allow the fourth entry")
+    if patched[0x1F878A:0x1F878E] != replacements[0x1F878A]:
+        raise AssertionError("Native menu overlay hook failed post-build verification")
+    if patched[0x1FAB25:0x1FAB29] != replacements[0x1FAB25]:
+        raise AssertionError("Story state-selection hook failed post-build verification")
 
     ips = make_ips(base, bytes(patched))
     out_rom.parent.mkdir(parents=True, exist_ok=True)
@@ -600,6 +659,10 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
         "rom_expanded_from_bytes": ROM_SIZE,
         "rom_size_header_code": "0x0C (4 MiB)",
         "code_bytes": len(code),
+        "native_menu_label_hook": f"BF:878A -> C0:{labels['NativeMenuAddStory']:04X}",
+        "story_state_selection_hook": f"BF:AB25 -> C0:{labels['StorySelectState']:04X}",
+        "selector_up_wrap_value": 3,
+        "selector_down_limit_value": 3,
         "code_rom_start": f"0x{CODE_ROM_START:06X}",
         "code_rom_end_exclusive": f"0x{CODE_ROM_START + len(code):06X}",
         "labels": {name: f"{BANK:02X}:{addr:04X}" for name, addr in labels.items()},
@@ -620,11 +683,12 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
         },
         "notes": [
             "New code/data are placed in appended LoROM banks C0-FF, not in the old FF-filled range that has existing references.",
-            "The custom menu is a self-contained black-background text UI with a new 5x7 bitmap font.",
-            "Menu options 0-2 seed the original selector variable and enter the original mode-confirmation routine; option 3 enters Story state 12.",
+            "The original French menu remains in place; HISTOIRE is written into its reserved fourth two-row slot using the original 16x16 glyph tiles.",
+            "The native selector bounds change from 0..2 to 0..3; confirmation of index 3 enters Story state 12 while indices 0-2 retain original routing.",
             "The first story slice has two intro pages, a two-way choice, and two distinct short endings.",
             "No SRAM is added; cursor/page/route flags are volatile WRAM only.",
-            "This is not emulator-tested. Validate 4 MiB LoROM mapping, boot, DMA, controller input, mode routing and transitions in Mesen/bsnes before release.",
+            "The title Start path remains the original transition into state 6/submode 2. Story B returns to that native selector.",
+            "This is not emulator-tested. Validate 4 MiB LoROM mapping, boot, native menu label visibility, DMA, controller input, mode routing and transitions in Mesen/bsnes before release.",
         ],
     }
     if report_path:
