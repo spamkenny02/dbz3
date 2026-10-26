@@ -42,7 +42,7 @@ Existing init entries 0-11 are preserved. The frame table preserves entries 0-10
 
 ## Original mode setup
 
-The custom menu initializer calls the original setup routines BF:826D, BF:85FA and BF:874B before drawing the new UI. For options 0-2, it sets `$196C` to the selected index and jumps to BF:AAB7, which performs the original mode setup and transitions to state 6/submode 5. This is a reasoned static integration path, not yet confirmed in an emulator.
+The custom menu initializer calls the complete original submode-2 initializer BF:8104 before drawing the new UI. This runs the common initialization tail and the setup routines BF:826D, BF:85FA and BF:874B. For options 0-2, it sets `$196C` to the selected index and jumps to BF:AAB7, which performs the original mode setup and transitions to state 6/submode 5. This is a reasoned static integration path, not yet confirmed in an emulator.
 
 ## Known limitations
 
