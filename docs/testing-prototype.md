@@ -1,40 +1,39 @@
-# Testing the experimental Story Mode patch
+# Testing the native-menu Story Mode patch
 
-This is a development patch, not a release. It has passed static checks and unit tests, but has **not** been run in a SNES emulator by the project build environment.
+This is a development patch, not a release. Static checks and unit tests pass, but the ROM has not yet been run in an emulator.
 
 ## Before testing
 
 1. Keep an untouched backup of your ROM.
-2. Confirm the base ROM is the French Ultime Menace image with SHA-256 `663116d015cad3398644608ca6f2506071ab23d38b03b4890e1a6caecb1a55aa`.
-3. Apply `Ultime-Menace-Story-Prototype.ips` to a copy using Floating IPS, Lunar IPS, or another IPS patcher. The patch expands the image from 2 MiB to 4 MiB; use an emulator with standard 4 MiB LoROM support.
-4. Open the patched copy in Mesen or bsnes. Do not patch the La Légende Saien ROM.
+2. Confirm the base image is the French Ultime Menace ROM with SHA-256 663116d015cad3398644608ca6f2506071ab23d38b03b4890e1a6caecb1a55aa.
+3. Apply Ultime-Menace-Native-Histoire.ips to a copy using Floating IPS, Lunar IPS or another IPS patcher.
+4. The patch expands the image from 2 MiB to 4 MiB. Use Mesen or bsnes with standard 4 MiB LoROM support.
 
-## Expected prototype flow
+## Expected result
 
-- The original title screen appears.
-- Press Start to enter the custom four-choice menu.
-- Up/Down cycles through COMBAT SOLO, COMBAT 2 JOUEURS, TOURNOI, HISTOIRE.
-- A on options 1-3 should invoke the original mode-confirmation/setup path.
-- A on HISTOIRE should open the first story page.
-- A advances to the second page, then to a choice between AIDER GOHAN and SUIVRE VEGETA.
-- Up/Down toggles the highlighted route; A displays one of two short endings.
-- A on an ending restarts the prologue; B returns to the custom menu.
-- B on the custom menu returns to the original title screen.
+- The original title screen and original menu artwork remain.
+- The menu shows COMBAT, CHAMPIONNAT, OPTION and a fourth entry, HISTOIRE, underneath OPTION.
+- Up/Down cycles through all four entries.
+- Confirming COMBAT, CHAMPIONNAT or OPTION should follow the original code path.
+- Confirming HISTOIRE should enter the Story Mode intro page.
+- A advances through the two intro pages to the choice between AIDER GOHAN and SUIVRE VEGETA.
+- The highlighted route should lead to a different short ending.
+- A on an ending restarts the prologue; B returns to the original three-choice menu.
+- Restarting the game should not preserve story route/page flags; no SRAM was added.
 
-## If it fails
+## If something fails
 
-Please note which step failed and include a screenshot or short recording. If using Mesen, a debugger trace/breakpoint at these new routines is useful:
+Please record the exact step that failed and attach a screenshot or short recording. Useful first checks in Mesen's debugger:
 
-- Story init: `BE:985A`
-- Story frame handler: `BE:9872`
-- Menu init: `BE:9956`
-- Menu frame handler: `BE:9974`
-- PPU/DMA renderer: `BE:9A34`
+- Native menu label wrapper: C0:8337
+- Story selection router: C0:846E
+- Story return helper: C0:8483
+- Original selector input handler: BF:AB48
 
-A black screen or freeze may indicate an issue with PPU register setup, DMA timing, state dispatch, or the original mode initializer. Do not overwrite the base ROM; the patch is disposable and can be rebuilt after corrections.
+A missing label may indicate the hook is too early/late relative to the map copy or PPU upload. A black screen or freeze may indicate a state-dispatch, LoROM mapping, DMA or register-setup issue. Do not overwrite the base ROM; the patch is disposable and can be rebuilt.
 
 ## Current limitations
 
-- The menu is text-only and does not yet match Super Butoden 2's original presentation.
-- The story currently has a narrative choice and two endings, but no real battle is launched yet.
-- SRAM is not added; story flags are volatile WRAM only.
+- Native menu label visibility and input routing still need runtime testing.
+- The menu uses original glyph tiles, but the story dialogue screen is still a text-only prototype.
+- Story Mode does not launch a real battle yet.
