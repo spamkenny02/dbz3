@@ -35,11 +35,11 @@ class StoryPrototypeAssetsTests(unittest.TestCase):
     def test_code_assembles_with_all_short_branches_in_range(self):
         code, labels = assemble_code()
         self.assertEqual(len(code), 743)
-        self.assertEqual(hashlib.sha256(code).hexdigest(), "fda0a16dee71b2e4c6306b577dec306a836a2626bd13b24da4edd3c6ff70f27c")
+        self.assertEqual(hashlib.sha256(code).hexdigest(), "36da4c1ac64ff9460e579aeb276354ea82e63463cb2d0626833c2faf1f6fed49")
         self.assertLess(CODE_ROM_START + len(code), FONT_OFFSET)
         expected_labels = {
-            "StoryInit": 0x985A, "StoryFrame": 0x9872, "MenuInit": 0x9956,
-            "MenuFrame": 0x9974, "DrawScreen": 0x9A34,
+            "StoryInit": 0x8054, "StoryFrame": 0x806C, "MenuInit": 0x8150,
+            "MenuFrame": 0x816E, "DrawScreen": 0x822E,
         }
         for name, address in expected_labels.items():
             self.assertEqual(labels[name], address)
@@ -51,6 +51,19 @@ class StoryPrototypeAssetsTests(unittest.TestCase):
 
 
 class IpsTests(unittest.TestCase):
+    def apply_ips(self, base, patch):
+        restored = bytearray(base)
+        pos = 5
+        while patch[pos:pos + 3] != b"EOF":
+            offset = int.from_bytes(patch[pos:pos + 3], "big")
+            length = int.from_bytes(patch[pos + 3:pos + 5], "big")
+            pos += 5
+            if offset + length > len(restored):
+                restored.extend(b"\x00" * (offset + length - len(restored)))
+            restored[offset:offset + length] = patch[pos:pos + length]
+            pos += length
+        return bytes(restored)
+
     def test_ips_round_trip_small_sample(self):
         base = bytes(range(32))
         changed = bytearray(base)
@@ -59,15 +72,15 @@ class IpsTests(unittest.TestCase):
         patch = make_ips(base, bytes(changed))
         self.assertTrue(patch.startswith(b"PATCH"))
         self.assertTrue(patch.endswith(b"EOF"))
-        restored = bytearray(base)
-        pos = 5
-        while patch[pos:pos + 3] != b"EOF":
-            offset = int.from_bytes(patch[pos:pos + 3], "big")
-            length = int.from_bytes(patch[pos + 3:pos + 5], "big")
-            pos += 5
-            restored[offset:offset + length] = patch[pos:pos + length]
-            pos += length
-        self.assertEqual(bytes(restored), bytes(changed))
+        self.assertEqual(self.apply_ips(base, patch), bytes(changed))
+
+    def test_ips_round_trip_expanded_rom(self):
+        base = bytes(range(32))
+        changed = bytearray(base + bytes(32))
+        changed[40:43] = b"XYZ"
+        patch = make_ips(base, bytes(changed))
+        self.assertEqual(self.apply_ips(base, patch), bytes(changed))
+        self.assertEqual(len(self.apply_ips(base, patch)), 64)
 
 
 if __name__ == "__main__":
