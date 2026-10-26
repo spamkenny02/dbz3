@@ -240,7 +240,7 @@ class Editor(tk.Tk):
         self.play_scene(self.data['start'])
     def play_scene(self,sid,selected=None):
         s=next(s for s in self.data['scenes'] if s['id']==sid)
-        win=tk.Toplevel(self);win.title('Lecture du scénario · simulation locale');win.geometry('600x550')
+        win=tk.Toplevel(self);win.title('Lecture du scénario · simulation locale');win.geometry('600x850')
         ttk.Label(win,text=s['name'],font=(self.ui_font,15,'bold')).pack(pady=10)
         if self.assets:
             photo=ImageTk.PhotoImage(compose(s,self.assets).resize((512,448),Image.Resampling.NEAREST))
