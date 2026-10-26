@@ -45,7 +45,7 @@ class StoryHookVerifierTests(unittest.TestCase):
             verify_rom(bytes(fake), strict_hash=True)
 
     def test_recorded_tables_have_expected_lengths(self):
-        self.assertEqual(len(INIT_POINTERS), 11)
+        self.assertEqual(len(INIT_POINTERS), 12)
         self.assertEqual(len(FRAME_POINTERS), 11)
         self.assertEqual(INIT_TABLE_OFFSET, 0xF9)
         self.assertEqual(FRAME_TABLE_OFFSET, 0x2E3)
