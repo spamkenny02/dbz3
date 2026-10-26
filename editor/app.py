@@ -35,7 +35,7 @@ class Editor(tk.Tk):
         ttk.Label(header,text='  DBZ · scènes & embranchements',foreground='#aab0c3').pack(side='left')
         for text,command in [('Enregistrer',self.save),('Ouvrir',self.open_project),('Nouveau',self.new)]:ttk.Button(header,text=text,command=command).pack(side='right',padx=3)
         toolbar=ttk.Frame(self,padding=(16,6));toolbar.pack(fill='x')
-        for text,command in [('Charger les assets',self.choose_catalog),('Extraire une ROM SB2',self.extract_rom),('Exporter PNG',self.export_png),('Vérifier les liens',self.check),('Vue des liens',self.graph),('Tester depuis le début',self.play)]:ttk.Button(toolbar,text=text,command=command).pack(side='left',padx=3)
+        for text,command in [('Charger les assets',self.choose_catalog),('Extraire une ROM SB2',self.extract_rom),('Exporter PNG',self.export_png),('Construire ROM / IPS',self.build_rom),('Vérifier les liens',self.check),('Vue des liens',self.graph),('Tester depuis le début',self.play)]:ttk.Button(toolbar,text=text,command=command).pack(side='left',padx=3)
         self.status=tk.StringVar(value='Chargez un catalogue SB2 pour commencer.')
         ttk.Label(self,textvariable=self.status,padding=8).pack(side='bottom',fill='x')
         panes=ttk.Panedwindow(self,orient='horizontal');panes.pack(fill='both',expand=True,padx=12,pady=8)
@@ -92,7 +92,7 @@ class Editor(tk.Tk):
         self.player=tk.StringVar();self.opponent=tk.StringVar();row=ttk.Frame(right);row.pack(fill='x')
         for var in (self.player,self.opponent):
             e=ttk.Combobox(row,textvariable=var,values=FIGHTERS,state='readonly',width=14);e.pack(side='left',fill='x',expand=True);e.bind('<<ComboboxSelected>>',lambda e:self.update_scene())
-        self.selectable=tk.BooleanVar();self.arena=tk.StringVar(value='foret')
+        self.selectable=tk.BooleanVar();self.arena=tk.StringVar(value='plaine_rocheuse')
         ttk.Checkbutton(right,text='Le joueur choisit son combattant parmi les deux',variable=self.selectable,command=self.update_scene).pack(anchor='w')
         ttk.Label(right,text='Arène prévue (identifiants ROM à confirmer)').pack(anchor='w')
         arena_box=ttk.Combobox(right,textvariable=self.arena,values=ARENAS,state='readonly');arena_box.pack(fill='x');arena_box.bind('<<ComboboxSelected>>',lambda e:self.update_scene())
@@ -126,7 +126,7 @@ class Editor(tk.Tk):
             choice=(s.get('choices',[])+[{}]*3)[i];label.set(choice.get('label',''));target.set(self.target_name(choice.get('target')))
         self.next.set(self.target_name(s.get('next')));combat=s.get('combat',{})
         self.player.set(combat.get('player',''));self.opponent.set(combat.get('opponent',''));self.win.set(self.target_name(combat.get('win')));self.lose.set(self.target_name(combat.get('lose')))
-        self.selectable.set(combat.get('selectable',False));self.arena.set(combat.get('arena','foret'))
+        self.selectable.set(combat.get('selectable',False));self.arena.set(combat.get('arena','plaine_rocheuse'))
         self.loading=False;self.refresh_actors();self.render()
     def change_name(self):
         if self.loading:return
@@ -257,7 +257,7 @@ class Editor(tk.Tk):
                 for fighter in (c['player'],c['opponent']):ttk.Button(win,text=fighter,command=lambda f=fighter:choose(f)).pack()
             else:
                 player,opponent=combat_sides(s,selected)
-                ttk.Label(win,text=f'Joueur : {player} / CPU : {opponent} · {c.get("arena","foret")}').pack()
+                ttk.Label(win,text=f'Joueur : {player} / CPU : {opponent} · {c.get("arena","plaine_rocheuse")}').pack()
                 ttk.Label(win,text='Simulation du résultat uniquement : aucun émulateur lancé.').pack()
                 for winner in (player,opponent):
                     ttk.Button(win,text=f'{winner} gagne',command=lambda w=winner:go(combat_target(s,w,selected))).pack()
@@ -320,7 +320,7 @@ class Editor(tk.Tk):
             path=filedialog.askopenfilename(filetypes=[('Projet scénario','*.json')])
         if not path:return
         try:
-            data=load_project(path);catalog=(Path(path).resolve().parent/data['catalog']).resolve();self.load_catalog(catalog) if catalog.exists() else None
+            data=load_project(path);catalog=(Path(path).resolve().parent/data['catalog']).resolve();self.load_catalog(catalog) if catalog.exists() else setattr(self,'assets',None)
             self.data=data;self.path=Path(path).resolve();self.current=0;self.refresh_scenes();self.show_scene(0);self.dirty=False;self.title('DBZ • Atelier scénario')
         except Exception as e:messagebox.showerror('Projet',str(e))
     def save(self):
@@ -331,6 +331,23 @@ class Editor(tk.Tk):
             if self.assets:self.data['catalog']=os.path.relpath(self.assets.path,Path(path).resolve().parent)
             save_project(self.data,path);self.path=Path(path).resolve();self.dirty=False;self.title('DBZ • Atelier scénario');self.status.set('Projet enregistré : '+str(path))
         except Exception as e:messagebox.showerror('Enregistrement',str(e))
+    def build_rom(self):
+        self.update_scene()
+        errors=validate(self.data)
+        if errors:messagebox.showerror('Projet incomplet','\n'.join(errors));return
+        rom=filedialog.askopenfilename(title='ROM française originale Butoden 3 (2 Mio)',filetypes=[('ROM SNES','*.sfc *.smc')])
+        if not rom:return
+        output=filedialog.asksaveasfilename(title='Nouvelle ROM (scènes texte + combats)',defaultextension='.sfc',filetypes=[('ROM SNES','*.sfc')])
+        if not output:return
+        script=ROOT/'tools/build_story_campaign.py'
+        if not script.exists():script=ROOT.parent/'tools/build_story_campaign.py'
+        try:
+            with tempfile.TemporaryDirectory() as d:
+                source=Path(d)/'project.json';save_project(self.data,source)
+                result=subprocess.run([sys.executable,str(script),rom,str(source),'--out-rom',output,'--out-ips',str(Path(output).with_suffix('.ips')),'--report',str(Path(output).with_suffix('.json'))],capture_output=True,text=True)
+                if result.returncode:raise ValueError(result.stderr or result.stdout)
+            messagebox.showinfo('Construction terminée','ROM et IPS créés. Les scènes sont affichées en texte ; les compositions SB2 ne sont pas encore réinsérées. Testez votre parcours dans un émulateur.')
+        except Exception as error:messagebox.showerror('Construction',str(error))
     def export_png(self):
         if not self.assets:return
         path=filedialog.asksaveasfilename(defaultextension='.png',filetypes=[('Image PNG','*.png')])

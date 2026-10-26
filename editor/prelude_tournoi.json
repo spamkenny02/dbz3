@@ -20,7 +20,7 @@
         "win": null,
         "lose": null,
         "selectable": false,
-        "arena": "foret"
+        "arena": "plaine_rocheuse"
       },
       "staging": {
         "setting": "bois",
@@ -46,7 +46,7 @@
         "win": null,
         "lose": null,
         "selectable": false,
-        "arena": "foret"
+        "arena": "plaine_rocheuse"
       },
       "staging": {
         "setting": "bois",
@@ -72,7 +72,7 @@
         "win": "freres_win",
         "lose": "freres_lose",
         "selectable": true,
-        "arena": "foret"
+        "arena": "plaine_rocheuse"
       },
       "staging": {
         "setting": "",
@@ -95,7 +95,7 @@
         "win": null,
         "lose": null,
         "selectable": false,
-        "arena": "foret"
+        "arena": "plaine_rocheuse"
       },
       "staging": {
         "setting": "",
@@ -118,7 +118,7 @@
         "win": null,
         "lose": null,
         "selectable": false,
-        "arena": "foret"
+        "arena": "plaine_rocheuse"
       },
       "staging": {
         "setting": "",
@@ -141,7 +141,7 @@
         "win": null,
         "lose": null,
         "selectable": false,
-        "arena": "foret"
+        "arena": "plaine_rocheuse"
       },
       "staging": {
         "setting": "salle de gravité",
@@ -191,7 +191,7 @@
         "win": null,
         "lose": null,
         "selectable": false,
-        "arena": "foret"
+        "arena": "plaine_rocheuse"
       },
       "staging": {
         "setting": "",
@@ -214,7 +214,7 @@
         "win": null,
         "lose": null,
         "selectable": false,
-        "arena": "foret"
+        "arena": "plaine_rocheuse"
       },
       "staging": {
         "setting": "",
@@ -237,7 +237,7 @@
         "win": null,
         "lose": null,
         "selectable": false,
-        "arena": "foret"
+        "arena": "plaine_rocheuse"
       },
       "staging": {
         "setting": "rassemblement au tournoi",
@@ -267,7 +267,7 @@
         "win": null,
         "lose": null,
         "selectable": false,
-        "arena": "foret"
+        "arena": "plaine_rocheuse"
       },
       "staging": {
         "setting": "",
@@ -295,7 +295,7 @@
         "win": null,
         "lose": null,
         "selectable": false,
-        "arena": "foret"
+        "arena": "plaine_rocheuse"
       },
       "staging": {
         "setting": "",
@@ -325,7 +325,7 @@
         "win": null,
         "lose": null,
         "selectable": false,
-        "arena": "foret"
+        "arena": "plaine_rocheuse"
       },
       "staging": {
         "setting": "arène du tournoi",
@@ -374,7 +374,7 @@
         "win": null,
         "lose": null,
         "selectable": false,
-        "arena": "foret"
+        "arena": "plaine_rocheuse"
       },
       "staging": {
         "setting": "",
@@ -397,7 +397,7 @@
         "win": null,
         "lose": null,
         "selectable": false,
-        "arena": "foret"
+        "arena": "plaine_rocheuse"
       },
       "staging": {
         "setting": "",
@@ -420,7 +420,7 @@
         "win": null,
         "lose": null,
         "selectable": false,
-        "arena": "foret"
+        "arena": "plaine_rocheuse"
       },
       "staging": {
         "setting": "",

@@ -6,8 +6,8 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-if exist exemple_scenario.json (
-  py -3 app.py --project exemple_scenario.json
+if exist prelude_tournoi.json (
+  py -3 app.py --project prelude_tournoi.json
 ) else (
   py -3 app.py
 )

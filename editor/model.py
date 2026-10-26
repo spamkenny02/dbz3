@@ -8,8 +8,8 @@ from PIL import Image, ImageDraw, ImageFont
 WIDTH, HEIGHT = 256, 224
 
 # Stable authoring keys; ROM numeric IDs must be verified separately.
-FIGHTERS = ('Gohan', 'Goten', 'Vegeta', 'Trunks', 'Goku', 'Piccolo', 'Kaioshin', 'Dabra', 'Majin Buu', 'C18')
-ARENAS = ('foret', 'salle_gravite', 'tournoi')
+FIGHTERS = ('Gohan', 'Goten', 'Vegeta', 'Trunks', 'Goku', 'Trunks (futur)', 'Dabra', 'Majin Buu', 'Petit Buu', 'C18')
+ARENAS = ('plaine_rocheuse', 'salle_gravite', 'tournoi')
 
 def combat_sides(s, selected=None):
     """Resolve a real pair, without interpreting the winner as the player."""
@@ -27,7 +27,7 @@ def combat_target(s, winner, selected=None):
 
 def scene(name='Nouvelle scène'):
     return dict(id='scene_'+uuid.uuid4().hex[:8],name=name,kind='dialogue',background=None,
-                actors=[],dialogue='',choices=[],next=None,combat={'player':'','opponent':'','win':None,'lose':None,'selectable':False,'arena':'foret'})
+                actors=[],dialogue='',choices=[],next=None,combat={'player':'','opponent':'','win':None,'lose':None,'selectable':False,'arena':'plaine_rocheuse'})
 
 def project():
     first=scene('Introduction')
@@ -55,7 +55,7 @@ def validate(data,assets=None):
                 errors.append(f'{name} : le duel exige deux personnages distincts')
             if not c.get('win') or not c.get('lose'):
                 errors.append(f'{name} : définir les suites victoire et défaite')
-            if c.get('arena', 'foret') not in ARENAS:
+            if c.get('arena', 'plaine_rocheuse') not in ARENAS:
                 errors.append(f'{name} : arène non reconnue')
             if s.get('choices') or s.get('next'):
                 errors.append(f'{name} : le combat utilise uniquement victoire/défaite')

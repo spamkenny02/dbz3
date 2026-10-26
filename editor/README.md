@@ -1,3 +1,14 @@
+## Prélude avec combats (v7)
+
+Ouvrez `prelude_tournoi.json`. Les duels proposent deux combattants natifs,
+le choix du camp, une arène et des destinations victoire/défaite. Le lecteur
+local permet de simuler le vainqueur. `Construire ROM / IPS` demande votre
+ROM française originale de 2 Mio et génère des fichiers séparés.
+La ROM obtenue joue de vrais combats, avec des scènes **texte** pour le moment.
+Les compositions graphiques SB2 restent dans le projet et ne sont pas exportées
+vers la ROM. Le combat prévu dans les bois utilise provisoirement une plaine.
+Voir `../docs/campaign-v7.md` pour les essais et limites.
+
 # Atelier scénario SB2 / DBZ3
 
 Desktop Python/Tk editor for 256×224 scenes, transparent character/prop layers,
@@ -28,7 +39,7 @@ assets using `../tools/extract_sb2_assets.py` or choose an existing catalog.
    a transparent layer. Mix elements from different original scenes.
 3. Drag a layer or edit X/Y, size, mirror and layer order in the inspector.
 4. Enter dialogue, add named scenes and choose destinations for up to three
-   choices per scene. Automatic links and descriptive combat win/loss links
+   choices per scene. Automatic links and structured combat win/loss links
    are also available. Combat nodes do not launch a game battle in this editor.
 5. Set the starting scene. Use the route buttons, Test from beginning and
    View links to inspect the graph. Check links before saving.
@@ -64,7 +75,8 @@ No raw compressed-ROM offsets are falsely presented as verified resources.
 ## What is not implemented
 
 JSON/PNG export and local route preview work. This editor does not yet encode
-SB2 graphics into the SB3 narrative renderer or insert arbitrary scene graphs
-into the ROM. The current IPS retains the earlier two-route text prologue.
+SB2 graphics into the SB3 narrative renderer into the ROM. The new campaign compiler inserts scene graphs as text screens
+with real battles; it does not compile composed graphics. The v6 IPS retains
+the earlier two-route text prologue.
 A graphical SNES renderer and a guarded script/asset compiler are still needed
 for that next integration step. Keep the editor project as its source of truth.
