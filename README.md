@@ -14,15 +14,17 @@ Research and tooling for a homebrew ROM patch that adds a replayable, branching 
 ## Status
 
 - [x] Inspect the supplied French ROM headers and hashes.
-- [x] Map top-level state dispatchers and identify a three-position mode-selector candidate.
+- [x] Map top-level state dispatchers and identify candidate selector handlers.
 - [x] Compare the supplied French *La Légende Saien* ROM as a reference for event/script architecture.
-- [x] Add byte-level checks for the recorded state tables and selector limits.
-- [ ] Confirm visible menu labels and graphics/tilemap data at runtime.
-- [ ] Confirm battle start/result/return hooks.
-- [ ] Implement the first story-scene prototype.
-- [ ] Build and test an IPS/BPS patch.
+- [x] Add a read-only verifier for exact selector bytes, global state tables, and the candidate fill range.
+- [x] Document an architecture for adding a dedicated global state without replacing an existing state.
+- [ ] Confirm which visible menu is the top-level mode menu at runtime.
+- [ ] Audit safe WRAM variables and the candidate ROM insertion area.
+- [ ] Identify the text/portrait rendering path.
+- [ ] Implement the first Story Mode scene and a battle transition.
+- [ ] Build and test an IPS/BPS patch in an emulator.
 
-This repository currently contains diagnostic tooling and design notes, **not a playable hack yet**.
+This repository contains diagnostic tooling and design notes, **not a playable hack yet**.
 
 ## Quick start
 
@@ -31,11 +33,11 @@ Python 3.10+; standard library only.
 ```bash
 python tools/inspect_rom.py "path/to/Dragon Ball Z - Ultime Menace (France).sfc" --min-fill 4096
 python tools/compare_roms.py "path/to/Ultime Menace.sfc" "path/to/La Legende Saien.sfc"
-python tools/verify_known_layout.py "path/to/Dragon Ball Z - Ultime Menace (France).sfc"
+python tools/verify_story_hooks.py "path/to/Dragon Ball Z - Ultime Menace (France).sfc"
 python -m unittest discover -s tests -v
 ```
 
-See docs/ for current static-analysis notes and docs/patch-spec-format.md for the guarded IPS format. The known-layout verifier expects the exact ROM SHA-256 documented in docs/analysis-results.md.
+See `docs/` for current static-analysis notes and `docs/patch-spec-format.md` for the guarded IPS format. The hook verifier expects the exact ROM SHA-256 documented in `docs/analysis-results.md`.
 
 ## Copyright / distribution
 
