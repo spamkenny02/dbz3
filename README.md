@@ -6,6 +6,7 @@ Research, tooling and an **experimental text-only branching Story Mode prototype
 
 - Work from a user-owned ROM. ROM images are not included in this repository.
 - Keep the original ROM unchanged; the builder writes a separate .sfc and .ips.
+- The prototype expands the 2 MiB LoROM image to 4 MiB and places custom code/data in the new C0-FF banks. This avoids overwriting the old FF-filled region, which has existing code references.
 - No SRAM/save feature: route choices and chapter flags live in volatile WRAM only.
 - Preserve the three original game modes and reuse the original battle engine where possible.
 - Static-analysis findings are candidates until runtime-verified.
@@ -18,6 +19,7 @@ Research, tooling and an **experimental text-only branching Story Mode prototype
 - The fourth option opens a dedicated story state with two intro pages, a two-way choice, and two different short endings.
 - A restarts the story; B returns to the custom menu.
 - The UI uses a small original bitmap font and custom tilemaps; no copyrighted game assets are included in the repository.
+- The patched image declares a 4 MiB LoROM size (header code 0x0C); SRAM remains disabled.
 - Story variables are volatile WRAM only; no SRAM is added.
 
 ## Build from your own ROM
@@ -33,7 +35,7 @@ python tools/verify_story_hooks.py "path/to/Dragon Ball Z - Ultime Menace (Franc
 python -m unittest discover -s tests -v
 ```
 
-The builder requires the exact French ROM SHA-256 recorded in docs/analysis-results.md. It validates original hook bytes, candidate free space, relocated state tables, output checksum and IPS generation. See docs/integration-next-steps.md for addresses and limitations, and docs/testing-prototype.md for the emulator test checklist.
+The builder requires the exact French ROM SHA-256 recorded in docs/analysis-results.md. It validates original hook bytes, the new-bank layout, relocated state tables, 4 MiB header/checksum and IPS expansion. See docs/integration-next-steps.md for addresses and limitations, and docs/testing-prototype.md for the emulator test checklist.
 
 ## Remaining work
 
