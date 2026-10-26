@@ -1,100 +1,148 @@
 {
-  "width": 32,
-  "height": 40,
+  "width": 26,
+  "height": 62,
   "objects": [
     {
-      "x": 0,
-      "y": 0,
-      "width": 8,
-      "height": 8,
-      "flip_x": false,
-      "flip_y": true,
-      "tiles": [
-        748320
-      ],
-      "palette": 775680
-    },
-    {
-      "x": 8,
-      "y": 0,
-      "width": 8,
-      "height": 8,
-      "flip_x": false,
-      "flip_y": true,
-      "tiles": [
-        748288
-      ],
-      "palette": 775680
-    },
-    {
       "x": 16,
-      "y": 0,
+      "y": 32,
       "width": 8,
       "height": 8,
-      "flip_x": false,
-      "flip_y": true,
+      "flip_x": true,
+      "flip_y": false,
       "tiles": [
-        748256
+        754944
+      ],
+      "palette": 775680
+    },
+    {
+      "x": 0,
+      "y": 32,
+      "width": 8,
+      "height": 8,
+      "flip_x": true,
+      "flip_y": false,
+      "tiles": [
+        754976
       ],
       "palette": 775680
     },
     {
       "x": 16,
       "y": 24,
-      "width": 16,
-      "height": 16,
-      "flip_x": false,
-      "flip_y": true,
+      "width": 8,
+      "height": 8,
+      "flip_x": true,
+      "flip_y": false,
       "tiles": [
-        747424,
-        747456,
-        747936,
-        747968
+        754912
       ],
       "palette": 775680
     },
     {
-      "x": 0,
-      "y": 24,
-      "width": 16,
-      "height": 16,
-      "flip_x": false,
-      "flip_y": true,
+      "x": 16,
+      "y": 16,
+      "width": 8,
+      "height": 8,
+      "flip_x": true,
+      "flip_y": false,
       "tiles": [
-        9885,
-        747392,
-        747872,
-        747904
+        754880
       ],
       "palette": 775680
     },
     {
       "x": 16,
       "y": 8,
-      "width": 16,
-      "height": 16,
-      "flip_x": false,
-      "flip_y": true,
+      "width": 8,
+      "height": 8,
+      "flip_x": true,
+      "flip_y": false,
       "tiles": [
-        747552,
-        747584,
-        748064,
-        748096
+        754848
+      ],
+      "palette": 775680
+    },
+    {
+      "x": 16,
+      "y": 0,
+      "width": 8,
+      "height": 8,
+      "flip_x": true,
+      "flip_y": false,
+      "tiles": [
+        754816
       ],
       "palette": 775680
     },
     {
       "x": 0,
-      "y": 8,
+      "y": 16,
       "width": 16,
       "height": 16,
-      "flip_x": false,
-      "flip_y": true,
+      "flip_x": true,
+      "flip_y": false,
       "tiles": [
-        747488,
-        747520,
-        748000,
-        748032
+        753728,
+        753760,
+        754240,
+        754272
+      ],
+      "palette": 775680
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "flip_x": true,
+      "flip_y": false,
+      "tiles": [
+        753664,
+        753696,
+        754176,
+        754208
+      ],
+      "palette": 775680
+    },
+    {
+      "x": 18,
+      "y": 33,
+      "width": 8,
+      "height": 8,
+      "flip_x": true,
+      "flip_y": false,
+      "tiles": [
+        755136
+      ],
+      "palette": 775680
+    },
+    {
+      "x": 2,
+      "y": 46,
+      "width": 16,
+      "height": 16,
+      "flip_x": true,
+      "flip_y": false,
+      "tiles": [
+        754752,
+        754784,
+        755264,
+        755296
+      ],
+      "palette": 775680
+    },
+    {
+      "x": 2,
+      "y": 30,
+      "width": 16,
+      "height": 16,
+      "flip_x": true,
+      "flip_y": false,
+      "tiles": [
+        754688,
+        754720,
+        755200,
+        755232
       ],
       "palette": 775680
     }

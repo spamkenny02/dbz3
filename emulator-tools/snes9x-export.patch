@@ -1,14 +1,30 @@
-diff --git a/libretro/libretro.cpp b/libretro/libretro.cpp
-index 6060767..3f7b9b0 100644
 --- a/libretro/libretro.cpp
 +++ b/libretro/libretro.cpp
-@@ -1873,6 +1873,9 @@ void* retro_get_memory_data(unsigned type)
+@@ -5,6 +5,7 @@
+ #include "memmap.h"
+ #include "srtc.h"
+ #include "apu/apu.h"
++extern "C" void* codex_spc_ram();
+ #include "apu/bapu/snes/snes.hpp"
+ #include "gfx.h"
+ #include "snapshot.h"
+@@ -1873,6 +1874,10 @@
  
      switch(type)
      {
 +        case 42: return PPU.CGDATA;
 +        case 43: return PPU.OAMData;
 +        case 44: return Memory.FillRAM;
++        case 45: return codex_spc_ram();
          case RETRO_MEMORY_SNES_SUFAMI_TURBO_A_RAM:
          case RETRO_MEMORY_SAVE_RAM:
              data = Memory.SRAM;
+--- a/apu/apu.cpp
++++ b/apu/apu.cpp
+@@ -497,3 +497,6 @@
+ 
+     return true;
+ }
++
++// Read-only diagnostic export for checking native audio driver restoration.
++extern "C" void* codex_spc_ram(){return SNES::smp.apuram;}

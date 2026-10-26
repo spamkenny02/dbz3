@@ -2,7 +2,7 @@
 from __future__ import annotations
 from copy import deepcopy
 from pathlib import Path
-import json, textwrap, uuid
+import json, textwrap, uuid, sys, base64
 from PIL import Image, ImageDraw, ImageFont
 
 WIDTH, HEIGHT = 256, 224
@@ -98,6 +98,18 @@ def compose(s,assets,dialogue=True):
     if s.get('background'):im.alpha_composite(assets.image(s['background']).resize((WIDTH,HEIGHT),Image.Resampling.NEAREST))
     for actor in sorted(s.get('actors',[]),key=lambda a:a.get('z',0)):
         im.alpha_composite(actor_image(actor,assets),(int(actor.get('x',0)),int(actor.get('y',0))))
+    if dialogue and s.get('dialogue') and s.get('presentation')=='sb2':
+        style=assets.root/'sb2_native_style.json'
+        if style.exists():
+            toolroot=Path(__file__).resolve().parent/'tools'
+            if not toolroot.exists():toolroot=Path(__file__).resolve().parents[1]/'tools'
+            sys.path.insert(0,str(toolroot))
+            from sb2_style import NativeFont
+            font=NativeFont(base64.b64decode(json.loads(style.read_text())['font']))
+            lines=[]
+            for paragraph in s['dialogue'].replace('’',"'").splitlines():lines.extend(textwrap.wrap(paragraph,26) or [''])
+            for n,line in enumerate(lines[:3]):font.draw(im,24,152+n*16,line)
+            return im
     if dialogue and s.get('dialogue'):
         draw=ImageDraw.Draw(im)
         candidates=[Path(__file__).with_name('DejaVuSans.ttf'),Path('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'),Path('C:/Windows/Fonts/arial.ttf')]

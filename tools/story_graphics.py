@@ -121,3 +121,34 @@ class Payloads:
         return dict(segments=segments,map=self.put(encoded['tilemap']),palette=self.put(encoded['cgram']),metrics=encoded['metrics'])
     def install(self,rom):
         for offset,payload in self.writes:rom[offset:offset+len(payload)]=payload
+
+def reveal_image(composition,complete,cells):
+    """Keep background under hidden 8x16 glyphs; reveal changes tilemap words only."""
+    result=encode(complete);palette=[int.from_bytes(result['cgram'][i:i+2],'little') for i in range(0,512,2)];used=result['metrics']['palette_colors']
+    lookup={v:i for i,v in enumerate(palette[:used])};indices=[]
+    for pixel in pixels_of(composition.convert('RGB')):
+        value=rgb555(pixel)
+        if value not in lookup:
+            if used<256:palette[used]=value;lookup[value]=used;used+=1
+            else:
+                rgb=rgb8(value);lookup[value]=min(range(256),key=lambda i:sum((x-y)**2 for x,y in zip(rgb,rgb8(palette[i]))));result['metrics']['quantized']=True
+        indices.append(lookup[value])
+    tiles=[result['tiles'][i:i+64] for i in range(0,len(result['tiles']),64)];seen={tile:i for i,tile in enumerate(tiles)};base_map=[]
+    for ty in range(28):
+        for tx in range(32):
+            tile=bytearray(64)
+            for row in range(8):
+                for col in range(8):
+                    value=indices[(ty*8+row)*256+tx*8+col]
+                    for plane in range(8):tile[(plane//2)*16+row*2+plane%2]|=(value>>plane&1)<<(7-col)
+            key=bytes(tile)
+            if key not in seen:seen[key]=len(tiles);tiles.append(key)
+            base_map.append(seen[key])
+    if len(tiles)>960:raise ValueError('La scène dépasse 960 tuiles avec le texte progressif ; simplifiez la composition.')
+    final=result['tilemap'];initial=bytearray(final);reveals=[]
+    for x,y in cells:
+        top=(y//8*32+x//8)*2;bottom=top+64
+        reveals.append((top,int.from_bytes(final[top:top+2],'little'),int.from_bytes(final[bottom:bottom+2],'little')))
+        initial[top:top+2]=base_map[top//2].to_bytes(2,'little');initial[bottom:bottom+2]=base_map[bottom//2].to_bytes(2,'little')
+    result.update(tiles=b''.join(tiles),tilemap=bytes(initial),final_map=final,reveals=reveals,cgram=b''.join(v.to_bytes(2,'little') for v in palette))
+    result['metrics']['tiles']=len(tiles);result['metrics']['palette_colors']=used;return result

@@ -11,7 +11,9 @@ ROOT = Path(__file__).resolve().parents[1]
 MODEL_DIR = ROOT / 'editor' if (ROOT / 'editor' / 'model.py').is_file() else ROOT
 sys.path.insert(0, str(MODEL_DIR))
 from model import load_project, validate, Assets, compose
-from story_graphics import encode, page_image, Payloads
+from story_graphics import encode, page_image, Payloads, reveal_image
+from sb2_style import NativeFont
+import base64
 
 FIGHTER_IDS={'Goku':0,'Vegeta':1,'Gohan':2,'Goten':3,'Trunks':4,
              'Majin Buu':5,'Dabra':6,'C18':7,'Petit Buu':8,'Trunks (futur)':9}
@@ -25,6 +27,10 @@ LOSE=0x7e1e57
 ACTIVE=0x7e1e58
 RESUME=0x7e1e59
 MAP_BANK=0x7e1e60
+TEXT_POS=0x7e1e68
+TEXT_TICK=0x7e1e69
+TEXT_LENGTH=0x7e1e6a
+AUTO_TIMER=0x7e1e6c
 REQUEST=0x7e1e61
 COUNT=0x7e1e62
 
@@ -42,8 +48,9 @@ def ascii_text(s):
     s=s.replace('…','...').replace('’',"'").replace('œ','oe').replace('—','-')
     return unicodedata.normalize('NFKD',s).encode('ascii','ignore').decode().upper()
 
-def compile_campaign(data,rom,assets=None):
+def compile_campaign(data,rom,assets=None,style=None):
     errors=validate(data)
+    if data.get('music',{}).get('source')=='sb2' and style is None:errors.append('Ressources musicales SB2 manquantes : préparez la première scène SB2.')
     if errors:raise ValueError('\n'.join(errors))
     scenes=data['scenes'];ids={s['id']:i for i,s in enumerate(scenes)}
     if len(scenes)>200:raise ValueError('Maximum 200 nodes for this compiler')
@@ -58,12 +65,15 @@ def compile_campaign(data,rom,assets=None):
         maps.append(tilemap);return pointer>>16,pointer&65535
     # Dialogue is paginated instead of silently truncating editor text.
     for i,s in enumerate(scenes):
-        graphical=bool(s.get('background') or s.get('actors'))
+        native=s.get('presentation')=='sb2'
+        if native and style is None:raise ValueError('Préparez les ressources de la ROM SB2 originale pour ce style.')
+        font=NativeFont(base64.b64decode(style['font'])) if native else None
+        graphical=bool(s.get('background') or s.get('actors')) or native
         composition=compose(s,assets,dialogue=False) if graphical else None
         lines=[]
-        for paragraph in ascii_text(s.get('dialogue','')).splitlines():
-            lines.extend(textwrap.wrap(paragraph,28) or [''])
-        per_page=4 if graphical else 9
+        for paragraph in (s.get('dialogue','') if native else ascii_text(s.get('dialogue',''))).splitlines():
+            lines.extend(textwrap.wrap(paragraph.replace('’',"'"),26 if native else 28) or [''])
+        per_page=3 if native else 4 if graphical else 9
         chunks=[lines[j:j+per_page] for j in range(0,len(lines),per_page)] or [[]]
         if graphical and s.get('choices') and s['kind']!='combat' and len(chunks[-1])>2:
             chunks.append([])
@@ -85,11 +95,22 @@ def compile_campaign(data,rom,assets=None):
             for selected in range(max(1,len(options))):
                 cursor=(12+selected*4 if s['kind']=='combat' else 16+selected*3) if options else None
                 if graphical:
-                    screen=page_image(composition,ascii_text(s['name']),chunk,[ascii_text(o) for o in options],selected,s['kind']=='combat')
+                    cells=[]
+                    if native:
+                        screen=composition.convert('RGB').copy()
+                        if options:
+                            for k,option in enumerate(options):font.draw(screen,24,152+k*16,('> ' if k==selected else '  ')+option)
+                        else:
+                            for k,line in enumerate(chunk):
+                                font.draw(screen,24,152+k*16,line)
+                                cells.extend((24+ci*8,152+k*16) for ci in range(len(line)))
+                    else:screen=page_image(composition,ascii_text(s['name']),chunk,[ascii_text(o) for o in options],selected,s['kind']=='combat')
                     key=screen.tobytes()
                     if key not in graphic_cache:
-                        encoded=encode(screen);gid=len(graphics);graphic_cache[key]=gid
-                        graphics.append(pool.image(encoded))
+                        encoded=reveal_image(composition,screen,cells) if cells else encode(screen);gid=len(graphics);graphic_cache[key]=gid
+                        gfx=pool.image(encoded);gfx['reveals']=encoded.get('reveals',[])
+                        if gfx['reveals']:gfx['final_map']=pool.put(encoded['final_map'])
+                        graphics.append(gfx)
                     variants.append(('graphic',graphic_cache[key]))
                 else:variants.append(add_map(rows,cursor))
             pages.append(dict(scene=i,part=n,parts=len(chunks),variants=variants,options=options))
@@ -99,14 +120,28 @@ def compile_campaign(data,rom,assets=None):
     a.label('Init')
     a.emit(0xe2,0x20,0xc2,0x10);a.lda(RESUME);a.emit(0xc9,1);a.branch(0xf0,'Resume')
     a.put(CURRENT,first[ids[data['start']]])
-    a.label('Resume');a.put(RESUME,0);a.put(ACTIVE,0);a.put(CHOICE,0);a.jsl('Render')
+    a.label('Resume');a.put(RESUME,0);a.put(ACTIVE,0);a.put(CHOICE,0)
+    a.jsl('Render')
+    if style and data.get('music',{}).get('source')=='sb2':a.jsl('StartSB2')
     a.emit(0x5c,0x1d,0x81,0x80)
     a.label('Frame')
     a.emit(0x08,0x8b,0xe2,0x20,0xc2,0x10,0xa9,0,0x48,0xab)
+    for pn,page in enumerate(pages):
+        delay=scenes[page['scene']].get('auto_frames',0)
+        if not delay:continue
+        if not 1<=delay<=255:raise ValueError('auto_frames must be 1..255')
+        a.lda(CURRENT);a.emit(0xc9,pn);a.branch(0xd0,f'AutoSkip{pn}')
+        a.lda(AUTO_TIMER);a.emit(0x1a);a.sta(AUTO_TIMER);a.emit(0xc9,delay);a.branch(0x90,f'AutoSkip{pn}')
+        a.emit(0xab,0x28);a.jml('Dispatch');a.label(f'AutoSkip{pn}')
+    a.jsl('TickText')
     a.lda(0x7e006e);a.emit(0x29,0x80);a.branch(0xf0,'CheckA')
+    if style and data.get('music',{}).get('source')=='sb2':a.jsl('RestoreSB3')
     a.put(ACTIVE,0);a.put(RESUME,0);a.put(0x7e1878,2);a.put(0x7e1879,0);a.emit(0xa9,6,0x5c,0x7a,0x80,0x80)
     a.label('CheckA');a.lda(0x7e006d);a.emit(0x29,0x80);a.branch(0xf0,'Move')
-    a.emit(0xab,0x28);a.jml('Dispatch')
+    a.lda(TEXT_POS);a.emit(0xcf,TEXT_LENGTH&255,TEXT_LENGTH>>8&255,TEXT_LENGTH>>16)
+    a.branch(0xf0,'TextComplete')
+    a.jsl('FinishText');a.emit(0xab,0x28,0x6b)
+    a.label('TextComplete');a.emit(0xab,0x28);a.jml('Dispatch')
     a.label('Move');a.lda(0x7e006e);a.emit(0x29,0x0c);a.branch(0xf0,'Done')
     a.lda(0x7e006e);a.emit(0x29,8);a.branch(0xf0,'MoveDown')
     a.lda(CHOICE);a.branch(0xd0,'MoveUpNormal');a.lda(COUNT)
@@ -125,6 +160,7 @@ def compile_campaign(data,rom,assets=None):
     for n,p in enumerate(pages):
         s=scenes[p['scene']];a.label(f'page{n}')
         if s['kind']=='combat':
+            if style and data.get('music',{}).get('source')=='sb2':a.jsl('RestoreSB3')
             c=s['combat'];a.put(WIN,first[ids[c['win']]]);a.put(LOSE,first[ids[c['lose']]])
             a.put(ACTIVE,1);a.put(RESUME,0)
             for addr,value in {0x501:0,0x701:0,0x517:0,0x717:0,0x169d:1,0x169e:0,0x169b:0,0x169c:0,0x16a6:0,0x188c:1,0x19ae:0,0x19af:0,0x166e:0,0x166f:0,0x18a1:0,0x1b0a:7,0xbab:ARENA_IDS[c.get('arena','plaine_rocheuse')]}.items():a.put(0x7e0000+addr,value)
@@ -150,12 +186,13 @@ def compile_campaign(data,rom,assets=None):
         a.lda(CURRENT);a.emit(0xc9,n);a.branch(0xd0,f'render_skip{n}');a.jml(f'map{n}');a.label(f'render_skip{n}')
     a.jml('Rendered')
     for n,p in enumerate(pages):
-        a.label(f'map{n}');a.put(COUNT,len(p['variants']))
+        a.label(f'map{n}');a.put(COUNT,len(p['variants']));a.put(TEXT_POS,0);a.put(TEXT_TICK,0);a.put(TEXT_LENGTH,0);a.put(AUTO_TIMER,0)
         # Clamp a shared 0..2 cursor to the number of choices on this page.
         a.lda(CHOICE);a.emit(0xc9,len(p['variants']));a.branch(0x90,f'clamped{n}');a.put(CHOICE,0);a.label(f'clamped{n}')
         for ci,variant in enumerate(p['variants']):
             a.lda(CHOICE);a.emit(0xc9,ci);a.branch(0xd0,f'variant_skip{n}_{ci}')
-            if variant[0]=='graphic':a.jsl(f'Graphic{variant[1]}')
+            if variant[0]=='graphic':
+                a.jsl(f'Graphic{variant[1]}');a.put(TEXT_LENGTH,len(graphics[variant[1]].get('reveals',[])))
             else:
                 bank,address=variant;a.put(MAP_BANK,bank);a.emit(0xa2,address&255,address>>8);a.jsl('Draw')
             a.jml('Rendered');a.label(f'variant_skip{n}_{ci}')
@@ -173,6 +210,35 @@ def compile_campaign(data,rom,assets=None):
     a.label('StoreResult');a.sta(CURRENT);a.put(RESUME,1);a.put(ACTIVE,0);a.put(REQUEST,12)
     a.label('NativeTransition');a.lda(REQUEST)
     a.emit(0xe2,0x20,0xa2,0xfe,0x1f,0x9a,0x5c,0x80,0x80,0x80)
+    a.label('FinishText')
+    a.emit(0x08,0xe2,0x20)
+    a.label('FinishAgain');a.lda(TEXT_POS);a.emit(0xcf,TEXT_LENGTH&255,TEXT_LENGTH>>8&255,TEXT_LENGTH>>16);a.branch(0xf0,'FinishDone')
+    a.jsl('RevealOne');a.branch(0x80,'FinishAgain')
+    a.label('FinishDone');a.emit(0x28,0x6b)
+    a.label('TickText');a.emit(0x08,0xe2,0x20);a.lda(TEXT_POS);a.emit(0xcf,TEXT_LENGTH&255,TEXT_LENGTH>>8&255,TEXT_LENGTH>>16);a.branch(0xf0,'TickDone')
+    a.lda(TEXT_TICK);a.emit(0x1a);a.sta(TEXT_TICK);a.emit(0xc9,3);a.branch(0x90,'TickDone');a.put(TEXT_TICK,0);a.jsl('RevealOne')
+    a.label('TickDone');a.emit(0x28,0x6b)
+    a.label('RevealOne');a.emit(0x08,0xc2,0x30,0x48,0xda,0x5a,0xe2,0x20)
+    for pn,page in enumerate(pages):
+        variant=page['variants'][0]
+        if variant[0]!='graphic' or not graphics[variant[1]].get('reveals'):continue
+        a.lda(CURRENT);a.emit(0xc9,pn);a.branch(0xd0,f'RevealSkip{pn}');a.jml(f'RevealPage{pn}');a.label(f'RevealSkip{pn}')
+    a.jml('Revealed')
+    for pn,page in enumerate(pages):
+        variant=page['variants'][0]
+        if variant[0]!='graphic' or not graphics[variant[1]].get('reveals'):continue
+        a.label(f'RevealPage{pn}')
+        table=b''.join((0x7800+offset//2).to_bytes(2,'little')+top.to_bytes(2,'little')+bottom.to_bytes(2,'little') for offset,top,bottom in graphics[variant[1]]['reveals'])
+        pointer=pool.put(table)
+        a.emit(0xc2,0x30);a.lda(TEXT_POS);a.emit(0x29,0xff,0,0x0a,0x85,0,0x0a,0x18,0x65,0,0xaa,0xe2,0x20,0xa9,0x80,0x8d,0x15,0x21,0xc2,0x20)
+        def table_word(add):a.emit(0xbf,(pointer+add)&255,(pointer+add)>>8&255,(pointer+add)>>16)
+        table_word(0);a.emit(0x8d,0x16,0x21)
+        table_word(2);a.emit(0x8d,0x18,0x21)
+        table_word(0);a.emit(0x18,0x69,0x20,0,0x8d,0x16,0x21)
+        table_word(4);a.emit(0x8d,0x18,0x21,0xe2,0x20)
+        a.lda(TEXT_POS);a.emit(0x1a);a.sta(TEXT_POS)
+        a.jml('Revealed')
+    a.label('Revealed');a.emit(0xc2,0x30,0x7a,0xfa,0x68,0x28,0x6b)
     a.label('Draw')
     original,labels=base.assemble_code();draw=original[labels['DrawScreen']-base.CODE_CPU_START:labels['NativeMenuAddStory']-base.CODE_CPU_START]
     old=bytes.fromhex('8e 02 43 a9 c0 8d 04 43');new=bytes.fromhex('8e 02 43 af 60 1e 7e 8d 04 43')
@@ -200,6 +266,10 @@ def compile_campaign(data,rom,assets=None):
         write(0x2121,0);dma(gfx['palette'],512,0x22,0)
         write(0x2100,15)
         a.emit(0x68,0x09,0x80);a.sta(0x7e0b43);a.emit(0x8d,0,0x42,0xc2,0x30,0x7a,0xfa,0x68,0xab,0x28,0x6b)
+    audio_sites=[]
+    if style and data.get('music',{}).get('source')=='sb2':
+        from story_audio import append_audio
+        audio_sites=append_audio(a,pool,style,data['music'].get('track',4),rom)
     code=a.finish()
     if len(code)>0x8000:raise ValueError('Campaign code exceeds bank C1')
     rom[CODE_OFFSET:CODE_OFFSET+len(code)]=code
@@ -210,8 +280,9 @@ def compile_campaign(data,rom,assets=None):
     rom[base.FRAME_TABLE_OFFSET+12*3:base.FRAME_TABLE_OFFSET+13*3]=base.pointer3(0xc10000+a.labels['Frame'])
     if rom[0x7a:0x80]!=bytes.fromhex('e2 20 a2 fe 1f 9a'):raise ValueError('Native transition signature changed')
     rom[0x7a:0x80]=bytes([0x5c])+base.pointer3(0xc10000+a.labels['Transition'])+bytes.fromhex('ea ea')
+    for offset,label in audio_sites:rom[offset:offset+4]=bytes([0x22])+base.pointer3(0xc10000+a.labels[label])
     base.update_checksum(rom)
-    return dict(page_scenes=[dict(scene=scenes[p['scene']]['id'],kind=scenes[p['scene']]['kind'],part=p['part'],options=len(p['options']),graphics=[v[1] if v[0]=='graphic' else None for v in p['variants']]) for p in pages],scenes=len(scenes),pages=len(pages),maps=len(maps),code_bytes=len(code),labels={k:f'C1:{v:04X}' for k,v in a.labels.items()},graphics_compiled=bool(graphics),graphic_variants=len(graphics),graphic_metrics=[g['metrics'] for g in graphics],payload_end=hex(pool.cursor),arena_ids=ARENA_IDS,fighter_ids=FIGHTER_IDS)
+    return dict(sb2_font_sha256=style.get('font_sha256') if style else None,sb2_driver_prefix_sha256=hashlib.sha256(base64.b64decode(next(b['data'] for b in style['audio']['0']['blocks'] if b['destination']==0x800))[:64]).hexdigest() if style else None,music=data.get('music'),page_scenes=[dict(scene=scenes[p['scene']]['id'],kind=scenes[p['scene']]['kind'],part=p['part'],options=len(p['options']),graphics=[v[1] if v[0]=='graphic' else None for v in p['variants']]) for p in pages],scenes=len(scenes),pages=len(pages),maps=len(maps),code_bytes=len(code),labels={k:f'C1:{v:04X}' for k,v in a.labels.items()},graphics_compiled=bool(graphics),graphic_variants=len(graphics),graphic_metrics=[g['metrics'] for g in graphics],payload_end=hex(pool.cursor),arena_ids=ARENA_IDS,fighter_ids=FIGHTER_IDS)
 
 def build(rom_path,project_path,out_rom,out_ips,report_path):
     paths=[Path(p).resolve() for p in (rom_path,project_path,out_rom,out_ips,report_path)]
@@ -225,7 +296,9 @@ def build(rom_path,project_path,out_rom,out_ips,report_path):
         catalog=(Path(project_path).resolve().parent/data.get('catalog','assets/catalog.json')).resolve()
         if not catalog.is_file():raise ValueError(f'Catalogue graphique introuvable : {catalog}. Chargez le catalogue dans l’éditeur.')
         assets=Assets(catalog)
-    report=compile_campaign(data,rom,assets);original=Path(rom_path).read_bytes();ips=base.make_ips(original,bytes(rom))
+    style=None
+    if data.get('sb2_style'):style=json.loads((Path(project_path).resolve().parent/data['sb2_style']).resolve().read_text())
+    report=compile_campaign(data,rom,assets,style);original=Path(rom_path).read_bytes();ips=base.make_ips(original,bytes(rom))
     for path,payload in [(out_rom,rom),(out_ips,ips)]:Path(path).parent.mkdir(parents=True,exist_ok=True);Path(path).write_bytes(payload)
     report.update(rom_sha256=hashlib.sha256(rom).hexdigest(),ips_sha256=hashlib.sha256(ips).hexdigest(),base_sha256=base.BASE_SHA256,emulator_tested=False)
     Path(report_path).write_text(json.dumps(report,indent=2)+'\n');return report

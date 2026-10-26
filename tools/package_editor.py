@@ -3,7 +3,7 @@
 from pathlib import Path
 import argparse,zipfile
 ROOT=Path(__file__).resolve().parents[1]
-TOOLS=('libretro_session.py','snes_graphics.py','extract_sb2_assets.py','build_story_campaign.py','build_story_prototype.py','story_graphics.py','make_ips.py')
+TOOLS=('libretro_session.py','snes_graphics.py','extract_sb2_assets.py','build_story_campaign.py','build_story_prototype.py','story_graphics.py','make_ips.py','sb2_style.py','story_audio.py','prepare_first_scene.py','goten_sb3_recipe.json')
 
 def package(output):
     output=Path(output);output.parent.mkdir(parents=True,exist_ok=True)
@@ -18,4 +18,4 @@ def package(output):
     return output
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',default=str(ROOT/'releases/Atelier_Scenario_GUI_Graphiques_v8.zip'));a=p.parse_args();print(package(a.output))
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',default=str(ROOT/'releases/Atelier_Premiere_Scene_SB2_v9.zip'));a=p.parse_args();print(package(a.output))

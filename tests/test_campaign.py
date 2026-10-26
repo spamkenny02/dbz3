@@ -28,7 +28,7 @@ class CampaignTests(unittest.TestCase):
         report=compile_campaign(data,rom);self.assertGreater(report['pages'],len(data['scenes']))
         self.assertEqual(ascii_text('Entraînement…'),'ENTRAINEMENT...')
     def test_standalone_zip_builder_imports_from_any_working_directory(self):
-        archive=ROOT/'releases/Atelier_Scenario_GUI_Graphiques_v8.zip'
+        archive=ROOT/'releases/Atelier_Premiere_Scene_SB2_v9.zip'
         with tempfile.TemporaryDirectory() as d:
             unpacked=Path(d)/'Atelier scénario avec espaces';unpacked.mkdir()
             with zipfile.ZipFile(archive) as z:z.extractall(unpacked)

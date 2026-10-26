@@ -12,7 +12,7 @@ ROOT=Path(__file__).resolve().parent
 
 class Editor(tk.Tk):
     def __init__(self,catalog=None,project_path=None):
-        super().__init__();self.title('DBZ • Atelier scénario');self.geometry('1450x900');self.minsize(1160,760)
+        super().__init__();self.title('DBZ • Atelier scénario · SB2 v9');self.geometry('1450x900');self.minsize(1160,760)
         self.configure(bg='#13151b');self.data=project();self.assets=None;self.path=None;self.current=0;self.actor=None;self.loading=False;self.dirty=False
         self.ui_font='Segoe UI' if os.name=='nt' else 'DejaVu Sans'
         self.style=ttk.Style(self);self.style.theme_use('clam')
@@ -36,6 +36,11 @@ class Editor(tk.Tk):
         for text,command in [('Enregistrer',self.save),('Ouvrir',self.open_project),('Nouveau',self.new)]:ttk.Button(header,text=text,command=command).pack(side='right',padx=3)
         toolbar=ttk.Frame(self,padding=(16,6));toolbar.pack(fill='x')
         for text,command in [('Charger les assets',self.choose_catalog),('Extraire une ROM SB2',self.extract_rom),('Exporter PNG',self.export_png),('Construire ROM / IPS',self.build_rom),('Vérifier les liens',self.check),('Vue des liens',self.graph),('Tester depuis le début',self.play)]:ttk.Button(toolbar,text=text,command=command).pack(side='left',padx=3)
+        nativebar=ttk.Frame(self,padding=(16,4));nativebar.pack(fill='x')
+        ttk.Button(nativebar,text='Créer la première scène SB2',command=self.prepare_first_scene).pack(side='left',padx=3)
+        ttk.Label(nativebar,text='Musique SB2 · piste :').pack(side='left',padx=(12,4))
+        self.music_track=tk.StringVar(value='4');music=ttk.Combobox(nativebar,textvariable=self.music_track,values=[str(i) for i in range(4,22)],state='readonly',width=5);music.pack(side='left');music.bind('<<ComboboxSelected>>',lambda e:self.change_music())
+        ttk.Label(nativebar,text='Police originale · texte progressif · scènes fixes',foreground='#aab0c3').pack(side='left',padx=10)
         self.status=tk.StringVar(value='Chargez un catalogue SB2 pour commencer.')
         ttk.Label(self,textvariable=self.status,padding=8).pack(side='bottom',fill='x')
         panes=ttk.Panedwindow(self,orient='horizontal');panes.pack(fill='both',expand=True,padx=12,pady=8)
@@ -321,7 +326,7 @@ class Editor(tk.Tk):
         if not path:return
         try:
             data=load_project(path);catalog=(Path(path).resolve().parent/data['catalog']).resolve();self.load_catalog(catalog) if catalog.exists() else setattr(self,'assets',None)
-            self.data=data;self.path=Path(path).resolve();self.current=0;self.refresh_scenes();self.show_scene(0);self.dirty=False;self.title('DBZ • Atelier scénario')
+            self.data=data;self.music_track.set(str(data.get('music',{}).get('track',4)));self.path=Path(path).resolve();self.current=0;self.refresh_scenes();self.show_scene(0);self.dirty=False;self.title('DBZ • Atelier scénario')
         except Exception as e:messagebox.showerror('Projet',str(e))
     def save(self):
         self.update_scene()
@@ -331,6 +336,30 @@ class Editor(tk.Tk):
             if self.assets:self.data['catalog']=os.path.relpath(self.assets.path,Path(path).resolve().parent)
             save_project(self.data,path);self.path=Path(path).resolve();self.dirty=False;self.title('DBZ • Atelier scénario');self.status.set('Projet enregistré : '+str(path))
         except Exception as e:messagebox.showerror('Enregistrement',str(e))
+    def change_music(self):
+        if self.loading:return
+        if not self.data.get('sb2_style'):
+            messagebox.showinfo('Ressources SB2','Créez d’abord la première scène SB2 pour extraire sa police et sa musique.');return
+        self.data['music']=dict(source='sb2',track=int(self.music_track.get()));self.mark()
+    def prepare_first_scene(self):
+        if not self.guard():return
+        if self.assets is None:
+            self.choose_catalog()
+            if self.assets is None:return
+        sb2=filedialog.askopenfilename(title='ROM française originale Super Butoden 2 / La Légende Saien (2 Mio)',filetypes=[('ROM SNES','*.sfc *.smc')])
+        if not sb2:return
+        sb3=filedialog.askopenfilename(title='ROM française originale Butoden 3 / Ultime Menace (2 Mio)',filetypes=[('ROM SNES','*.sfc *.smc')])
+        if not sb3:return
+        output=filedialog.asksaveasfilename(title='Nouveau projet · première scène SB2',defaultextension='.json',initialfile='Premiere_scene_SB2.json',filetypes=[('Projet JSON','*.json')])
+        if not output:return
+        script=ROOT/'tools/prepare_first_scene.py'
+        if not script.exists():script=ROOT.parent/'tools/prepare_first_scene.py'
+        try:
+            result=subprocess.run([sys.executable,str(script),sb2,sb3,str(self.assets.path),output,'--track',self.music_track.get()],capture_output=True,text=True)
+            if result.returncode:raise ValueError(result.stderr or result.stdout)
+            self.dirty=False;self.open_project(output)
+            messagebox.showinfo('Première scène prête','Décor, apparitions, police et musique SB2 préparés. Goten est extrait de SB3. Enregistrez puis construisez la ROM avec la ROM SB3 originale.')
+        except Exception as error:messagebox.showerror('Préparation SB2',str(error))
     def build_rom(self):
         self.update_scene()
         errors=validate(self.data,self.assets.items if self.assets else None)
@@ -349,6 +378,9 @@ class Editor(tk.Tk):
             with tempfile.TemporaryDirectory() as d:
                 source=Path(d)/'project.json';export_data=json.loads(json.dumps(self.data))
                 if self.assets:export_data['catalog']=str(self.assets.path)
+                if export_data.get('sb2_style'):
+                    candidate=self.assets.root/'sb2_native_style.json' if self.assets else Path('')
+                    export_data['sb2_style']=str(candidate.resolve() if self.assets and candidate.is_file() else ((self.path.parent if self.path else ROOT)/export_data['sb2_style']).resolve())
                 save_project(export_data,source)
                 result=subprocess.run([sys.executable,str(script),rom,str(source),'--out-rom',output,'--out-ips',str(Path(output).with_suffix('.ips')),'--report',str(Path(output).with_suffix('.json'))],capture_output=True,text=True)
                 if result.returncode:raise ValueError(result.stderr or result.stdout)
