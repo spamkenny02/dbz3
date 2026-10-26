@@ -1,0 +1,2150 @@
+{
+  "core": "Snes9x libretro upstream 1bcc369",
+  "unit_tests": 48,
+  "scope": "static scene conversion and campaign integration",
+  "runs": {
+    "win": {
+      "graphic_checks": [
+        {
+          "page": 0,
+          "choice": 0,
+          "graphic": 0,
+          "rgb555_sha256": "7383b7059f7c3077ab043fb298234af8fd4c47f66e1febc20fa426d89c3caf2f"
+        },
+        {
+          "page": 1,
+          "choice": 0,
+          "graphic": 1,
+          "rgb555_sha256": "d16ff619f93b38e42d705c7542310b0b515fd4da602fb1f7707e451ccbbb983f"
+        },
+        {
+          "page": 2,
+          "choice": 0,
+          "graphic": 2,
+          "rgb555_sha256": "7debad46670ed6187565611684c0aaba66f8ab49e2c59beb257791a140681eb3"
+        },
+        {
+          "page": 3,
+          "choice": 0,
+          "graphic": 3,
+          "rgb555_sha256": "0b9503204431b1920e119df0bbf5a7d9b982717561c56b6221245ecfb3f2bea0"
+        },
+        {
+          "page": 4,
+          "choice": 0,
+          "graphic": 5,
+          "rgb555_sha256": "00c944e534708bfdda584857b4301c5d7c32b8564c974812ddb95fe02cbab78f"
+        },
+        {
+          "page": 6,
+          "choice": 0,
+          "graphic": 7,
+          "rgb555_sha256": "acfd199187bdfa5e20fef4d3b7d1a38f91f84893921b025e2109d7facd446ad1"
+        },
+        {
+          "page": 7,
+          "choice": 0,
+          "graphic": 8,
+          "rgb555_sha256": "23ca7f09027e4567a2614d411400f19769d28078fbb1dbe7a63e23f81910b259"
+        },
+        {
+          "page": 8,
+          "choice": 0,
+          "graphic": 9,
+          "rgb555_sha256": "a250a949ec9b50ffd40c96e69d00930bf4f9efc14c38ed16ba7fae5367881c2d"
+        },
+        {
+          "page": 9,
+          "choice": 0,
+          "graphic": 11,
+          "rgb555_sha256": "a145761933e054d3284802d7c932632f0f38c8493ec245b86d7ee1380bfd017c"
+        },
+        {
+          "page": 11,
+          "choice": 0,
+          "graphic": 13,
+          "rgb555_sha256": "6d268510266c56e5073522fb5dd1dfe80a3b2d933c7824d20794714619c223ae"
+        },
+        {
+          "page": 12,
+          "choice": 0,
+          "graphic": 14,
+          "rgb555_sha256": "e8fc2afa2fe6363268509d0a25b17646aa5f9d5ad3ea7ece13af6534e0f6c69a"
+        },
+        {
+          "page": 13,
+          "choice": 0,
+          "graphic": 15,
+          "rgb555_sha256": "fcaf1012c402be7c07c2f00984ef1068f7c65edf5dc4e3c3e603732d9e61de18"
+        },
+        {
+          "page": 14,
+          "choice": 0,
+          "graphic": 16,
+          "rgb555_sha256": "84c35f54888666154229b7544de759d19cbeaf1326d5d0ee50cb6dd969aa7ae0"
+        },
+        {
+          "page": 15,
+          "choice": 0,
+          "graphic": 17,
+          "rgb555_sha256": "c4a48cbb1532e1516311b0552d7114e212e3dedf05b9f81cbb51c3929914d7a7"
+        },
+        {
+          "page": 16,
+          "choice": 0,
+          "graphic": 18,
+          "rgb555_sha256": "437c0cf9d04ab89a7aefae89371371a090a8ddaac69808f3e7bc83eb5bfe3c12"
+        },
+        {
+          "page": 17,
+          "choice": 0,
+          "graphic": 19,
+          "rgb555_sha256": "978663dfaf5614609d91f6607f1c83cbdc32d9d7e84c6282dcf8b9f253577c84"
+        },
+        {
+          "page": 18,
+          "choice": 0,
+          "graphic": 20,
+          "rgb555_sha256": "36b2cbec1a4fa1c200f622e02e247429e3b34acf7f85478c148fa45c174094c4"
+        },
+        {
+          "page": 19,
+          "choice": 0,
+          "graphic": 21,
+          "rgb555_sha256": "069b131e35e9b2a4bd8bdfc53e1e808684d6679bd7f1f710cfcf2840091600ac"
+        },
+        {
+          "page": 20,
+          "choice": 0,
+          "graphic": 23,
+          "rgb555_sha256": "f124b91c0a8118f4b3dfdd11d86da2dd8cbb61d244345e10c8911184cf2afc8a"
+        },
+        {
+          "page": 23,
+          "choice": 0,
+          "graphic": 26,
+          "rgb555_sha256": "9731e52b35c7a9b7c2994a7f0711baf44e5da90500c01ac471ff363b18487579"
+        }
+      ],
+      "second_player": false,
+      "lose": false,
+      "natural_match": false,
+      "frames": 4194,
+      "combats": [
+        {
+          "scene": "duel_freres",
+          "player": "Gohan",
+          "cpu": "Goten",
+          "arena": 6,
+          "entry_frame": 1549,
+          "result": "win",
+          "returned_page": 4
+        },
+        {
+          "scene": "duel_saiyans",
+          "player": "Vegeta",
+          "cpu": "Trunks",
+          "arena": 5,
+          "entry_frame": 2353,
+          "result": "win",
+          "returned_page": 9
+        },
+        {
+          "scene": "duel_enfants",
+          "player": "Goten",
+          "cpu": "Trunks",
+          "arena": 0,
+          "entry_frame": 3577,
+          "result": "win",
+          "returned_page": 20
+        }
+      ],
+      "rom_sha256": "0092304ffd464a8ea87d70c5c1cbb335d7424bd1ad6d4513806ea558a2dd0fbf",
+      "buttons": [
+        [
+          1251,
+          [
+            8
+          ],
+          0
+        ],
+        [
+          1332,
+          [
+            8
+          ],
+          1
+        ],
+        [
+          1413,
+          [
+            8
+          ],
+          2
+        ],
+        [
+          1494,
+          [
+            8
+          ],
+          3
+        ],
+        [
+          2054,
+          [
+            8
+          ],
+          4
+        ],
+        [
+          2135,
+          [
+            8
+          ],
+          6
+        ],
+        [
+          2216,
+          [
+            8
+          ],
+          7
+        ],
+        [
+          2297,
+          [
+            8
+          ],
+          8
+        ],
+        [
+          2791,
+          [
+            8
+          ],
+          9
+        ],
+        [
+          2872,
+          [
+            8
+          ],
+          11
+        ],
+        [
+          2953,
+          [
+            8
+          ],
+          12
+        ],
+        [
+          3034,
+          [
+            8
+          ],
+          13
+        ],
+        [
+          3115,
+          [
+            8
+          ],
+          14
+        ],
+        [
+          3196,
+          [
+            8
+          ],
+          15
+        ],
+        [
+          3277,
+          [
+            8
+          ],
+          16
+        ],
+        [
+          3358,
+          [
+            8
+          ],
+          17
+        ],
+        [
+          3439,
+          [
+            8
+          ],
+          18
+        ],
+        [
+          3520,
+          [
+            8
+          ],
+          19
+        ],
+        [
+          4113,
+          [
+            8
+          ],
+          20
+        ],
+        [
+          4194,
+          [
+            8
+          ],
+          23
+        ]
+      ]
+    },
+    "lose": {
+      "graphic_checks": [
+        {
+          "page": 0,
+          "choice": 0,
+          "graphic": 0,
+          "rgb555_sha256": "7383b7059f7c3077ab043fb298234af8fd4c47f66e1febc20fa426d89c3caf2f"
+        },
+        {
+          "page": 1,
+          "choice": 0,
+          "graphic": 1,
+          "rgb555_sha256": "d16ff619f93b38e42d705c7542310b0b515fd4da602fb1f7707e451ccbbb983f"
+        },
+        {
+          "page": 2,
+          "choice": 0,
+          "graphic": 2,
+          "rgb555_sha256": "7debad46670ed6187565611684c0aaba66f8ab49e2c59beb257791a140681eb3"
+        },
+        {
+          "page": 3,
+          "choice": 0,
+          "graphic": 3,
+          "rgb555_sha256": "0b9503204431b1920e119df0bbf5a7d9b982717561c56b6221245ecfb3f2bea0"
+        },
+        {
+          "page": 5,
+          "choice": 0,
+          "graphic": 6,
+          "rgb555_sha256": "b927e03fcd0b18a108571d25cc3c83114ed40075c6e03800b2dda6fd7c39e979"
+        },
+        {
+          "page": 6,
+          "choice": 0,
+          "graphic": 7,
+          "rgb555_sha256": "acfd199187bdfa5e20fef4d3b7d1a38f91f84893921b025e2109d7facd446ad1"
+        },
+        {
+          "page": 7,
+          "choice": 0,
+          "graphic": 8,
+          "rgb555_sha256": "23ca7f09027e4567a2614d411400f19769d28078fbb1dbe7a63e23f81910b259"
+        },
+        {
+          "page": 8,
+          "choice": 0,
+          "graphic": 9,
+          "rgb555_sha256": "a250a949ec9b50ffd40c96e69d00930bf4f9efc14c38ed16ba7fae5367881c2d"
+        },
+        {
+          "page": 10,
+          "choice": 0,
+          "graphic": 12,
+          "rgb555_sha256": "e4cb87f22dcf798761eb8a0cedbdece70baa4d67552d43e01335c8f94b21634a"
+        },
+        {
+          "page": 11,
+          "choice": 0,
+          "graphic": 13,
+          "rgb555_sha256": "6d268510266c56e5073522fb5dd1dfe80a3b2d933c7824d20794714619c223ae"
+        },
+        {
+          "page": 12,
+          "choice": 0,
+          "graphic": 14,
+          "rgb555_sha256": "e8fc2afa2fe6363268509d0a25b17646aa5f9d5ad3ea7ece13af6534e0f6c69a"
+        },
+        {
+          "page": 13,
+          "choice": 0,
+          "graphic": 15,
+          "rgb555_sha256": "fcaf1012c402be7c07c2f00984ef1068f7c65edf5dc4e3c3e603732d9e61de18"
+        },
+        {
+          "page": 14,
+          "choice": 0,
+          "graphic": 16,
+          "rgb555_sha256": "84c35f54888666154229b7544de759d19cbeaf1326d5d0ee50cb6dd969aa7ae0"
+        },
+        {
+          "page": 15,
+          "choice": 0,
+          "graphic": 17,
+          "rgb555_sha256": "c4a48cbb1532e1516311b0552d7114e212e3dedf05b9f81cbb51c3929914d7a7"
+        },
+        {
+          "page": 16,
+          "choice": 0,
+          "graphic": 18,
+          "rgb555_sha256": "437c0cf9d04ab89a7aefae89371371a090a8ddaac69808f3e7bc83eb5bfe3c12"
+        },
+        {
+          "page": 17,
+          "choice": 0,
+          "graphic": 19,
+          "rgb555_sha256": "978663dfaf5614609d91f6607f1c83cbdc32d9d7e84c6282dcf8b9f253577c84"
+        },
+        {
+          "page": 18,
+          "choice": 0,
+          "graphic": 20,
+          "rgb555_sha256": "36b2cbec1a4fa1c200f622e02e247429e3b34acf7f85478c148fa45c174094c4"
+        },
+        {
+          "page": 19,
+          "choice": 0,
+          "graphic": 21,
+          "rgb555_sha256": "069b131e35e9b2a4bd8bdfc53e1e808684d6679bd7f1f710cfcf2840091600ac"
+        },
+        {
+          "page": 21,
+          "choice": 0,
+          "graphic": 24,
+          "rgb555_sha256": "9e8c9f17b83245f6274c592f9085726a614042e827b8037a106b9f34b0a4cbbf"
+        },
+        {
+          "page": 22,
+          "choice": 0,
+          "graphic": 25,
+          "rgb555_sha256": "e2a94a27d085f4e79a4385eae59214cc089031a859291b9379255f2ee89cddec"
+        },
+        {
+          "page": 23,
+          "choice": 0,
+          "graphic": 26,
+          "rgb555_sha256": "9731e52b35c7a9b7c2994a7f0711baf44e5da90500c01ac471ff363b18487579"
+        }
+      ],
+      "second_player": false,
+      "lose": true,
+      "natural_match": false,
+      "frames": 4235,
+      "combats": [
+        {
+          "scene": "duel_freres",
+          "player": "Gohan",
+          "cpu": "Goten",
+          "arena": 6,
+          "entry_frame": 1549,
+          "result": "lose",
+          "returned_page": 5
+        },
+        {
+          "scene": "duel_saiyans",
+          "player": "Vegeta",
+          "cpu": "Trunks",
+          "arena": 5,
+          "entry_frame": 2383,
+          "result": "lose",
+          "returned_page": 10
+        },
+        {
+          "scene": "duel_enfants",
+          "player": "Goten",
+          "cpu": "Trunks",
+          "arena": 0,
+          "entry_frame": 3621,
+          "result": "lose",
+          "returned_page": 21
+        }
+      ],
+      "rom_sha256": "0092304ffd464a8ea87d70c5c1cbb335d7424bd1ad6d4513806ea558a2dd0fbf",
+      "buttons": [
+        [
+          1251,
+          [
+            8
+          ],
+          0
+        ],
+        [
+          1332,
+          [
+            8
+          ],
+          1
+        ],
+        [
+          1413,
+          [
+            8
+          ],
+          2
+        ],
+        [
+          1494,
+          [
+            8
+          ],
+          3
+        ],
+        [
+          2084,
+          [
+            8
+          ],
+          5
+        ],
+        [
+          2165,
+          [
+            8
+          ],
+          6
+        ],
+        [
+          2246,
+          [
+            8
+          ],
+          7
+        ],
+        [
+          2327,
+          [
+            8
+          ],
+          8
+        ],
+        [
+          2835,
+          [
+            8
+          ],
+          10
+        ],
+        [
+          2916,
+          [
+            8
+          ],
+          11
+        ],
+        [
+          2997,
+          [
+            8
+          ],
+          12
+        ],
+        [
+          3078,
+          [
+            8
+          ],
+          13
+        ],
+        [
+          3159,
+          [
+            8
+          ],
+          14
+        ],
+        [
+          3240,
+          [
+            8
+          ],
+          15
+        ],
+        [
+          3321,
+          [
+            8
+          ],
+          16
+        ],
+        [
+          3402,
+          [
+            8
+          ],
+          17
+        ],
+        [
+          3483,
+          [
+            8
+          ],
+          18
+        ],
+        [
+          3564,
+          [
+            8
+          ],
+          19
+        ],
+        [
+          4073,
+          [
+            8
+          ],
+          21
+        ],
+        [
+          4154,
+          [
+            8
+          ],
+          22
+        ],
+        [
+          4235,
+          [
+            8
+          ],
+          23
+        ]
+      ]
+    },
+    "second-win": {
+      "graphic_checks": [
+        {
+          "page": 0,
+          "choice": 0,
+          "graphic": 0,
+          "rgb555_sha256": "7383b7059f7c3077ab043fb298234af8fd4c47f66e1febc20fa426d89c3caf2f"
+        },
+        {
+          "page": 1,
+          "choice": 0,
+          "graphic": 1,
+          "rgb555_sha256": "d16ff619f93b38e42d705c7542310b0b515fd4da602fb1f7707e451ccbbb983f"
+        },
+        {
+          "page": 2,
+          "choice": 0,
+          "graphic": 2,
+          "rgb555_sha256": "7debad46670ed6187565611684c0aaba66f8ab49e2c59beb257791a140681eb3"
+        },
+        {
+          "page": 3,
+          "choice": 0,
+          "graphic": 3,
+          "rgb555_sha256": "0b9503204431b1920e119df0bbf5a7d9b982717561c56b6221245ecfb3f2bea0"
+        },
+        {
+          "page": 3,
+          "choice": 1,
+          "graphic": 4,
+          "rgb555_sha256": "57eae474f1063a01405c30d59a7e983aa4915d5b80aac688c2208432f33e4592"
+        },
+        {
+          "page": 4,
+          "choice": 0,
+          "graphic": 5,
+          "rgb555_sha256": "00c944e534708bfdda584857b4301c5d7c32b8564c974812ddb95fe02cbab78f"
+        },
+        {
+          "page": 6,
+          "choice": 0,
+          "graphic": 7,
+          "rgb555_sha256": "acfd199187bdfa5e20fef4d3b7d1a38f91f84893921b025e2109d7facd446ad1"
+        },
+        {
+          "page": 7,
+          "choice": 0,
+          "graphic": 8,
+          "rgb555_sha256": "23ca7f09027e4567a2614d411400f19769d28078fbb1dbe7a63e23f81910b259"
+        },
+        {
+          "page": 8,
+          "choice": 0,
+          "graphic": 9,
+          "rgb555_sha256": "a250a949ec9b50ffd40c96e69d00930bf4f9efc14c38ed16ba7fae5367881c2d"
+        },
+        {
+          "page": 8,
+          "choice": 1,
+          "graphic": 10,
+          "rgb555_sha256": "b47683722bc4d48a290232e9dda18df749f95186f83fba6528a9b67b40593012"
+        },
+        {
+          "page": 9,
+          "choice": 0,
+          "graphic": 11,
+          "rgb555_sha256": "a145761933e054d3284802d7c932632f0f38c8493ec245b86d7ee1380bfd017c"
+        },
+        {
+          "page": 11,
+          "choice": 0,
+          "graphic": 13,
+          "rgb555_sha256": "6d268510266c56e5073522fb5dd1dfe80a3b2d933c7824d20794714619c223ae"
+        },
+        {
+          "page": 12,
+          "choice": 0,
+          "graphic": 14,
+          "rgb555_sha256": "e8fc2afa2fe6363268509d0a25b17646aa5f9d5ad3ea7ece13af6534e0f6c69a"
+        },
+        {
+          "page": 13,
+          "choice": 0,
+          "graphic": 15,
+          "rgb555_sha256": "fcaf1012c402be7c07c2f00984ef1068f7c65edf5dc4e3c3e603732d9e61de18"
+        },
+        {
+          "page": 14,
+          "choice": 0,
+          "graphic": 16,
+          "rgb555_sha256": "84c35f54888666154229b7544de759d19cbeaf1326d5d0ee50cb6dd969aa7ae0"
+        },
+        {
+          "page": 15,
+          "choice": 0,
+          "graphic": 17,
+          "rgb555_sha256": "c4a48cbb1532e1516311b0552d7114e212e3dedf05b9f81cbb51c3929914d7a7"
+        },
+        {
+          "page": 16,
+          "choice": 0,
+          "graphic": 18,
+          "rgb555_sha256": "437c0cf9d04ab89a7aefae89371371a090a8ddaac69808f3e7bc83eb5bfe3c12"
+        },
+        {
+          "page": 17,
+          "choice": 0,
+          "graphic": 19,
+          "rgb555_sha256": "978663dfaf5614609d91f6607f1c83cbdc32d9d7e84c6282dcf8b9f253577c84"
+        },
+        {
+          "page": 18,
+          "choice": 0,
+          "graphic": 20,
+          "rgb555_sha256": "36b2cbec1a4fa1c200f622e02e247429e3b34acf7f85478c148fa45c174094c4"
+        },
+        {
+          "page": 19,
+          "choice": 0,
+          "graphic": 21,
+          "rgb555_sha256": "069b131e35e9b2a4bd8bdfc53e1e808684d6679bd7f1f710cfcf2840091600ac"
+        },
+        {
+          "page": 19,
+          "choice": 1,
+          "graphic": 22,
+          "rgb555_sha256": "5bbdcb8a596dc6696319c040e8d63acc3b8e6b0a69dfe404ba6e44c033ce1e1c"
+        },
+        {
+          "page": 20,
+          "choice": 0,
+          "graphic": 23,
+          "rgb555_sha256": "f124b91c0a8118f4b3dfdd11d86da2dd8cbb61d244345e10c8911184cf2afc8a"
+        },
+        {
+          "page": 23,
+          "choice": 0,
+          "graphic": 26,
+          "rgb555_sha256": "9731e52b35c7a9b7c2994a7f0711baf44e5da90500c01ac471ff363b18487579"
+        }
+      ],
+      "second_player": true,
+      "lose": false,
+      "natural_match": false,
+      "frames": 4400,
+      "combats": [
+        {
+          "scene": "duel_freres",
+          "player": "Goten",
+          "cpu": "Gohan",
+          "arena": 6,
+          "entry_frame": 1630,
+          "result": "win",
+          "returned_page": 4
+        },
+        {
+          "scene": "duel_saiyans",
+          "player": "Trunks",
+          "cpu": "Vegeta",
+          "arena": 5,
+          "entry_frame": 2546,
+          "result": "win",
+          "returned_page": 9
+        },
+        {
+          "scene": "duel_enfants",
+          "player": "Trunks",
+          "cpu": "Goten",
+          "arena": 0,
+          "entry_frame": 3866,
+          "result": "win",
+          "returned_page": 20
+        }
+      ],
+      "rom_sha256": "0092304ffd464a8ea87d70c5c1cbb335d7424bd1ad6d4513806ea558a2dd0fbf",
+      "buttons": [
+        [
+          1251,
+          [
+            8
+          ],
+          0
+        ],
+        [
+          1332,
+          [
+            8
+          ],
+          1
+        ],
+        [
+          1413,
+          [
+            8
+          ],
+          2
+        ],
+        [
+          1494,
+          [
+            5
+          ],
+          3
+        ],
+        [
+          1575,
+          [
+            8
+          ],
+          3
+        ],
+        [
+          2166,
+          [
+            8
+          ],
+          4
+        ],
+        [
+          2247,
+          [
+            8
+          ],
+          6
+        ],
+        [
+          2328,
+          [
+            8
+          ],
+          7
+        ],
+        [
+          2409,
+          [
+            5
+          ],
+          8
+        ],
+        [
+          2490,
+          [
+            8
+          ],
+          8
+        ],
+        [
+          2999,
+          [
+            8
+          ],
+          9
+        ],
+        [
+          3080,
+          [
+            8
+          ],
+          11
+        ],
+        [
+          3161,
+          [
+            8
+          ],
+          12
+        ],
+        [
+          3242,
+          [
+            8
+          ],
+          13
+        ],
+        [
+          3323,
+          [
+            8
+          ],
+          14
+        ],
+        [
+          3404,
+          [
+            8
+          ],
+          15
+        ],
+        [
+          3485,
+          [
+            8
+          ],
+          16
+        ],
+        [
+          3566,
+          [
+            8
+          ],
+          17
+        ],
+        [
+          3647,
+          [
+            8
+          ],
+          18
+        ],
+        [
+          3728,
+          [
+            5
+          ],
+          19
+        ],
+        [
+          3809,
+          [
+            8
+          ],
+          19
+        ],
+        [
+          4319,
+          [
+            8
+          ],
+          20
+        ],
+        [
+          4400,
+          [
+            8
+          ],
+          23
+        ]
+      ]
+    },
+    "second-lose": {
+      "graphic_checks": [
+        {
+          "page": 0,
+          "choice": 0,
+          "graphic": 0,
+          "rgb555_sha256": "7383b7059f7c3077ab043fb298234af8fd4c47f66e1febc20fa426d89c3caf2f"
+        },
+        {
+          "page": 1,
+          "choice": 0,
+          "graphic": 1,
+          "rgb555_sha256": "d16ff619f93b38e42d705c7542310b0b515fd4da602fb1f7707e451ccbbb983f"
+        },
+        {
+          "page": 2,
+          "choice": 0,
+          "graphic": 2,
+          "rgb555_sha256": "7debad46670ed6187565611684c0aaba66f8ab49e2c59beb257791a140681eb3"
+        },
+        {
+          "page": 3,
+          "choice": 0,
+          "graphic": 3,
+          "rgb555_sha256": "0b9503204431b1920e119df0bbf5a7d9b982717561c56b6221245ecfb3f2bea0"
+        },
+        {
+          "page": 3,
+          "choice": 1,
+          "graphic": 4,
+          "rgb555_sha256": "57eae474f1063a01405c30d59a7e983aa4915d5b80aac688c2208432f33e4592"
+        },
+        {
+          "page": 5,
+          "choice": 0,
+          "graphic": 6,
+          "rgb555_sha256": "b927e03fcd0b18a108571d25cc3c83114ed40075c6e03800b2dda6fd7c39e979"
+        },
+        {
+          "page": 6,
+          "choice": 0,
+          "graphic": 7,
+          "rgb555_sha256": "acfd199187bdfa5e20fef4d3b7d1a38f91f84893921b025e2109d7facd446ad1"
+        },
+        {
+          "page": 7,
+          "choice": 0,
+          "graphic": 8,
+          "rgb555_sha256": "23ca7f09027e4567a2614d411400f19769d28078fbb1dbe7a63e23f81910b259"
+        },
+        {
+          "page": 8,
+          "choice": 0,
+          "graphic": 9,
+          "rgb555_sha256": "a250a949ec9b50ffd40c96e69d00930bf4f9efc14c38ed16ba7fae5367881c2d"
+        },
+        {
+          "page": 8,
+          "choice": 1,
+          "graphic": 10,
+          "rgb555_sha256": "b47683722bc4d48a290232e9dda18df749f95186f83fba6528a9b67b40593012"
+        },
+        {
+          "page": 10,
+          "choice": 0,
+          "graphic": 12,
+          "rgb555_sha256": "e4cb87f22dcf798761eb8a0cedbdece70baa4d67552d43e01335c8f94b21634a"
+        },
+        {
+          "page": 11,
+          "choice": 0,
+          "graphic": 13,
+          "rgb555_sha256": "6d268510266c56e5073522fb5dd1dfe80a3b2d933c7824d20794714619c223ae"
+        },
+        {
+          "page": 12,
+          "choice": 0,
+          "graphic": 14,
+          "rgb555_sha256": "e8fc2afa2fe6363268509d0a25b17646aa5f9d5ad3ea7ece13af6534e0f6c69a"
+        },
+        {
+          "page": 13,
+          "choice": 0,
+          "graphic": 15,
+          "rgb555_sha256": "fcaf1012c402be7c07c2f00984ef1068f7c65edf5dc4e3c3e603732d9e61de18"
+        },
+        {
+          "page": 14,
+          "choice": 0,
+          "graphic": 16,
+          "rgb555_sha256": "84c35f54888666154229b7544de759d19cbeaf1326d5d0ee50cb6dd969aa7ae0"
+        },
+        {
+          "page": 15,
+          "choice": 0,
+          "graphic": 17,
+          "rgb555_sha256": "c4a48cbb1532e1516311b0552d7114e212e3dedf05b9f81cbb51c3929914d7a7"
+        },
+        {
+          "page": 16,
+          "choice": 0,
+          "graphic": 18,
+          "rgb555_sha256": "437c0cf9d04ab89a7aefae89371371a090a8ddaac69808f3e7bc83eb5bfe3c12"
+        },
+        {
+          "page": 17,
+          "choice": 0,
+          "graphic": 19,
+          "rgb555_sha256": "978663dfaf5614609d91f6607f1c83cbdc32d9d7e84c6282dcf8b9f253577c84"
+        },
+        {
+          "page": 18,
+          "choice": 0,
+          "graphic": 20,
+          "rgb555_sha256": "36b2cbec1a4fa1c200f622e02e247429e3b34acf7f85478c148fa45c174094c4"
+        },
+        {
+          "page": 19,
+          "choice": 0,
+          "graphic": 21,
+          "rgb555_sha256": "069b131e35e9b2a4bd8bdfc53e1e808684d6679bd7f1f710cfcf2840091600ac"
+        },
+        {
+          "page": 19,
+          "choice": 1,
+          "graphic": 22,
+          "rgb555_sha256": "5bbdcb8a596dc6696319c040e8d63acc3b8e6b0a69dfe404ba6e44c033ce1e1c"
+        },
+        {
+          "page": 21,
+          "choice": 0,
+          "graphic": 24,
+          "rgb555_sha256": "9e8c9f17b83245f6274c592f9085726a614042e827b8037a106b9f34b0a4cbbf"
+        },
+        {
+          "page": 22,
+          "choice": 0,
+          "graphic": 25,
+          "rgb555_sha256": "e2a94a27d085f4e79a4385eae59214cc089031a859291b9379255f2ee89cddec"
+        },
+        {
+          "page": 23,
+          "choice": 0,
+          "graphic": 26,
+          "rgb555_sha256": "9731e52b35c7a9b7c2994a7f0711baf44e5da90500c01ac471ff363b18487579"
+        }
+      ],
+      "second_player": true,
+      "lose": true,
+      "natural_match": false,
+      "frames": 4515,
+      "combats": [
+        {
+          "scene": "duel_freres",
+          "player": "Goten",
+          "cpu": "Gohan",
+          "arena": 6,
+          "entry_frame": 1630,
+          "result": "lose",
+          "returned_page": 5
+        },
+        {
+          "scene": "duel_saiyans",
+          "player": "Trunks",
+          "cpu": "Vegeta",
+          "arena": 5,
+          "entry_frame": 2514,
+          "result": "lose",
+          "returned_page": 10
+        },
+        {
+          "scene": "duel_enfants",
+          "player": "Trunks",
+          "cpu": "Goten",
+          "arena": 0,
+          "entry_frame": 3818,
+          "result": "lose",
+          "returned_page": 21
+        }
+      ],
+      "rom_sha256": "0092304ffd464a8ea87d70c5c1cbb335d7424bd1ad6d4513806ea558a2dd0fbf",
+      "buttons": [
+        [
+          1251,
+          [
+            8
+          ],
+          0
+        ],
+        [
+          1332,
+          [
+            8
+          ],
+          1
+        ],
+        [
+          1413,
+          [
+            8
+          ],
+          2
+        ],
+        [
+          1494,
+          [
+            5
+          ],
+          3
+        ],
+        [
+          1575,
+          [
+            8
+          ],
+          3
+        ],
+        [
+          2134,
+          [
+            8
+          ],
+          5
+        ],
+        [
+          2215,
+          [
+            8
+          ],
+          6
+        ],
+        [
+          2296,
+          [
+            8
+          ],
+          7
+        ],
+        [
+          2377,
+          [
+            5
+          ],
+          8
+        ],
+        [
+          2458,
+          [
+            8
+          ],
+          8
+        ],
+        [
+          2951,
+          [
+            8
+          ],
+          10
+        ],
+        [
+          3032,
+          [
+            8
+          ],
+          11
+        ],
+        [
+          3113,
+          [
+            8
+          ],
+          12
+        ],
+        [
+          3194,
+          [
+            8
+          ],
+          13
+        ],
+        [
+          3275,
+          [
+            8
+          ],
+          14
+        ],
+        [
+          3356,
+          [
+            8
+          ],
+          15
+        ],
+        [
+          3437,
+          [
+            8
+          ],
+          16
+        ],
+        [
+          3518,
+          [
+            8
+          ],
+          17
+        ],
+        [
+          3599,
+          [
+            8
+          ],
+          18
+        ],
+        [
+          3680,
+          [
+            5
+          ],
+          19
+        ],
+        [
+          3761,
+          [
+            8
+          ],
+          19
+        ],
+        [
+          4353,
+          [
+            8
+          ],
+          21
+        ],
+        [
+          4434,
+          [
+            8
+          ],
+          22
+        ],
+        [
+          4515,
+          [
+            8
+          ],
+          23
+        ]
+      ]
+    },
+    "natural-lose": {
+      "graphic_checks": [
+        {
+          "page": 0,
+          "choice": 0,
+          "graphic": 0,
+          "rgb555_sha256": "7383b7059f7c3077ab043fb298234af8fd4c47f66e1febc20fa426d89c3caf2f"
+        },
+        {
+          "page": 1,
+          "choice": 0,
+          "graphic": 1,
+          "rgb555_sha256": "d16ff619f93b38e42d705c7542310b0b515fd4da602fb1f7707e451ccbbb983f"
+        },
+        {
+          "page": 2,
+          "choice": 0,
+          "graphic": 2,
+          "rgb555_sha256": "7debad46670ed6187565611684c0aaba66f8ab49e2c59beb257791a140681eb3"
+        },
+        {
+          "page": 3,
+          "choice": 0,
+          "graphic": 3,
+          "rgb555_sha256": "0b9503204431b1920e119df0bbf5a7d9b982717561c56b6221245ecfb3f2bea0"
+        },
+        {
+          "page": 5,
+          "choice": 0,
+          "graphic": 6,
+          "rgb555_sha256": "b927e03fcd0b18a108571d25cc3c83114ed40075c6e03800b2dda6fd7c39e979"
+        },
+        {
+          "page": 6,
+          "choice": 0,
+          "graphic": 7,
+          "rgb555_sha256": "acfd199187bdfa5e20fef4d3b7d1a38f91f84893921b025e2109d7facd446ad1"
+        },
+        {
+          "page": 7,
+          "choice": 0,
+          "graphic": 8,
+          "rgb555_sha256": "23ca7f09027e4567a2614d411400f19769d28078fbb1dbe7a63e23f81910b259"
+        },
+        {
+          "page": 8,
+          "choice": 0,
+          "graphic": 9,
+          "rgb555_sha256": "a250a949ec9b50ffd40c96e69d00930bf4f9efc14c38ed16ba7fae5367881c2d"
+        },
+        {
+          "page": 10,
+          "choice": 0,
+          "graphic": 12,
+          "rgb555_sha256": "e4cb87f22dcf798761eb8a0cedbdece70baa4d67552d43e01335c8f94b21634a"
+        },
+        {
+          "page": 11,
+          "choice": 0,
+          "graphic": 13,
+          "rgb555_sha256": "6d268510266c56e5073522fb5dd1dfe80a3b2d933c7824d20794714619c223ae"
+        },
+        {
+          "page": 12,
+          "choice": 0,
+          "graphic": 14,
+          "rgb555_sha256": "e8fc2afa2fe6363268509d0a25b17646aa5f9d5ad3ea7ece13af6534e0f6c69a"
+        },
+        {
+          "page": 13,
+          "choice": 0,
+          "graphic": 15,
+          "rgb555_sha256": "fcaf1012c402be7c07c2f00984ef1068f7c65edf5dc4e3c3e603732d9e61de18"
+        },
+        {
+          "page": 14,
+          "choice": 0,
+          "graphic": 16,
+          "rgb555_sha256": "84c35f54888666154229b7544de759d19cbeaf1326d5d0ee50cb6dd969aa7ae0"
+        },
+        {
+          "page": 15,
+          "choice": 0,
+          "graphic": 17,
+          "rgb555_sha256": "c4a48cbb1532e1516311b0552d7114e212e3dedf05b9f81cbb51c3929914d7a7"
+        },
+        {
+          "page": 16,
+          "choice": 0,
+          "graphic": 18,
+          "rgb555_sha256": "437c0cf9d04ab89a7aefae89371371a090a8ddaac69808f3e7bc83eb5bfe3c12"
+        },
+        {
+          "page": 17,
+          "choice": 0,
+          "graphic": 19,
+          "rgb555_sha256": "978663dfaf5614609d91f6607f1c83cbdc32d9d7e84c6282dcf8b9f253577c84"
+        },
+        {
+          "page": 18,
+          "choice": 0,
+          "graphic": 20,
+          "rgb555_sha256": "36b2cbec1a4fa1c200f622e02e247429e3b34acf7f85478c148fa45c174094c4"
+        },
+        {
+          "page": 19,
+          "choice": 0,
+          "graphic": 21,
+          "rgb555_sha256": "069b131e35e9b2a4bd8bdfc53e1e808684d6679bd7f1f710cfcf2840091600ac"
+        },
+        {
+          "page": 21,
+          "choice": 0,
+          "graphic": 24,
+          "rgb555_sha256": "9e8c9f17b83245f6274c592f9085726a614042e827b8037a106b9f34b0a4cbbf"
+        },
+        {
+          "page": 22,
+          "choice": 0,
+          "graphic": 25,
+          "rgb555_sha256": "e2a94a27d085f4e79a4385eae59214cc089031a859291b9379255f2ee89cddec"
+        },
+        {
+          "page": 23,
+          "choice": 0,
+          "graphic": 26,
+          "rgb555_sha256": "9731e52b35c7a9b7c2994a7f0711baf44e5da90500c01ac471ff363b18487579"
+        }
+      ],
+      "second_player": false,
+      "lose": true,
+      "natural_match": true,
+      "frames": 13601,
+      "combats": [
+        {
+          "scene": "duel_freres",
+          "player": "Gohan",
+          "cpu": "Goten",
+          "arena": 6,
+          "entry_frame": 1549,
+          "result": "lose",
+          "returned_page": 5
+        },
+        {
+          "scene": "duel_saiyans",
+          "player": "Vegeta",
+          "cpu": "Trunks",
+          "arena": 5,
+          "entry_frame": 5772,
+          "result": "lose",
+          "returned_page": 10
+        },
+        {
+          "scene": "duel_enfants",
+          "player": "Goten",
+          "cpu": "Trunks",
+          "arena": 0,
+          "entry_frame": 10103,
+          "result": "lose",
+          "returned_page": 21
+        }
+      ],
+      "rom_sha256": "0092304ffd464a8ea87d70c5c1cbb335d7424bd1ad6d4513806ea558a2dd0fbf",
+      "buttons": [
+        [
+          1251,
+          [
+            8
+          ],
+          0
+        ],
+        [
+          1332,
+          [
+            8
+          ],
+          1
+        ],
+        [
+          1413,
+          [
+            8
+          ],
+          2
+        ],
+        [
+          1494,
+          [
+            8
+          ],
+          3
+        ],
+        [
+          5473,
+          [
+            8
+          ],
+          5
+        ],
+        [
+          5554,
+          [
+            8
+          ],
+          6
+        ],
+        [
+          5635,
+          [
+            8
+          ],
+          7
+        ],
+        [
+          5716,
+          [
+            8
+          ],
+          8
+        ],
+        [
+          9317,
+          [
+            8
+          ],
+          10
+        ],
+        [
+          9398,
+          [
+            8
+          ],
+          11
+        ],
+        [
+          9479,
+          [
+            8
+          ],
+          12
+        ],
+        [
+          9560,
+          [
+            8
+          ],
+          13
+        ],
+        [
+          9641,
+          [
+            8
+          ],
+          14
+        ],
+        [
+          9722,
+          [
+            8
+          ],
+          15
+        ],
+        [
+          9803,
+          [
+            8
+          ],
+          16
+        ],
+        [
+          9884,
+          [
+            8
+          ],
+          17
+        ],
+        [
+          9965,
+          [
+            8
+          ],
+          18
+        ],
+        [
+          10046,
+          [
+            8
+          ],
+          19
+        ],
+        [
+          13439,
+          [
+            8
+          ],
+          21
+        ],
+        [
+          13520,
+          [
+            8
+          ],
+          22
+        ],
+        [
+          13601,
+          [
+            8
+          ],
+          23
+        ]
+      ]
+    }
+  },
+  "native_modes": {
+    "combat": {
+      "scenario": "combat",
+      "states": {
+        "1040": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1160": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1260": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        },
+        "1320": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        },
+        "1360": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        },
+        "1450": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        },
+        "1800": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        }
+      },
+      "frame_sha256": {
+        "1040": "c78a0a4b101b7c08e0d036ec5b584f03a1cca57d7b019111f76c5b2f5720feab",
+        "1160": "3abde304298e7181134587944c3c42ea2689d7053a0b5c316cd4f6860ee060c8",
+        "1260": "f90480962e332e54f18fc6facea5bce81843fcf958d360b7c7eb3ee63bb91878",
+        "1320": "f90480962e332e54f18fc6facea5bce81843fcf958d360b7c7eb3ee63bb91878",
+        "1360": "f90480962e332e54f18fc6facea5bce81843fcf958d360b7c7eb3ee63bb91878",
+        "1450": "f90480962e332e54f18fc6facea5bce81843fcf958d360b7c7eb3ee63bb91878",
+        "1800": "f90480962e332e54f18fc6facea5bce81843fcf958d360b7c7eb3ee63bb91878"
+      },
+      "early_menu_frames": [
+        917,
+        918,
+        919,
+        920,
+        921,
+        922,
+        923,
+        924,
+        925,
+        926,
+        927,
+        928,
+        929,
+        930,
+        931,
+        932
+      ]
+    },
+    "championnat": {
+      "scenario": "championnat",
+      "states": {
+        "1040": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1160": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 2,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1260": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        },
+        "1320": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        },
+        "1360": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        },
+        "1450": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        },
+        "1800": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        }
+      },
+      "frame_sha256": {
+        "1040": "c78a0a4b101b7c08e0d036ec5b584f03a1cca57d7b019111f76c5b2f5720feab",
+        "1160": "1a83e06adec886dc0f8b7a73e18185a0b2f048a85e95b578ccdff78419595d2a",
+        "1260": "d2a23a7de3af6bf70d164a0ce45201371aca7624e30079d30cccab1cb6cf52e3",
+        "1320": "4bd5375991a8d5efa8b9883537183ec06546e26fa9a56e53203514983066a085",
+        "1360": "4bd5375991a8d5efa8b9883537183ec06546e26fa9a56e53203514983066a085",
+        "1450": "4bd5375991a8d5efa8b9883537183ec06546e26fa9a56e53203514983066a085",
+        "1800": "4bd5375991a8d5efa8b9883537183ec06546e26fa9a56e53203514983066a085"
+      },
+      "early_menu_frames": [
+        917,
+        918,
+        919,
+        920,
+        921,
+        922,
+        923,
+        924,
+        925,
+        926,
+        927,
+        928,
+        929,
+        930,
+        931,
+        932
+      ]
+    },
+    "option": {
+      "scenario": "option",
+      "states": {
+        "1040": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1160": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1260": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        },
+        "1320": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        },
+        "1360": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        },
+        "1450": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        },
+        "1800": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        }
+      },
+      "frame_sha256": {
+        "1040": "c78a0a4b101b7c08e0d036ec5b584f03a1cca57d7b019111f76c5b2f5720feab",
+        "1160": "1b526f4d58ba98bd06b1b429312655116f3f949c76c153ecb9d3c6478a8ff8d7",
+        "1260": "3c27044e1ded77367482e15037c9c34fa1c50fc7b625a6a0edec0dd9d5ce5f0a",
+        "1320": "3c27044e1ded77367482e15037c9c34fa1c50fc7b625a6a0edec0dd9d5ce5f0a",
+        "1360": "3c27044e1ded77367482e15037c9c34fa1c50fc7b625a6a0edec0dd9d5ce5f0a",
+        "1450": "3c27044e1ded77367482e15037c9c34fa1c50fc7b625a6a0edec0dd9d5ce5f0a",
+        "1800": "3c27044e1ded77367482e15037c9c34fa1c50fc7b625a6a0edec0dd9d5ce5f0a"
+      },
+      "early_menu_frames": [
+        917,
+        918,
+        919,
+        920,
+        921,
+        922,
+        923,
+        924,
+        925,
+        926,
+        927,
+        928,
+        929,
+        930,
+        931,
+        932
+      ]
+    }
+  },
+  "graphic_variants": 27,
+  "graphic_variants_pixel_verified": 27,
+  "rom_sha256": "0092304ffd464a8ea87d70c5c1cbb335d7424bd1ad6d4513806ea558a2dd0fbf",
+  "quantized_graphic_variants": 0,
+  "all_graphic_variants_verified": true,
+  "mixed_graphical_and_text": {
+    "graphic_checks": [
+      {
+        "page": 0,
+        "choice": 0,
+        "graphic": 0,
+        "rgb555_sha256": "7383b7059f7c3077ab043fb298234af8fd4c47f66e1febc20fa426d89c3caf2f"
+      },
+      {
+        "page": 1,
+        "choice": 0,
+        "graphic": 1,
+        "rgb555_sha256": "d16ff619f93b38e42d705c7542310b0b515fd4da602fb1f7707e451ccbbb983f"
+      },
+      {
+        "page": 2,
+        "choice": 0,
+        "graphic": 2,
+        "rgb555_sha256": "7debad46670ed6187565611684c0aaba66f8ab49e2c59beb257791a140681eb3"
+      }
+    ],
+    "second_player": false,
+    "lose": false,
+    "natural_match": false,
+    "frames": 3789,
+    "combats": [
+      {
+        "scene": "duel_freres",
+        "player": "Gohan",
+        "cpu": "Goten",
+        "arena": 6,
+        "entry_frame": 1549,
+        "result": "win",
+        "returned_page": 4
+      },
+      {
+        "scene": "duel_saiyans",
+        "player": "Vegeta",
+        "cpu": "Trunks",
+        "arena": 5,
+        "entry_frame": 2272,
+        "result": "win",
+        "returned_page": 8
+      },
+      {
+        "scene": "duel_enfants",
+        "player": "Goten",
+        "cpu": "Trunks",
+        "arena": 0,
+        "entry_frame": 3172,
+        "result": "win",
+        "returned_page": 15
+      }
+    ],
+    "rom_sha256": "35ff0bfe10abb3f4233d71d8ce9ec554a113e62914d028f82e67a63f834f727c",
+    "buttons": [
+      [
+        1251,
+        [
+          8
+        ],
+        0
+      ],
+      [
+        1332,
+        [
+          8
+        ],
+        1
+      ],
+      [
+        1413,
+        [
+          8
+        ],
+        2
+      ],
+      [
+        1494,
+        [
+          8
+        ],
+        3
+      ],
+      [
+        2054,
+        [
+          8
+        ],
+        4
+      ],
+      [
+        2135,
+        [
+          8
+        ],
+        6
+      ],
+      [
+        2216,
+        [
+          8
+        ],
+        7
+      ],
+      [
+        2710,
+        [
+          8
+        ],
+        8
+      ],
+      [
+        2791,
+        [
+          8
+        ],
+        10
+      ],
+      [
+        2872,
+        [
+          8
+        ],
+        11
+      ],
+      [
+        2953,
+        [
+          8
+        ],
+        12
+      ],
+      [
+        3034,
+        [
+          8
+        ],
+        13
+      ],
+      [
+        3115,
+        [
+          8
+        ],
+        14
+      ],
+      [
+        3708,
+        [
+          8
+        ],
+        15
+      ],
+      [
+        3789,
+        [
+          8
+        ],
+        17
+      ]
+    ]
+  },
+  "split_bank_dma": {
+    "tiles": 619,
+    "rgb555_sha256": "3230e870a235fb73fdfd7b17b9a1af86738e2d53cb3b31e4d1ba82a51ef00041",
+    "passed": true
+  },
+  "standalone_zip": {
+    "full_build": true,
+    "space_and_accent_paths": true,
+    "cli_rom_equal": true,
+    "cli_ips_equal": true,
+    "graphic_variants": 3,
+    "all_palettes_exact": true
+  },
+  "intro": {
+    "matching": true,
+    "frames": {
+      "120": "2cbbeef1249170a43854962fa5b19fba628470c70beb9ce23e15a0f05cb891f2",
+      "300": "2cbbeef1249170a43854962fa5b19fba628470c70beb9ce23e15a0f05cb891f2",
+      "500": "3cc870370c9009efc78a93ab2205283daa5cf563d5958882fb57f32b65be1558",
+      "700": "c7363acacd529ddcd79c40e618ec8b50ce8ef8b6563f6aa608f518c83cf31a1d",
+      "849": "6122f4322c28a46cc7a57c9db184930a2aa9c3b09b0ef9f2c95ff6b1f128e7f7"
+    }
+  },
+  "graphic_choices": {
+    "three_choices": true,
+    "pagination": true,
+    "up_down_wrap": true,
+    "selected_target": true,
+    "exact_pixels": true,
+    "checks": [
+      {
+        "frame": 1250,
+        "page": 0,
+        "choice": 0
+      },
+      {
+        "frame": 1350,
+        "page": 1,
+        "choice": 0
+      },
+      {
+        "frame": 1450,
+        "page": 2,
+        "choice": 0
+      },
+      {
+        "frame": 1550,
+        "page": 2,
+        "choice": 2
+      },
+      {
+        "frame": 1650,
+        "page": 2,
+        "choice": 0
+      },
+      {
+        "frame": 1750,
+        "page": 2,
+        "choice": 1
+      },
+      {
+        "frame": 1850,
+        "page": 4,
+        "choice": 0
+      }
+    ]
+  },
+  "gui": "Linux Tk/Xvfb: loaded private catalog; edited actor placement/mirror; GUI build preserved catalog through temporary JSON; ROM identical to CLI; project overwrite refused.",
+  "windows": "New Windows build not executed here. Previous editor Windows launch was confirmed by user.",
+  "ips_reconstruction": true,
+  "checksum_valid": true
+}

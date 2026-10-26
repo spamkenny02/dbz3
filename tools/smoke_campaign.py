@@ -37,6 +37,8 @@ def run(core,rom,project,second=False,lose=False,natural=False,manifest=None):
                 target=ram[0x1e57 if lose else 0x1e56]
                 assert ram[0x1e54]==target,(frame,'wrong result page')
                 records[-1]['returned_page']=target;active=None;entered=None;selection_done=False
+                # Leave the first result page on screen long enough for pixel QA.
+                last=frame;s.buttons=set();s.run();continue
             page=ram[0x1e54]
             # Combat pages are recognizable in the emitted map as CHOISIS TON...
             vram=s.memory(3,65536);text=''.join(chr((int.from_bytes(vram[o:o+2],'little')&1023)+32) for o in range(0x4000,0x4800,2))
