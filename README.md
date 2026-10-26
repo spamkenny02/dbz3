@@ -18,7 +18,9 @@ Research and tooling for a homebrew ROM patch that adds a replayable, branching 
 - [x] Compare the supplied French *La Légende Saien* ROM as a reference for event/script architecture.
 - [x] Add a read-only verifier for exact selector bytes, global state tables, and the candidate fill range.
 - [x] Document an architecture for adding a dedicated global state without replacing an existing state.
-- [ ] Confirm which visible menu is the top-level mode menu at runtime.
+- [x] Draft the selector router in 65816 assembly (source only; not linked into the ROM).
+- [x] Trace the static Start-to-mode-selector control flow.
+- [ ] Decode the visible menu labels/tilemap and verify the screen in an emulator.
 - [ ] Audit safe WRAM variables and the candidate ROM insertion area.
 - [ ] Identify the text/portrait rendering path.
 - [ ] Implement the first Story Mode scene and a battle transition.
