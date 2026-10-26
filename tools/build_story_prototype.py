@@ -206,7 +206,7 @@ def make_maps() -> dict[str, bytes]:
         for i, (row, label) in enumerate(zip(option_rows, options)):
             lines.append((row, f"{i + 1}  {label}", 1 if i == selected else 0, "left:7"))
         lines.extend([
-            (25, "HAUT BAS : CHOISIR", 0, "center"),
+            (24, "HAUT BAS : CHOISIR", 0, "center"),
             (26, "A : VALIDER  B : RETOUR", 1, "center"),
         ])
         maps[f"menu_{selected}"] = make_map(lines, cursor_row=option_rows[selected])
@@ -218,7 +218,7 @@ def make_maps() -> dict[str, bytes]:
         (12, "MAIS UNE FORCE ANCIENNE", 0, "center"),
         (14, "SE PREPARE A REVEILLER", 0, "center"),
         (16, "MAJIN BOO.", 0, "center"),
-        (25, "A : CONTINUER", 1, "center"),
+        (24, "A : CONTINUER", 1, "center"),
         (26, "B : RETOUR MENU", 0, "center"),
     ])
     maps["story_1"] = make_map([
@@ -228,21 +228,21 @@ def make_maps() -> dict[str, bytes]:
         (12, "MAJIN BOO.", 0, "center"),
         (14, "LE SORT DE LA TERRE", 0, "center"),
         (16, "DEPEND DE NOS CHOIX.", 0, "center"),
-        (25, "A : CHOISIR LA ROUTE", 1, "center"),
+        (24, "A : CHOISIR LA ROUTE", 1, "center"),
         (26, "B : RETOUR MENU", 0, "center"),
     ])
     maps["choice_gohan"] = make_map([
         (3, "CHOIX DU HEROS", 1, "center"),
         (10, "AIDER GOHAN", 1, "center"),
         (15, "SUIVRE VEGETA", 0, "center"),
-        (25, "HAUT BAS : CHOISIR", 0, "center"),
+        (24, "HAUT BAS : CHOISIR", 0, "center"),
         (26, "A : VALIDER  B : MENU", 1, "center"),
     ], cursor_row=10)
     maps["choice_vegeta"] = make_map([
         (3, "CHOIX DU HEROS", 1, "center"),
         (10, "AIDER GOHAN", 0, "center"),
         (15, "SUIVRE VEGETA", 1, "center"),
-        (25, "HAUT BAS : CHOISIR", 0, "center"),
+        (24, "HAUT BAS : CHOISIR", 0, "center"),
         (26, "A : VALIDER  B : MENU", 1, "center"),
     ], cursor_row=15)
     maps["ending_gohan"] = make_map([
@@ -252,7 +252,7 @@ def make_maps() -> dict[str, bytes]:
         (13, "BABIDI N'A PAS DIT", 0, "center"),
         (15, "SON DERNIER MOT...", 0, "center"),
         (19, "FIN DU PROLOGUE A", 1, "center"),
-        (25, "A : REJOUER", 1, "center"),
+        (24, "A : REJOUER", 1, "center"),
         (26, "B : MENU", 0, "center"),
     ])
     maps["ending_vegeta"] = make_map([
@@ -262,7 +262,7 @@ def make_maps() -> dict[str, bytes]:
         (13, "LE COMBAT QUI S'ANNONCE", 0, "center"),
         (15, "VA TOUT CHANGER...", 0, "center"),
         (19, "FIN DU PROLOGUE B", 1, "center"),
-        (25, "A : REJOUER", 1, "center"),
+        (24, "A : REJOUER", 1, "center"),
         (26, "B : MENU", 0, "center"),
     ])
     return maps
