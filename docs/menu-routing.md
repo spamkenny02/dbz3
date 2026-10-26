@@ -27,7 +27,7 @@ The prototype relocates and extends both tables:
 |---|---:|---|---:|
 | Init table | `0x1F1806` | `BE:9806` | 14 (states 0-13) |
 | Frame table | `0x1F1830` | `BE:9830` | 14 (states 0-13) |
-| New code | `0x1F185A` | `BE:985A` | 756 bytes in current build |
+| New code | `0x1F185A` | `BE:985A` | 755 bytes in current build |
 
 Existing init entries 0-11 are preserved. The frame table preserves entries 0-10, adds a default handler at index 11, then adds the story and menu handlers at indices 12 and 13.
 
@@ -35,7 +35,7 @@ Existing init entries 0-11 are preserved. The frame table preserves entries 0-10
 
 - State 12: story init/frame handlers at BE:985A and BE:9872.
 - State 13: menu init/frame handlers at BE:9956 and BE:9981.
-- Shared PPU/DMA renderer at BE:9A41.
+- Shared PPU/DMA renderer at BE:9A40.
 - The menu uses a new 5x7 font at file offset `0x1F2000`, plus custom BG1 tilemaps from `0x1F2400` through `0x1F7400`.
 - The renderer sets SNES Mode 0, BG1 2bpp, a 32x32 tilemap, a small CGRAM palette, then uploads the font and selected tilemap with DMA.
 - The three story variables use WRAM bytes `$7F:FF50`–`$7F:FF52`. They have no direct long-address references in the base ROM, but runtime use still needs checking.
