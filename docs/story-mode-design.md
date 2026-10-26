@@ -1,56 +1,49 @@
-# Story mode design — no SRAM
+# Story mode design — first playable-slice target
 
 ## Requirements
 
-- Add a branching story mode to the French release of Dragon Ball Z: Ultime Menace.
-- Use the existing SNES battle engine where feasible.
+- Add a branching story experience to the French SNES release of Dragon Ball Z: Ultime Menace.
+- Preserve the original three game modes.
 - Keep all story state in volatile WRAM; do not add SRAM or persistent saves.
 - Restarting the story resets flags so the player can pursue another route or ending.
-- Keep the original ROM untouched and create a separate IPS/BPS patch only after hooks are verified.
+- Keep the original ROM untouched and produce a separate hash-guarded IPS patch.
 
-## Minimal volatile state model
+## Current prototype flow
 
-These are logical variables, not yet assigned to concrete WRAM addresses:
+1. From the title screen, Start enters a custom four-choice menu.
+2. The first three options set the original selector variable and jump to the game's original mode-confirmation routine.
+3. The fourth option enters a dedicated global state for the story.
+4. The story displays two intro pages about the World Tournament and Babidi's plan.
+5. The player chooses between helping Gohan and following Vegeta.
+6. Each choice leads to a different short ending. A restarts the prologue; B returns to the custom menu.
 
-| Symbol | Purpose |
-|---|---|
-| story_active | Distinguishes story battles from normal play |
-| chapter_id | Current scene/chapter |
-| route_id | Selected narrative branch |
-| choice_flags | Decisions already made in this run |
-| last_fight_result | Win/loss/draw or game-defined result |
-| ending_id | Ending to display |
+The menu and story screens use a small original 5x7 font encoded as SNES 2bpp tiles. They render to BG1 in Mode 0, using a dedicated tilemap and palette. This avoids depending on unknown original font/tile IDs while the original screen assets are still being researched.
 
-At story start, clear all of these. A battle result advances the script or selects a branch. On an ending, return to the existing menu and clear story_active; a new story run begins from the initial scene.
+## State layout
 
-## Prototype scope
+- State 12: story initializer and per-frame handler.
+- State 13: custom mode menu initializer and per-frame handler.
+- Original state 11's special initializer remains intact.
+- The relocated init/frame tables preserve original entries and append states 12-13.
+- Variables: menu cursor `$7F:FF50`, story page `$7F:FF51`, route `$7F:FF52`.
 
-The first playable slice should be deliberately small:
+These WRAM addresses are absent from direct long-address references in the base ROM, but a runtime memory trace is still required to prove they are safe.
 
-1. Add a fourth option to the existing mode selector.
-2. Enter a story intro scene with two or three dialogue boxes.
-3. Launch one existing battle using the game's own battle setup path.
-4. Return to the story interpreter and branch based on the battle result.
-5. Reach one of two short endings, both replayable by starting over.
+## Next milestones
 
-No new character sprites or imported assets are required for this proof of concept; existing portraits/backgrounds can be reused if the relevant resources are understood.
-
-## Integration plan (not yet implemented)
-
-1. Trace the selector and confirm visible menu options from an emulator screenshot/debugger.
-2. Confirm the state-6 confirmation path and cross-references to global state 5.
-3. Identify unused WRAM; never infer that it is free solely because a variable appears unused in one code path.
-4. Verify candidate ROM fill regions are unreferenced and safe for code/data.
-5. Implement the smallest state-5 handler and test entry/exit before writing the script engine.
-6. Trace battle entry and return, then connect one story battle.
-7. Add branching and endings only after the prototype passes repeated emulator runs.
+1. Test boot, menu navigation, cancel, and the three original mode routes in an emulator.
+2. Verify the custom PPU setup/DMA code and adjust timing if necessary.
+3. Find and reuse the original battle-entry and battle-return routines.
+4. Replace the short ending-only branch with a story event that launches a real fight and branches on its result.
+5. Add additional manga-inspired chapters and cutscenes, then test each path.
 
 ## Test checklist
 
-- Normal menu options still work.
-- Story option is selectable and cancel returns to the previous screen.
-- Story variables reset on a fresh start and do not survive reset/power cycle.
-- Win/loss paths both return to the script correctly.
-- Both endings can be reached by replaying.
-- No lockup during fade transitions or when holding buttons.
-- Base ROM checksum/hash is validated before patch generation.
+- Original ROM hash matches before building.
+- No SRAM header change.
+- Title Start reaches state 13.
+- Up/down cycles across all four options and highlights the current choice.
+- Options 0-2 still enter their original game modes.
+- Option 3 reaches state 12; A advances pages and selects a route; B returns to the menu.
+- Both endings are reachable by replaying; no state persists across reset.
+- No lockup during forced blank/DMA or state transitions.
