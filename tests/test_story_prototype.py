@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 
 from build_story_prototype import (
-    CODE_ROM_START, FONT_OFFSET, MAP_OFFSETS, PATCH_END, PATCH_START,
+    CODE_CPU_START, CODE_ROM_START, FONT_OFFSET, MAP_OFFSETS, PATCH_END, PATCH_START,
     STORY_CURSOR, STORY_PAGE, STORY_ROUTE, assemble_code, make_font, make_ips, make_maps,
 )
 
@@ -34,17 +34,37 @@ class StoryPrototypeAssetsTests(unittest.TestCase):
 
     def test_code_assembles_with_all_short_branches_in_range(self):
         code, labels = assemble_code()
-        self.assertEqual(len(code), 743)
-        self.assertEqual(hashlib.sha256(code).hexdigest(), "36da4c1ac64ff9460e579aeb276354ea82e63463cb2d0626833c2faf1f6fed49")
+        self.assertEqual(len(code), 1093)
+        self.assertEqual(hashlib.sha256(code).hexdigest(), "23c35d2c59c1978c74bc898b4ee9e1cbd21cc849f6c5ca98751e4fb633d81e56")
         self.assertLess(CODE_ROM_START + len(code), FONT_OFFSET)
         expected_labels = {
-            "StoryInit": 0x8054, "StoryFrame": 0x806C, "MenuInit": 0x8150,
-            "MenuFrame": 0x816E, "DrawScreen": 0x822E,
+            "StoryInit": 0x8054, "StoryFrame": 0x806C, "MenuInit": 0x814C,
+            "MenuFrame": 0x816A, "DrawScreen": 0x822A,
+            "NativeMenuAddStory": 0x8337, "StorySelectState": 0x846E,
+            "StoryReturnToNativeMenu": 0x8483,
         }
         for name, address in expected_labels.items():
             self.assertEqual(labels[name], address)
         self.assertLess(PATCH_START, CODE_ROM_START)
         self.assertLess(FONT_OFFSET, PATCH_END)
+
+    def test_native_menu_overlay_writes_eight_original_font_glyphs(self):
+        code, labels = assemble_code()
+        start = labels["NativeMenuAddStory"] - CODE_CPU_START
+        end = labels["StorySelectState"] - CODE_CPU_START
+        overlay = code[start:end]
+        self.assertEqual(overlay.count(bytes.fromhex("9F 00 60 7E")), 32)
+        expected_top = [
+            0x2F02, 0x2F03, 0x2F04, 0x2F05, 0x2F28, 0x2F29, 0x2F2A, 0x2F2B,
+            0x2F20, 0x2F21, 0x2F04, 0x2F05, 0x2F26, 0x2F27, 0x2EEC, 0x2EED,
+        ]
+        expected_bottom = [
+            0x2F12, 0x2F13, 0x2F14, 0x2F15, 0x2F38, 0x2F39, 0x2F3A, 0x2F3B,
+            0x2F30, 0x2F31, 0x2F14, 0x2F15, 0x2F36, 0x2F37, 0x2EFC, 0x2EFD,
+        ]
+        for value in expected_top + expected_bottom:
+            needle = bytes((0xA9, value & 0xFF, value >> 8, 0x9F, 0x00, 0x60, 0x7E, 0xE8, 0xE8))
+            self.assertIn(needle, overlay)
 
     def test_story_ram_variables_are_distinct(self):
         self.assertEqual(len({STORY_CURSOR, STORY_PAGE, STORY_ROUTE}), 3)
