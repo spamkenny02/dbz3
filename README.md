@@ -21,6 +21,12 @@ Research, tooling and an experimental branching Story Mode prototype for the Fre
 - Story flags are volatile WRAM only. No SRAM is added.
 - The ROM expands from 2 MiB to 4 MiB LoROM; new code/data use appended banks C0-FF, leaving the original FF-filled region with existing references untouched.
 
+## Download the current patch
+
+The prebuilt experimental IPS patch is committed at [patches/Ultime-Menace-Native-Histoire.ips](https://github.com/spamkenny02/dbz3/raw/refs/heads/main/patches/Ultime-Menace-Native-Histoire.ips). Its SHA-256 is `479c9f3996955df040d21fb7beda706f73f1dcd614b10c696a93fcadd970773a` (7,414 bytes). The accompanying [validation report](patches/Ultime-Menace-Native-Histoire-Validation.json) records the build checks.
+
+Apply it only to the matching French base ROM (SHA-256 `663116d015cad3398644608ca6f2506071ab23d38b03b4890e1a6caecb1a55aa`) using Floating IPS or Lunar IPS. The ROM itself is not included. This is a development patch: native menu rendering and routing still need emulator testing; see [the test checklist](docs/testing-prototype.md).
+
 ## Build from your own ROM
 
 Python 3.10+; standard library only.
