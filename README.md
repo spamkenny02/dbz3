@@ -1,46 +1,47 @@
 # DBZ3 — Ultime Menace Story Mode Hack
 
-Research and tooling for a homebrew ROM patch that adds a replayable, branching Story Mode to the French SNES release of **Dragon Ball Z 3: Ultime Menace**.
+Research, tooling and an **experimental text-only branching Story Mode prototype** for the French SNES release of **Dragon Ball Z 3: Ultime Menace**.
 
 ## Project rules
 
 - Work from a user-owned ROM. ROM images are not included in this repository.
-- Keep the original ROM unchanged; tools write to separate output paths.
-- No SRAM/save feature: route choices and chapter flags live in volatile WRAM only. Restarting the story is how players reach other endings.
-- Reuse the existing battle engine where possible.
-- Do not publish a playable patch until every modified byte is based on a verified hook and the result has been tested in an emulator.
+- Keep the original ROM unchanged; the builder writes a separate .sfc and .ips.
+- No SRAM/save feature: route choices and chapter flags live in volatile WRAM only.
+- Preserve the three original game modes and reuse the original battle engine where possible.
 - Static-analysis findings are candidates until runtime-verified.
+- The current prototype has **not** been tested in an emulator and is not a release build.
 
-## Status
+## Current prototype
 
-- [x] Inspect the supplied French ROM headers and hashes.
-- [x] Map top-level state dispatchers and identify candidate selector handlers.
-- [x] Compare the supplied French *La Légende Saien* ROM as a reference for event/script architecture.
-- [x] Add a read-only verifier for exact selector bytes, global state tables, and the candidate fill range.
-- [x] Document an architecture for adding a dedicated global state without replacing an existing state.
-- [x] Draft the selector router in 65816 assembly (source only; not linked into the ROM).
-- [x] Trace the static Start-to-mode-selector control flow.
-- [ ] Decode the visible menu labels/tilemap and verify the screen in an emulator.
-- [ ] Audit safe WRAM variables and the candidate ROM insertion area.
-- [ ] Identify the text/portrait rendering path.
-- [ ] Implement the first Story Mode scene and a battle transition.
-- [ ] Build and test an IPS/BPS patch in an emulator.
+- Start from the title screen enters a custom four-choice menu.
+- The first three options return to the original mode-confirmation routine.
+- The fourth option opens a dedicated story state with two intro pages, a two-way choice, and two different short endings.
+- A restarts the story; B returns to the custom menu.
+- The UI uses a small original bitmap font and custom tilemaps; no copyrighted game assets are included in the repository.
+- Story variables are volatile WRAM only; no SRAM is added.
 
-This repository contains diagnostic tooling and design notes, **not a playable hack yet**.
-
-## Quick start
+## Build from your own ROM
 
 Python 3.10+; standard library only.
 
 ```bash
-python tools/inspect_rom.py "path/to/Dragon Ball Z - Ultime Menace (France).sfc" --min-fill 4096
-python tools/compare_roms.py "path/to/Ultime Menace.sfc" "path/to/La Legende Saien.sfc"
+python tools/build_story_prototype.py "path/to/Dragon Ball Z - Ultime Menace (France).sfc" \
+  --out-rom build/Ultime-Menace-Story-Prototype.sfc \
+  --out-ips build/Ultime-Menace-Story-Prototype.ips \
+  --report build/story-prototype-report.json
 python tools/verify_story_hooks.py "path/to/Dragon Ball Z - Ultime Menace (France).sfc"
 python -m unittest discover -s tests -v
 ```
 
-See `docs/` for current static-analysis notes and `docs/patch-spec-format.md` for the guarded IPS format. The hook verifier expects the exact ROM SHA-256 documented in `docs/analysis-results.md`.
+The builder requires the exact French ROM SHA-256 recorded in docs/analysis-results.md. It validates original hook bytes, candidate free space, relocated state tables, output checksum and IPS generation. See docs/integration-next-steps.md for addresses and limitations.
+
+## Remaining work
+
+- Emulator-test menu navigation, PPU/DMA setup and original mode routing.
+- Confirm the WRAM allocation under runtime tracing.
+- Connect story scenes to a real battle and branch on win/loss.
+- Add more chapters and improve the UI to match the original game's presentation.
 
 ## Copyright / distribution
 
-This repository contains analysis code and original documentation only. Do not commit ROMs, extracted copyrighted graphics/audio, or a complete game image. A future patch should be based on a matching user-supplied ROM and only be published after review of its contents and distribution scope.
+This repository contains original code, documentation and a generated bitmap font only. Do not commit ROMs, extracted copyrighted graphics/audio, or a complete game image. The IPS patch should be built from the user's exact ROM and only published as a release after emulator testing.
