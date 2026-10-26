@@ -24,7 +24,7 @@ The relocated tables are:
 - Font tiles start at file `0x1F2000`, CPU `BE:A000`.
 - Menu/story tilemaps are placed between file `0x1F2400` and `0x1F7400`.
 
-The menu setup also calls the original routines BF:826D, BF:85FA and BF:874B before drawing the new menu. This is intended to initialize mode-related variables so choices 0-2 can re-enter the existing confirmation path. It still needs emulator testing.
+The menu setup calls the complete original submode-2 initializer BF:8104 before drawing the new menu. That routine runs its common initialization tail as well as BF:826D, BF:85FA and BF:874B, so the prototype does not skip the original mode-related setup. It still needs emulator testing.
 
 ## Build and verify
 
