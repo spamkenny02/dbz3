@@ -1,3 +1,4 @@
+import hashlib
 import sys
 import unittest
 from pathlib import Path
@@ -33,10 +34,15 @@ class StoryPrototypeAssetsTests(unittest.TestCase):
 
     def test_code_assembles_with_all_short_branches_in_range(self):
         code, labels = assemble_code()
-        self.assertGreater(len(code), 500)
+        self.assertEqual(len(code), 756)
+        self.assertEqual(hashlib.sha256(code).hexdigest(), "24f587b2202ef507899853aae06772d36d6d7f6cac69568892bf06a52cce2c6e")
         self.assertLess(CODE_ROM_START + len(code), FONT_OFFSET)
-        for name in ("StoryInit", "StoryFrame", "MenuInit", "MenuFrame", "DrawScreen"):
-            self.assertIn(name, labels)
+        expected_labels = {
+            "StoryInit": 0x985A, "StoryFrame": 0x9872, "MenuInit": 0x9956,
+            "MenuFrame": 0x9981, "DrawScreen": 0x9A41,
+        }
+        for name, address in expected_labels.items():
+            self.assertEqual(labels[name], address)
         self.assertLess(PATCH_START, CODE_ROM_START)
         self.assertLess(FONT_OFFSET, PATCH_END)
 
