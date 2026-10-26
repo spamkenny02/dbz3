@@ -109,7 +109,8 @@ def verify_rom(data: bytes, strict_hash: bool = True) -> dict:
             "end_exclusive": f"0x{FILL_END:06X}",
             "length": FILL_END - FILL_START,
             "all_ff": fill_is_ff,
-            "warning": "FF bytes are only a candidate region; this check does not prove the region is unreferenced or safe to overwrite.",
+            "known_code_references": ["81:D561 uses LDA.l,X targeting BE:9806", "81:D590 uses LDA.l,X targeting BE:9806"],
+            "warning": "This FF-filled range has existing code references and must not be overwritten. The prototype uses expanded LoROM banks C0-FF instead.",
         },
         "all_checks_match": (
             all(x["matches"] for x in hook_results.values())
