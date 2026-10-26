@@ -35,7 +35,7 @@ class StoryPrototypeAssetsTests(unittest.TestCase):
     def test_code_assembles_with_all_short_branches_in_range(self):
         code, labels = assemble_code()
         self.assertEqual(len(code), 1093)
-        self.assertEqual(hashlib.sha256(code).hexdigest(), "23c35d2c59c1978c74bc898b4ee9e1cbd21cc849f6c5ca98751e4fb633d81e56")
+        self.assertEqual(hashlib.sha256(code).hexdigest(), "b744e87c7db3cf8d08674678373625821745954f7765e8ce72f4e8fc4be058fa")
         self.assertLess(CODE_ROM_START + len(code), FONT_OFFSET)
         expected_labels = {
             "StoryInit": 0x8054, "StoryFrame": 0x806C, "MenuInit": 0x814C,
@@ -65,6 +65,66 @@ class StoryPrototypeAssetsTests(unittest.TestCase):
         for value in expected_top + expected_bottom:
             needle = bytes((0xA9, value & 0xFF, value >> 8, 0x9F, 0x00, 0x60, 0x7E, 0xE8, 0xE8))
             self.assertIn(needle, overlay)
+
+    def test_native_overlay_preserves_stack_for_all_register_widths(self):
+        code, labels = assemble_code()
+        overlay = code[labels["NativeMenuAddStory"] - CODE_CPU_START:
+                       labels["StorySelectState"] - CODE_CPU_START]
+        # Execute the overlay's stack/register operations up to the original
+        # DMA call. A sentinel models the caller's long return address.
+        for flags in (0x00, 0x10, 0x20, 0x30):
+            with self.subTest(flags=flags):
+                p, db = flags, 0x7E
+                regs = [0xBEEF, 0x12 if flags & 0x10 else 0x1234,
+                        0x56 if flags & 0x10 else 0x5678]
+                original = regs[:]
+                stack = [0xCA, 0xFE, 0x42]
+                def push(value, size):
+                    for shift in range(8 * (size - 1), -1, -8):
+                        stack.append((value >> shift) & 255)
+                def pull(size):
+                    return sum(stack.pop() << (8 * i) for i in range(size))
+                pc = 0
+                while pc < len(overlay):
+                    op = overlay[pc]
+                    pc += 1
+                    if op == 0x08:
+                        push(p, 1)
+                    elif op == 0x8B:
+                        push(db, 1)
+                    elif op == 0xC2:
+                        p &= ~overlay[pc]
+                        pc += 1
+                    elif op in (0x48, 0xDA, 0x5A):
+                        idx = {0x48: 0, 0xDA: 1, 0x5A: 2}[op]
+                        size = 1 if p & (0x20 if idx == 0 else 0x10) else 2
+                        push(regs[idx], size)
+                    elif op in (0x68, 0xFA, 0x7A):
+                        idx = {0x68: 0, 0xFA: 1, 0x7A: 2}[op]
+                        size = 1 if p & (0x20 if idx == 0 else 0x10) else 2
+                        regs[idx] = pull(size)
+                    elif op == 0xAB:
+                        db = pull(1)
+                    elif op == 0x28:
+                        p = pull(1)
+                    elif op in (0xA9, 0xA2):
+                        idx = 0 if op == 0xA9 else 1
+                        size = 1 if p & (0x20 if idx == 0 else 0x10) else 2
+                        regs[idx] = int.from_bytes(overlay[pc:pc+size], "little")
+                        pc += size
+                    elif op == 0x9F:
+                        pc += 3  # STA long,X does not touch the stack
+                    elif op == 0xE8:
+                        regs[1] = (regs[1] + 1) & (255 if p & 0x10 else 65535)
+                    elif op == 0x22:
+                        self.assertEqual(overlay[pc:pc+3], bytes.fromhex("3C 88 80"))
+                        break
+                    else:
+                        self.fail(f"Unexpected overlay opcode {op:02X}")
+                self.assertEqual(stack, [0xCA, 0xFE, 0x42])
+                self.assertEqual(regs, original)
+                self.assertEqual(db, 0x7E)
+                self.assertEqual(p, flags)
 
     def test_story_ram_variables_are_distinct(self):
         self.assertEqual(len({STORY_CURSOR, STORY_PAGE, STORY_ROUTE}), 3)

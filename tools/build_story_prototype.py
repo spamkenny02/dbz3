@@ -462,7 +462,9 @@ def assemble_code() -> tuple[bytes, dict[str, int]]:
     # Reuse the game's own 16x16 glyph tiles and palette so HISTOIRE matches the
     # COMBAT / CHAMPIONNAT / OPTION lettering instead of drawing a new menu.
     a.label("NativeMenuAddStory")
-    a.emit(0x08, 0x8B, 0x48, 0xDA, 0x5A, 0xC2, 0x30)  # PHP, PHB, PHA, PHX, PHY, REP #$30
+    # Fix widths BEFORE saving registers: all pushes and pulls must be
+    # 16-bit even when the native caller arrives with M=1 or X=1.
+    a.emit(0x08, 0x8B, 0xC2, 0x30, 0x48, 0xDA, 0x5A)  # PHP, PHB, REP #$30, PHA, PHX, PHY
     a.emit(0xA2, 0x90, 0x01)  # row 6, x=8: byte offset $0190 in $7E:6000
     for tile in (0x2F02, 0x2F03, 0x2F04, 0x2F05, 0x2F28, 0x2F29,
                  0x2F2A, 0x2F2B, 0x2F20, 0x2F21, 0x2F04, 0x2F05,
