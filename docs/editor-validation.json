@@ -1,0 +1,18 @@
+{
+  "source_sha256": "5563770a1df5a6b1905cad404e32517ff8ed92ab1dc538fb9525a99e4111438a",
+  "attempted_ids": 256,
+  "verified_scene_ids": 222,
+  "unverified_ids": 34,
+  "background_compositions": 31,
+  "transparent_elements": 35,
+  "gui_tested": "Linux Tk, virtual display; not Windows executable",
+  "tested_gui_operations": [
+    "compose",
+    "transform actor",
+    "add/delete/duplicate scenes",
+    "save/reopen project",
+    "follow choice",
+    "open graph"
+  ],
+  "rom_graphics_compiler_implemented": false
+}

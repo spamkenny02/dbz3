@@ -1,8 +1,25 @@
-> **Latest: Native Histoire v5.** Restores the original Goku/Vegeta intro.
-> HISTOIRE remains first and selected in the following native menu.
-> [Download IPS](patches/Ultime-Menace-Native-Histoire-v5.ips)
-> · [Validation and limits](docs/native-histoire-v5.md).
+> **Latest: Native Histoire v6.** HISTOIRE is present from the first menu
+> transfer, with the original Goku/Vegeta introduction preserved.
+> [Download IPS](patches/Ultime-Menace-Native-Histoire-v6.ips)
+> · [Runtime validation](docs/native-histoire-v6.md).
 > Apply to the original French ROM, not an older patched version.
+
+## Desktop scenario editor
+
+The [Python/Tk editor](editor/README.md) composes SB2 backgrounds and transparent
+character/prop layers, dialogue, choices and scene links. Save/reopen JSON,
+preview routes and export scene PNGs. The local private extraction package
+contains game artwork; it is intentionally absent from this public repository.
+Put its `assets/` folder inside `editor/`.
+
+```
+python -m pip install -r editor/requirements.txt
+python editor/app.py --project editor/exemple_scenario.json
+```
+
+The editor exports local projects; arbitrary graphics/graphs are not yet
+reinserted into the SNES Story Mode. See the [extraction/core notes](emulator-tools/README.md).
+
 
 # DBZ3 — Ultime Menace Story Mode Hack
 

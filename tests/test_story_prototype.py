@@ -39,8 +39,8 @@ class StoryPrototypeAssetsTests(unittest.TestCase):
 
     def test_code_assembles_with_all_short_branches_in_range(self):
         code, labels = assemble_code()
-        self.assertEqual(len(code), 1420)
-        self.assertEqual(hashlib.sha256(code).hexdigest(), "acde484033b0844a3093185a2e82796383b7dda087952d10cca4f3c33a1d07f5")
+        self.assertEqual(len(code), 1475)
+        self.assertEqual(hashlib.sha256(code).hexdigest(), "e2bffc53c28f9220bc2dda1c5984adb74d16d1c0f224e5beafa1b42d9bed07af")
         self.assertLess(CODE_ROM_START + len(code), FONT_OFFSET)
         expected_labels = {
             "StoryInit": 0x8054, "StoryFrame": 0x806F, "MenuInit": 0x814F,
@@ -89,7 +89,7 @@ class StoryPrototypeAssetsTests(unittest.TestCase):
                         stack.append((value >> shift) & 255)
                 def pull(size):
                     return sum(stack.pop() << (8 * i) for i in range(size))
-                memory = {0x7E80C0 + i: (i * 17 + 23) & 255 for i in range(384)}
+                memory = {0x7FF800 + i: (i * 17 + 23) & 255 for i in range(384)}
                 pc = 0
                 while pc < len(overlay):
                     op = overlay[pc]
@@ -145,7 +145,7 @@ class StoryPrototypeAssetsTests(unittest.TestCase):
                     else:
                         self.fail(f"Unexpected overlay opcode {op:02X}")
                 self.assertEqual(bytes(memory[0x7E6080+i] for i in range(384)),
-                                 bytes(memory[0x7E80C0+i] for i in range(384)))
+                                 bytes(memory[0x7FF800+i] for i in range(384)))
                 self.assertEqual(stack, [0xCA, 0xFE, 0x42])
                 self.assertEqual(regs, original)
                 self.assertEqual(db, 0x7E)

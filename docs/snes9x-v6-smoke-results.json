@@ -1,0 +1,481 @@
+{
+  "core": "Snes9x libretro 1.61, Ubuntu package 1.61+dfsg-1",
+  "rom_sha256": "f5ae24bf1c4db807643e37d2b48e0402c46397f1e01383654259cb1b7729863d",
+  "scenarios": {
+    "gohan": {
+      "scenario": "gohan",
+      "states": {
+        "1040": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1160": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1260": {
+          "global_state": 12,
+          "frame_state": 12,
+          "screen": 0,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1320": {
+          "global_state": 12,
+          "frame_state": 12,
+          "screen": 0,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 1,
+          "route": 0
+        },
+        "1360": {
+          "global_state": 12,
+          "frame_state": 12,
+          "screen": 0,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 2,
+          "route": 0
+        },
+        "1450": {
+          "global_state": 12,
+          "frame_state": 12,
+          "screen": 0,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 3,
+          "route": 0
+        },
+        "1800": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 10,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        }
+      },
+      "frame_sha256": {
+        "1040": "248111190487611e8a435704ab524c9574c3845f12cc996901c714cb4020b25c",
+        "1160": "248111190487611e8a435704ab524c9574c3845f12cc996901c714cb4020b25c",
+        "1260": "a1b902f1d660298ee0287f1508d5b6eb110370a8c65eac6b344d2102201e6ae2",
+        "1320": "104a6bc516cd0965ea17e1b2f4e56c5fbee7c412cefa0ab781e91e7dd02b0294",
+        "1360": "0d908f2e59c65a4e1c98cdbc9c663a7bce37b80ed05e0395ccc77d11d320cd9f",
+        "1450": "26fbc600763b7c6f74698376bccc0f2a38a45cabb75a4484b845fab73717bd58",
+        "1800": "98968fcd30786d98a0468995c6faabcf578bcdab6fba7bf16788c523ed248a1a"
+      },
+      "early_menu_frames": [
+        917,
+        918,
+        919,
+        920,
+        921,
+        922,
+        923,
+        924,
+        925,
+        926,
+        927,
+        928,
+        929,
+        930,
+        931,
+        932
+      ]
+    },
+    "vegeta": {
+      "scenario": "vegeta",
+      "states": {
+        "1040": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1160": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1260": {
+          "global_state": 12,
+          "frame_state": 12,
+          "screen": 0,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1320": {
+          "global_state": 12,
+          "frame_state": 12,
+          "screen": 0,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 1,
+          "route": 0
+        },
+        "1360": {
+          "global_state": 12,
+          "frame_state": 12,
+          "screen": 0,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 2,
+          "route": 0
+        },
+        "1450": {
+          "global_state": 12,
+          "frame_state": 12,
+          "screen": 0,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 3,
+          "route": 1
+        },
+        "1800": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 10,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        }
+      },
+      "frame_sha256": {
+        "1040": "248111190487611e8a435704ab524c9574c3845f12cc996901c714cb4020b25c",
+        "1160": "248111190487611e8a435704ab524c9574c3845f12cc996901c714cb4020b25c",
+        "1260": "a1b902f1d660298ee0287f1508d5b6eb110370a8c65eac6b344d2102201e6ae2",
+        "1320": "104a6bc516cd0965ea17e1b2f4e56c5fbee7c412cefa0ab781e91e7dd02b0294",
+        "1360": "0d908f2e59c65a4e1c98cdbc9c663a7bce37b80ed05e0395ccc77d11d320cd9f",
+        "1450": "b08432eb219e24de2ef341677657bb315da9fc86733403b6c473b33a848466b5",
+        "1800": "98968fcd30786d98a0468995c6faabcf578bcdab6fba7bf16788c523ed248a1a"
+      },
+      "early_menu_frames": [
+        917,
+        918,
+        919,
+        920,
+        921,
+        922,
+        923,
+        924,
+        925,
+        926,
+        927,
+        928,
+        929,
+        930,
+        931,
+        932
+      ]
+    },
+    "combat": {
+      "scenario": "combat",
+      "states": {
+        "1040": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1160": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1260": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        },
+        "1320": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        },
+        "1360": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        },
+        "1450": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        },
+        "1800": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        }
+      },
+      "frame_sha256": {
+        "1040": "248111190487611e8a435704ab524c9574c3845f12cc996901c714cb4020b25c",
+        "1160": "19d4187b3dec4fec5bdcc0992b45dc2ad5803ce900d84afb51909f29521ad61a",
+        "1260": "b63e4416ac6f02c3807cbb0a31736d8e9c0d4f75d8ef778bf9a067f88f518fc3",
+        "1320": "b63e4416ac6f02c3807cbb0a31736d8e9c0d4f75d8ef778bf9a067f88f518fc3",
+        "1360": "b63e4416ac6f02c3807cbb0a31736d8e9c0d4f75d8ef778bf9a067f88f518fc3",
+        "1450": "b63e4416ac6f02c3807cbb0a31736d8e9c0d4f75d8ef778bf9a067f88f518fc3",
+        "1800": "b63e4416ac6f02c3807cbb0a31736d8e9c0d4f75d8ef778bf9a067f88f518fc3"
+      },
+      "early_menu_frames": [
+        917,
+        918,
+        919,
+        920,
+        921,
+        922,
+        923,
+        924,
+        925,
+        926,
+        927,
+        928,
+        929,
+        930,
+        931,
+        932
+      ]
+    },
+    "championnat": {
+      "scenario": "championnat",
+      "states": {
+        "1040": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1160": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 2,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1260": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        },
+        "1320": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        },
+        "1360": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        },
+        "1450": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        },
+        "1800": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        }
+      },
+      "frame_sha256": {
+        "1040": "248111190487611e8a435704ab524c9574c3845f12cc996901c714cb4020b25c",
+        "1160": "900a4e0d232b5b9b50df474c956a2759295e8edbf07152542b63299433c3b409",
+        "1260": "2921ec5e0e4c9d14a31faabff366d77a013c408f547ec7bc73d85a63974217e5",
+        "1320": "b8fb21bc9ba237e443548e6ebaa6ab289578199c64ebe8efddbb0eab97d07be5",
+        "1360": "b8fb21bc9ba237e443548e6ebaa6ab289578199c64ebe8efddbb0eab97d07be5",
+        "1450": "b8fb21bc9ba237e443548e6ebaa6ab289578199c64ebe8efddbb0eab97d07be5",
+        "1800": "b8fb21bc9ba237e443548e6ebaa6ab289578199c64ebe8efddbb0eab97d07be5"
+      },
+      "early_menu_frames": [
+        917,
+        918,
+        919,
+        920,
+        921,
+        922,
+        923,
+        924,
+        925,
+        926,
+        927,
+        928,
+        929,
+        930,
+        931,
+        932
+      ]
+    },
+    "option": {
+      "scenario": "option",
+      "states": {
+        "1040": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1160": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1260": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        },
+        "1320": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        },
+        "1360": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        },
+        "1450": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        },
+        "1800": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        }
+      },
+      "frame_sha256": {
+        "1040": "248111190487611e8a435704ab524c9574c3845f12cc996901c714cb4020b25c",
+        "1160": "7469f4ec81c3e780d59f7e98376c40f33a06221fac4f7dc3527d03d523e1747e",
+        "1260": "26d9fae2c1321131c3bc0e484e9a314060d18e7d14abb8f480a68c46df7459cb",
+        "1320": "26d9fae2c1321131c3bc0e484e9a314060d18e7d14abb8f480a68c46df7459cb",
+        "1360": "26d9fae2c1321131c3bc0e484e9a314060d18e7d14abb8f480a68c46df7459cb",
+        "1450": "26d9fae2c1321131c3bc0e484e9a314060d18e7d14abb8f480a68c46df7459cb",
+        "1800": "26d9fae2c1321131c3bc0e484e9a314060d18e7d14abb8f480a68c46df7459cb"
+      },
+      "early_menu_frames": [
+        917,
+        918,
+        919,
+        920,
+        921,
+        922,
+        923,
+        924,
+        925,
+        926,
+        927,
+        928,
+        929,
+        930,
+        931,
+        932
+      ]
+    }
+  }
+}

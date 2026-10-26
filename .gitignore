@@ -11,3 +11,6 @@ roms/
 .DS_Store
 
 build/
+
+# Private game-art catalog generated from the user ROM
+editor/assets/

@@ -1,0 +1,85 @@
+{
+  "format": "dbz3-story",
+  "version": 1,
+  "title": "Ma saga",
+  "start": "introduction",
+  "catalog": "assets/catalog.json",
+  "scenes": [
+    {
+      "id": "introduction",
+      "name": "Un nouveau choix",
+      "kind": "choice",
+      "background": "background_0002",
+      "actors": [
+        {
+          "id": "gohan",
+          "asset": "sprite_0005",
+          "x": 32,
+          "y": 64,
+          "scale": 1,
+          "flip": true,
+          "z": 0
+        },
+        {
+          "id": "goku",
+          "asset": "sprite_0004",
+          "x": 172,
+          "y": 26,
+          "scale": 1,
+          "flip": false,
+          "z": 1
+        }
+      ],
+      "dialogue": "Le destin de la Terre dépend de notre prochain choix.",
+      "choices": [
+        {
+          "label": "Aider Gohan",
+          "target": "route_gohan"
+        },
+        {
+          "label": "Suivre Vegeta",
+          "target": "route_vegeta"
+        }
+      ],
+      "next": null,
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null
+      }
+    },
+    {
+      "id": "route_gohan",
+      "name": "Route Gohan",
+      "kind": "ending",
+      "background": "background_0002",
+      "actors": [],
+      "dialogue": "Rejoindre Gohan pour arrêter le rituel.",
+      "choices": [],
+      "next": null,
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null
+      }
+    },
+    {
+      "id": "route_vegeta",
+      "name": "Route Vegeta",
+      "kind": "ending",
+      "background": "background_0002",
+      "actors": [],
+      "dialogue": "Suivre Vegeta et découvrir ses intentions.",
+      "choices": [],
+      "next": null,
+      "combat": {
+        "player": "",
+        "opponent": "",
+        "win": null,
+        "lose": null
+      }
+    }
+  ]
+}

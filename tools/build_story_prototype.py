@@ -480,7 +480,7 @@ def assemble_code() -> tuple[bytes, dict[str, int]]:
     # immutable decompressed map, avoiding a repeated in-place shift.
     a.emit(0xA2, 0x00, 0x00)
     a.label("CopyNativeEntries")
-    a.emit(0xBF, 0xC0, 0x80, 0x7E, 0x9F, 0x80, 0x60, 0x7E,
+    a.emit(0xBF, 0x00, 0xF8, 0x7F, 0x9F, 0x80, 0x60, 0x7E,
            0xE8, 0xE8, 0xE0, 0x80, 0x01)
     a.branch(0x90, "CopyNativeEntries")
     a.emit(0xA2, 0x00, 0x00, 0xA9, 0x00, 0x2C)
@@ -536,6 +536,21 @@ def assemble_code() -> tuple[bytes, dict[str, int]]:
            0xE2, 0x20, 0xA9, 0x0A, 0x85, 0x23, 0xA9, 0x04, 0x85, 0x24,
            0x64, 0x25, 0x9C, 0x6B, 0x19, 0x9C, 0xA0, 0x18,
            0x5C, 0x71, 0x81, 0xBF)
+
+    a.label("PrepareNativeMenu")
+    a.emit(0x08, 0xC2, 0x30, 0x48, 0xDA, 0x5A, 0xA2, 0x00, 0x00)
+    a.label("CacheOriginalEntries")
+    a.emit(0xBF, 0xC0, 0x80, 0x7E, 0x9F, 0x00, 0xF8, 0x7F,
+           0xE8, 0xE8, 0xE0, 0x80, 0x01)
+    a.branch(0x90, "CacheOriginalEntries")
+    a.jsl("NativeMenuAddStory")
+    # The first fade DMA uses $7E:8000, not the later $7E:6000 buffer.
+    a.emit(0xA2, 0x00, 0x00)
+    a.label("PrepareFirstMenuDMA")
+    a.emit(0xBF, 0x00, 0x60, 0x7E, 0x9F, 0xC0, 0x80, 0x7E,
+           0xE8, 0xE8, 0xE0, 0x00, 0x02)
+    a.branch(0x90, "PrepareFirstMenuDMA")
+    a.emit(0x7A, 0xFA, 0x68, 0x28, 0x22, 0x63, 0xE5, 0xBF, 0x6B)
 
     return a.finish(), a.labels
 
@@ -633,6 +648,7 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
         0x02D3: bytes.fromhex("E3 82 80"),
         0x02DB: bytes.fromhex("E5 82 80"),
         0x1F9A54: bytes.fromhex("A9 06"),  # preserve original title -> native menu path
+        0x1FA519: bytes.fromhex("22 63 E5 BF"),
         0x1FAA1A: bytes.fromhex("A9 00 00 18"),
         0x1FAA79: bytes.fromhex("A9 02"),
         0x1FA9ED: bytes.fromhex("A9 02"),
@@ -645,6 +661,7 @@ def build(base_path: Path, out_rom: Path, out_ips: Path, report_path: Path | Non
         0x02D3: bytes.fromhex("2A 80 C0"),
         0x02DB: bytes.fromhex("2C 80 C0"),
         0x1F9A54: bytes.fromhex("A9 06"),
+        0x1FA519: bytes((0x22, labels["PrepareNativeMenu"] & 255, labels["PrepareNativeMenu"] >> 8, BANK)),
         0x1FAA1A: bytes((0x22, labels["NativeMenuAddStory"] & 0xFF, (labels["NativeMenuAddStory"] >> 8) & 0xFF, BANK)),
         0x1FAA79: bytes.fromhex("A9 03"),
         0x1FA9ED: bytes.fromhex("A9 03"),

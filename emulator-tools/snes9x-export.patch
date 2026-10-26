@@ -1,0 +1,14 @@
+diff --git a/libretro/libretro.cpp b/libretro/libretro.cpp
+index 6060767..3f7b9b0 100644
+--- a/libretro/libretro.cpp
++++ b/libretro/libretro.cpp
+@@ -1873,6 +1873,9 @@ void* retro_get_memory_data(unsigned type)
+ 
+     switch(type)
+     {
++        case 42: return PPU.CGDATA;
++        case 43: return PPU.OAMData;
++        case 44: return Memory.FillRAM;
+         case RETRO_MEMORY_SNES_SUFAMI_TURBO_A_RAM:
+         case RETRO_MEMORY_SAVE_RAM:
+             data = Memory.SRAM;

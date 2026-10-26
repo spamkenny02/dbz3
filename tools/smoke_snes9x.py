@@ -80,8 +80,14 @@ lib.retro_get_memory_data.argtypes = [c.c_uint]
 lib.retro_get_memory_data.restype = c.c_void_p
 ram = (c.c_ubyte * 131072).from_address(lib.retro_get_memory_data(2))
 states = {}
+early_menu_frames = []
 for frame in range(1801):
     lib.retro_run()
+    if 917 <= frame <= 932:
+        vram = (c.c_ubyte * 65536).from_address(lib.retro_get_memory_data(3))
+        tile = (vram[0xB490] | vram[0xB491] << 8) & 0x3FF
+        assert tile == 0x302, f'HISTOIRE absent from first menu transfer at frame {frame}'
+        early_menu_frames.append(frame)
     if frame in (1040, 1160, 1260, 1320, 1360, 1450, 1800):
         states[frame] = dict(global_state=ram[0x20], frame_state=ram[0x22],
                              screen=ram[0x23], main_cursor=ram[0x196B],
@@ -102,4 +108,4 @@ else:
     assert states[1360]['global_state'] == 6
     assert states[1360]['submenu'] == ['combat', 'championnat', 'option'].index(scenario) + 2
 lib.retro_deinit()
-print(json.dumps(dict(scenario=scenario, states=states, frame_sha256=screens), indent=2))
+print(json.dumps(dict(scenario=scenario, states=states, frame_sha256=screens, early_menu_frames=early_menu_frames), indent=2))
