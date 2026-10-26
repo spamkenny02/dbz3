@@ -60,3 +60,18 @@ An FF-filled range is only a *candidate* for code/data placement. It is not prov
 ## Follow-up finding: the apparent FF run is referenced
 
 The FF-filled range `0x1F1806`–`0x1F8000` must not be treated as free space. Static inspection found existing long-indexed reads at file offsets `0x00D561` and `0x00D590` targeting `BE:9806`. The current prototype therefore leaves this range untouched and expands the ROM from 2 MiB to 4 MiB, placing new code/data in the added LoROM banks C0-FF.
+
+
+## Native selector — fourth entry investigation
+
+The native selector input handler uses the tilemap buffer at $7E:6000. Each menu entry occupies two tilemap rows / 0x80 bytes, leaving a fourth two-row slot in the 0x200-byte map window. The selector's Up wrap operand at file offset 0x1FAB92 and Down limit at 0x1FABB1 were confirmed as the two values that cap the original three-entry cursor.
+
+The current experimental patch:
+- Preserves the original title-to-state-6 path at 0x1F9A54.
+- Hooks the original PPU/DMA call at 0x1F878A and writes HISTOIRE into the fourth slot at $7E:6190 and $7E:61D0 using the existing 16x16 glyph tiles.
+- Changes the selector wrap/limit from 2 to 3.
+- Hooks the final state selection at 0x1FAB25 so index 3 enters global state 12; indices 0-2 keep state 6.
+- Returns from Story Mode to state 6 / selector submode 2 on B.
+- Adds no SRAM; the story flags remain volatile WRAM.
+
+The 4 MiB patch is statically built and the automated tests pass. The native menu label and transitions are not yet emulator-tested; see docs/menu-routing.md and docs/testing-prototype.md.
