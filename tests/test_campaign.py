@@ -1,4 +1,4 @@
-import sys, unittest
+import sys, unittest, tempfile, subprocess, zipfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'tools'));sys.path.insert(0,str(ROOT/'editor'))
@@ -27,6 +27,14 @@ class CampaignTests(unittest.TestCase):
         rom=bytearray(0x400000);rom[0x7a:0x80]=bytes.fromhex('e2 20 a2 fe 1f 9a')
         report=compile_campaign(data,rom);self.assertGreater(report['pages'],len(data['scenes']))
         self.assertEqual(ascii_text('Entraînement…'),'ENTRAINEMENT...')
+    def test_standalone_zip_builder_imports_from_any_working_directory(self):
+        archive=ROOT/'releases/Atelier_Scenario_GUI_Combats_v7.zip'
+        with tempfile.TemporaryDirectory() as d:
+            unpacked=Path(d)/'Atelier scénario avec espaces';unpacked.mkdir()
+            with zipfile.ZipFile(archive) as z:z.extractall(unpacked)
+            self.assertEqual((unpacked/'tools/build_story_campaign.py').read_bytes(),(ROOT/'tools/build_story_campaign.py').read_bytes())
+            result=subprocess.run([sys.executable,str(unpacked/'tools/build_story_campaign.py'),'--help'],cwd=d,capture_output=True,text=True)
+            self.assertEqual(result.returncode,0,result.stderr)
     def test_roster_is_native_and_not_guessed(self):
         self.assertEqual([FIGHTER_IDS[n] for n in ('Gohan','Goten','Vegeta','Trunks')],[2,3,1,4])
         self.assertNotIn('Piccolo',FIGHTER_IDS)

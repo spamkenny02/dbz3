@@ -5,7 +5,7 @@ Original Goku/Vegeta introduction and native HISTOIRE menu are preserved.
 No SRAM: choices and progress last only for the current session.
 
 - [Download v7 IPS](patches/Ultime-Menace-Histoire-Combats-v7.ips)
-- [Download updated Windows/Python editor](releases/Atelier_Scenario_GUI_Combats_v7.zip)
+- [Download updated Windows/Python editor](releases/Atelier_Scenario_GUI_Combats_v7_1.zip)
 - [Editable sample campaign](editor/prelude_tournoi.json)
 - [Validation and limits](docs/campaign-v7.md)
 - [Snes9x runtime evidence](docs/campaign-v7-runtime.json)

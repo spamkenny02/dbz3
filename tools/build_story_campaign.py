@@ -6,7 +6,10 @@ Original intro/menu preserved. No SRAM. SB2 image composition is not compiled.
 import argparse, hashlib, json, tempfile, textwrap, unicodedata, sys
 from pathlib import Path
 import build_story_prototype as base
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'editor'))
+# Repository: editor/model.py. Standalone ZIP: model.py beside app.py.
+ROOT = Path(__file__).resolve().parents[1]
+MODEL_DIR = ROOT / 'editor' if (ROOT / 'editor' / 'model.py').is_file() else ROOT
+sys.path.insert(0, str(MODEL_DIR))
 from model import load_project, validate
 
 FIGHTER_IDS={'Goku':0,'Vegeta':1,'Gohan':2,'Goten':3,'Trunks':4,
