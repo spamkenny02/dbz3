@@ -9,3 +9,5 @@ roms/
 *.bps
 *.bin
 .DS_Store
+
+build/
