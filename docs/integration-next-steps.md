@@ -1,43 +1,49 @@
-# Story Mode integration — next verified steps
+# Story Mode integration — experimental prototype
 
-## What the static trace now establishes
+## What is now implemented in source
 
-The fresh-boot flow starts in global state 6. The title/start handler at BF:9A3C (file offset 0x1F9A3C) checks the Start bit; the Start path writes `2` to `$1878` and clears `$1879` before returning through the state dispatcher. State-6 submode 2 resolves through the submode table to BF:8104 (file offset 0x1F8104), which calls the setup routine BF:874B (file offset 0x1F874B).
+The prototype builder, tools/build_story_prototype.py, targets the exact French Ultime Menace ROM with SHA-256 `663116d015cad3398644608ca6f2506071ab23d38b03b4890e1a6caecb1a55aa`. It writes a separate .sfc and .ips; it never edits the input ROM.
 
-BF:874B loads the corresponding screen resources and initializes the state-6 substate machinery. The selector flow then reaches BF:AA8F (file offset 0x1FAA8F); when `$18A0 == 0`, this routine jumps directly to BF:AB48. That routine reads the controller, changes cursor variable `$196C), and uses the three-position bounds at 0x1FAB92 and 0x1FABB1. The confirmation path stores `$196C` to `$188C`, sets `$1878=5`, and returns through the state dispatcher.
+- The title-screen Start transition now targets new global state 13, a self-contained four-choice menu.
+- The menu uses an original 5x7 bitmap font and its own 32x32 BG1 tilemaps. It does not depend on guessed original font tile IDs.
+- Choices 0-2 seed the original selector variable and jump to the original mode-confirmation routine at BF:AAB7, which performs the game's existing setup before entering state 6/submode 5.
+- Choice 3 enters new global state 12, the story screen.
+- State 12 has two introductory pages, a two-way choice (help Gohan / follow Vegeta), and two distinct short endings. A restarts the prologue; B returns to the custom menu.
+- Story cursor/page/route are volatile WRAM variables at `$7F:FF50`–`$7F:FF52`; no SRAM is added.
+- The state tables are relocated to the verified FF-filled area at file offsets `0x1F1806` and `0x1F1830`. Existing initializer entries 0-11 are preserved; state 11 is a special initializer. New states 12 and 13 are appended. The frame table receives a default entry for state 11 plus the new story/menu handlers.
 
-This makes the BF:AB48 selector a strong static candidate for the first mode-selection screen after pressing Start. The menu's visible labels/tilemap still need to be identified before modifying the display.
+## Important integration details
 
-## Verified exact-ROM facts
+The original global initializer table has 12 entries (states 0-11), including the special initializer `$81:915B` at index 11. The original per-frame table has 11 entries (states 0-10); state 11 is not a normal frame state. The prototype preserves this distinction rather than overwriting state 11.
 
-The supplied Ultime Menace ROM is 2 MiB, SHA-256 `663116d015cad3398644608ca6f2506071ab23d38b03b4890e1a6caecb1a55aa`, internal title `DRAGONBALL Z3`, and SRAM-size byte 0.
+The relocated tables are:
 
-| Purpose | File offset | Current bytes |
-|---|---:|---|
-| Start-to-submode-2 transition | `0x1F9A47` | `A9 02 8D 78 18 A9 00 8D 79 18` |
-| Submode-2 setup entry | `0x1F8104` | `A9 0C 85 23 22 6D 82 BF 22 FA 85 BF 22 4B 87 BF` |
-| Selector handler input path | `0x1FAA8F` | `E2 20 AD A0 18 D0 03 4C 48 AB` |
-| Up-wrap limit in BF:AB48 | `0x1FAB92` | `A9 02` |
-| Down limit in BF:AB48 | `0x1FABB1` | `C9 02` |
-| Copy selector cursor to selected-mode variable | `0x1FAAF6` | `AD 6C 19 8D 8C 18` |
-| Set state-6 submode 5 after selection | `0x1FAB18` | `A9 05 8D 78 18` |
-| Return to state dispatcher | `0x1FAB32` | `5C 7A 80 80` |
+- Init table: file `0x1F1806`, CPU `BE:9806`, 14 long pointers for states 0-13.
+- Frame table: file `0x1F1830`, CPU `BE:9830`, 14 long pointers for states 0-13.
+- Custom code starts at file `0x1F185A`, CPU `BE:985A`.
+- Font tiles start at file `0x1F2000`, CPU `BE:A000`.
+- Menu/story tilemaps are placed between file `0x1F2400` and `0x1F7400`.
 
-The top-level global-state init table currently has 11 entries at file offset `0xF9`; the per-frame handler table has 11 entries at `0x2E3`. Each entry is a 24-bit long pointer, and the dispatcher indexes each table by `state * 3`.
+The menu setup also calls the original routines BF:826D, BF:85FA and BF:874B before drawing the new menu. This is intended to initialize mode-related variables so choices 0-2 can re-enter the existing confirmation path. It still needs emulator testing.
 
-## Candidate clean integration architecture
+## Build and verify
 
-1. Decode the menu label/tilemap data loaded by BF:874B and determine where a fourth line can be drawn without overwriting existing assets.
-2. Preserve the original 11 global states. If a dedicated state is needed, relocate both pointer tables into verified free ROM space, append a new state entry (candidate state 11), and patch both table-base operands in the dispatchers.
-3. Extend the cursor wrap bounds only together with the label drawing and confirmation router. Existing choices must retain their current behavior; the new choice should set global state 11 and use the normal dispatcher.
-4. Allocate volatile story flags only after WRAM usage is audited. No SRAM or persistent saves are planned.
-5. Identify the existing text/portrait rendering path before implementing the first dialogue scene.
-6. Connect a single existing battle only after the battle-entry and battle-return paths are traced.
-7. Generate an IPS patch from a hash-guarded manifest and test it in an emulator before calling it playable.
+```bash
+python tools/build_story_prototype.py "path/to/Dragon Ball Z - Ultime Menace (France).sfc" \
+  --out-rom build/Ultime-Menace-Story-Prototype.sfc \
+  --out-ips build/Ultime-Menace-Story-Prototype.ips \
+  --report build/story-prototype-report.json
+python -m unittest discover -s tests -v
+```
 
-## Current status
+The builder verifies the base hash, original hook bytes, free-space fill, state-table pointers, WRAM address references, output size, checksum/complement and IPS generation. The unit tests cover font/map sizes, menu variants, branch screens, assembler branch ranges and IPS encoding.
 
-- Read-only hook verifier passes on the exact supplied ROM.
-- Static control flow identifies the likely mode-selection path after Start.
-- Menu label/tilemap resources and safe WRAM allocations remain unresolved.
-- No ROM patch or game modification has been generated in this integration step.
+## Not yet proven
+
+- The patch has **not** been tested in Mesen, bsnes or another SNES emulator in this environment.
+- The menu is a clean text-only prototype, not yet a recreation of Super Butoden 2's visual style.
+- The story currently contains dialogue-like pages and branching endings but does not yet launch a battle.
+- `$7F:FF50`–`$7F:FF52` have no direct long-address references in the base ROM, but runtime memory use must still be checked.
+- PPU register setup, DMA timing, title transition, and the three original mode routes must be tested in an emulator before this is treated as playable.
+
+Do not call this a release patch until these checks pass. The original ROM is never overwritten.
