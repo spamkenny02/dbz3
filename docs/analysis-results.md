@@ -55,3 +55,8 @@ The two files are both 2 MiB, but are not interchangeable ROM revisions. The byt
 ## Critical caveat about FF runs
 
 An FF-filled range is only a *candidate* for code/data placement. It is not proven unused. Before using any candidate range, inspect all relevant pointers, tables, bank-local addressing, graphics/audio/resource references, and run the game under a debugger/emulator. These numbers must not be treated as a ready-made patch plan.
+
+
+## Follow-up finding: the apparent FF run is referenced
+
+The FF-filled range `0x1F1806`–`0x1F8000` must not be treated as free space. Static inspection found existing long-indexed reads at file offsets `0x00D561` and `0x00D590` targeting `BE:9806`. The current prototype therefore leaves this range untouched and expands the ROM from 2 MiB to 4 MiB, placing new code/data in the added LoROM banks C0-FF.
