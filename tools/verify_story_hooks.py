@@ -15,8 +15,11 @@ from pathlib import Path
 EXPECTED_SHA256 = "663116d015cad3398644608ca6f2506071ab23d38b03b4890e1a6caecb1a55aa"
 ROM_SIZE = 0x200000
 
-# Exact selector instructions / confirmation site in the supplied ROM.
+# Exact fresh-boot-to-selector and confirmation bytes in the supplied ROM.
 HOOKS = {
+    "start_to_submode2": (0x1F9A47, bytes.fromhex("A9 02 8D 78 18 A9 00 8D 79 18")),
+    "submode2_setup": (0x1F8104, bytes.fromhex("A9 0C 85 23 22 6D 82 BF 22 FA 85 BF 22 4B 87 BF")),
+    "selector_input_gate": (0x1FAA8F, bytes.fromhex("E2 20 AD A0 18 D0 03 4C 48 AB")),
     "cursor_up_wrap": (0x1FAB92, bytes.fromhex("A9 02")),
     "cursor_down_limit": (0x1FABB1, bytes.fromhex("C9 02")),
     "selection_confirmation_store": (0x1FAAF6, bytes.fromhex("AD 6C 19 8D 8C 18")),
