@@ -28,13 +28,23 @@ Initializer entries relevant to this investigation:
 | 5 | 80:811D | 0x00011D | generic fallback currently; candidate story state after cross-reference checks |
 | 6 | BF:8072 | 0x1F8072 | title/menu presentation flow |
 
-## Three-position mode selector candidate
+## Static Start-to-selector trace
 
-- State-6 submode initializer table at BF:80BC has nine entries: BF:80D7, BF:80E4, BF:8104, BF:8116, BF:8128, BF:813A, BF:8144, BF:815D, BF:8167. Do not append a tenth entry in-place without relocating the table; following bytes are executable code.
-- Frame handler BF:A96B dispatches on 25; its 25=2 path enters input handler BF:AB48 after fade completion.
-- BF:AB48 checks Up (6D & 0800), Down (6D & 0400), A (6D & 0080), and B (6E & 80). Cursor 196C wraps through 0..2.
-- Confirm copies 196C to 188C and sets 1878=5 after a fade. BF:8AE4 later branches on 188C values 0, 1, and 2 to setup/resource paths.
-- This is a strong candidate for a fourth Story entry, but visible labels and tilemap data still need runtime confirmation.
+- The title/start input handler BF:9A3C writes `2` to `$1878` when Start is pressed (file offset 0x1F9A47), then returns through the global state dispatcher.
+- State-6 submode 2 maps to initializer BF:8104 through the nine-entry submode table at BF:80BC.
+- BF:8104 initializes substate 12, calls common setup BF:826D and BF:85FA, then calls BF:874B to load the menu screen resources.
+- The selector dispatcher BF:A96B uses `$25` to choose among five handler paths. The mode-selection handler at BF:AA8F jumps to BF:AB48 when `$18A0 == 0`.
+- BF:AB48 checks Up (`$6D & $0800`), Down (`$6D & $0400`), A (`$6D & $0080`), and B (`$6E & $80`). Cursor `$196C` currently wraps through 0..2.
+- Confirmation copies `$196C` to `$188C` and sets `$1878=5`. The existing setup code expects selection values 0, 1, or 2; a fourth value must branch to a new state before falling into that path.
+- This is the strongest static candidate for the mode selector after Start. The visible label/tilemap data still needs to be decoded, and the screen should be confirmed in an emulator before altering its graphics.
+
+## Dedicated-state integration plan
+
+- Preserve all 11 existing global states.
+- Relocate the global initializer table and per-frame handler table together into a verified free ROM region, append a twelfth pointer for candidate global state 11, and patch both dispatcher table-base operands.
+- Replace the five-byte `A9 05 8D 78 18` sequence at file offset 0x1FAB18 with a four-byte JSL to a router plus NOP. For choices 0..2, the router must reproduce the original `$1878=5` assignment. For choice 3, it should set global state 11; the caller's existing cleanup and dispatcher jump then continue.
+- The router source draft is in `asm/selector_router.s`; it is not linked into the ROM yet.
+- The FF-filled candidate region at 0x1F1806 is 26,618 bytes, but is not considered safe until resource references and runtime use have been ruled out.
 
 ## Candidate code space
 
