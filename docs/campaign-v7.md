@@ -34,7 +34,7 @@ when a marked story battle is returning from state 1. It chooses the saved
 win/loss destination and resumes Story state 12.
 
 The battle initializer clears bank 7F, so old Story WRAM there cannot retain a
-campaign. V7 uses `$7E:1E54–1E61`, below the native stack area. These bytes
+campaign. V7 uses `$7E:1E54–1E62`, below the native stack area. These bytes
 survive the tested three-fight routes. This is runtime evidence for this
 campaign, not proof for every possible future original-game mode or hook.
 Code is in appended bank C1; narrative tilemaps start at C2. V6 remains intact
@@ -66,5 +66,6 @@ and a graphical narrative renderer remain separate work.
 
 The editor's `Tester depuis le début` simulates results locally; it does not
 run an emulator. The ROM export launches real native battles when played.
-Windows was confirmed by the user for the earlier editor. New Windows UI
-and exporter require user testing; the compiler/runtime checks run on Linux.
+Windows was confirmed by the user for the earlier editor. The updated GUI was tested under Linux/Xvfb: fighter fields, arena, save,
+ROM/IPS export, player selection, result simulation and graph. New Windows
+controls still require user testing.

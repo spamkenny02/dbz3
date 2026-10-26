@@ -1,70 +1,67 @@
-> **Latest: Native Histoire v6.** HISTOIRE is present from the first menu
-> transfer, with the original Goku/Vegeta introduction preserved.
-> [Download IPS](patches/Ultime-Menace-Native-Histoire-v6.ips)
-> · [Runtime validation](docs/native-histoire-v6.md).
-> Apply to the original French ROM, not an older patched version.
+# DBZ3 — Ultime Menace Story Mode
 
-## Desktop scenario editor
+**V7: a modifiable tournament prelude with three native battles.**
+Original Goku/Vegeta introduction and native HISTOIRE menu are preserved.
+No SRAM: choices and progress last only for the current session.
 
-The [Python/Tk editor](editor/README.md) composes SB2 backgrounds and transparent
-character/prop layers, dialogue, choices and scene links. Save/reopen JSON,
-preview routes and export scene PNGs. The local private extraction package
-contains game artwork; it is intentionally absent from this public repository.
-Put its `assets/` folder inside `editor/`.
+- [Download v7 IPS](patches/Ultime-Menace-Histoire-Combats-v7.ips)
+- [Download updated Windows/Python editor](releases/Atelier_Scenario_GUI_Combats_v7.zip)
+- [Editable sample campaign](editor/prelude_tournoi.json)
+- [Validation and limits](docs/campaign-v7.md)
+- [Snes9x runtime evidence](docs/campaign-v7-runtime.json)
+
+Apply the patch to your **original French 2 MiB ROM**, never an older patched
+version. Boot without an old save state. Output is 4 MiB. V6 remains available
+in `patches/` for comparison.
+
+## Campaign
+
+1. Gohan/Goten training, choose either fighter, different win/loss dialogue.
+2. Vegeta/Trunks training, choose either fighter, both outcomes continue.
+3. Goku's return, then Goten/Trunks children's final, choose either fighter.
+
+Current ROM cutscenes are **text screens**. The editor's SB2 compositions are
+not yet compiled into the SNES renderer. The intended woods duel temporarily
+uses the native rocky plain; gravity room and tournament use native terrains.
+Bulma, Chichi and Piccolo appear in dialogue, not new cutscene sprites.
+
+## Desktop editor
+
+Extract the editor ZIP into a new folder and copy your existing private
+`assets/` folder alongside `app.py`. No commercial artwork is included here.
+
+```
+py -3 -m pip install -r requirements.txt
+```
+
+Double-click `Lancer_editeur.bat`. It opens `prelude_tournoi.json` by default.
+Select a combat scene to set fighters, player selection, arena and the two
+result destinations. `Tester depuis le début` simulates results locally.
+`Construire ROM / IPS` builds a separate playable ROM and IPS using your
+original French ROM. [Editor instructions](editor/README.md).
+
+## Build and check from the repository
+
+Python 3.10+ with Pillow:
 
 ```
 python -m pip install -r editor/requirements.txt
-python editor/app.py --project editor/exemple_scenario.json
+python tools/build_story_campaign.py original.sfc editor/prelude_tournoi.json --out-rom build/prelude.sfc --out-ips build/prelude.ips --report build/prelude.json
+python -m unittest discover -s tests -v
 ```
 
-The editor exports local projects; arbitrary graphics/graphs are not yet
-reinserted into the SNES Story Mode. See the [extraction/core notes](emulator-tools/README.md).
+The builder requires SHA-256
+`663116d015cad3398644608ca6f2506071ab23d38b03b4890e1a6caecb1a55aa`.
+It validates the original hook and writes separate outputs. Runtime tests
+cover all three battles, both choices and both result branches, plus a full
+natural CPU-win route. The outcome-coverage runs use injected KOs, explicitly
+recorded in the evidence. Original mode routing and sampled intro frames
+were checked as well.
 
+The earlier menu-only builder is retained as `tools/build_story_prototype.py`.
 
-# DBZ3 — Ultime Menace Story Mode Hack
+## Distribution
 
-Research, tooling and an experimental branching Story Mode prototype for the French SNES release of Dragon Ball Z 3: Ultime Menace.
-
-## Project rules
-
-- Work from a user-owned ROM. ROM images are not included in this repository.
-- Keep the original ROM unchanged; the builder writes a separate .sfc and .ips.
-- No SRAM/save feature: route choices and chapter flags live in volatile WRAM only.
-- Preserve the original title menu and its three existing choices.
-- Static-analysis findings are candidates until runtime-verified.
-- The current prototype has not been tested in an emulator and is not a release build.
-
-## Current prototype
-
-- The original title-to-menu flow is preserved.
-- The original selector now has a fourth entry, HISTOIRE, placed under OPTION using the original menu glyph tiles and palette.
-- Up/Down navigates four entries. The first three keep their original route; confirming HISTOIRE enters Story state 12.
-- The story has two introductory pages, a choice between helping Gohan and following Vegeta, and two short endings.
-- A advances/restarts the story; B returns to the original three-mode selector.
-- Story flags are volatile WRAM only. No SRAM is added.
-- The ROM expands from 2 MiB to 4 MiB LoROM; new code/data use appended banks C0-FF, leaving the original FF-filled region with existing references untouched.
-
-## Patch status
-
-The prebuilt IPS binary is not currently included in this repository. Build it locally from the matching French ROM you own using the command below; the ROM itself is not distributed here. The patch remains experimental until its menu rendering and routing are verified in Mesen or bsnes.
-
-## Build from your own ROM
-
-Python 3.10+; standard library only.
-
-    python tools/build_story_prototype.py "path/to/Dragon Ball Z - Ultime Menace (France).sfc" --out-rom build/Ultime-Menace-Native-Histoire.sfc --out-ips build/Ultime-Menace-Native-Histoire.ips --report build/native-story-report.json
-    python tools/verify_story_hooks.py "path/to/Dragon Ball Z - Ultime Menace (France).sfc"
-    python -m unittest discover -s tests -v
-
-The builder requires the exact French ROM SHA-256 recorded in docs/analysis-results.md. It validates original hook bytes, native-menu patch points, relocated state tables, the 4 MiB header/checksum and IPS reconstruction. See docs/menu-routing.md for the exact selector integration and docs/testing-prototype.md for the emulator checklist.
-
-## Remaining work
-
-- Test the patch in Mesen or bsnes: boot, menu visibility, four-way navigation, confirmation and return.
-- Verify PPU/DMA timing and original mode routing under runtime tracing.
-- Connect story scenes to real battles and branch on win/loss.
-- Add chapters and manga-inspired cutscenes.
-
-## Copyright / distribution
-
-This repository contains original code, documentation and generated UI assets only. Do not commit ROMs, extracted copyrighted graphics/audio, or a complete game image. The IPS patch should be treated as a development build until emulator tests pass.
+The repository contains code, documentation and patches. Do not commit ROMs,
+extracted commercial graphics/audio or complete game images. Private SB2 assets
+stay local. Original ROMs must remain untouched.

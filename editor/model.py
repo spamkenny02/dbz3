@@ -43,6 +43,7 @@ def validate(data,assets=None):
         name=s.get('name',s.get('id','?'))
         for target in [s.get('next')]+[c.get('target') for c in s.get('choices',[])]+[s.get('combat',{}).get(k) for k in ('win','lose')]:
             if target and target not in ids:errors.append(f'{name} : destination {target} introuvable')
+        if len(s.get('choices',[]))>3:errors.append(f'{name} : maximum trois choix')
         for choice in s.get('choices',[]):
             if not choice.get('label','').strip() or not choice.get('target'):errors.append(f'{name} : choix incomplet')
         for aid in [s.get('background')]+[a.get('asset') for a in s.get('actors',[])]:

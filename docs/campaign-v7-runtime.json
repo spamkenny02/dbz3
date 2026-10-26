@@ -1,0 +1,1025 @@
+{
+  "core": "Snes9x libretro upstream 1bcc369",
+  "scope": "four deterministic result-injection runs and one natural CPU-win run",
+  "runs": {
+    "win": {
+      "second_player": false,
+      "lose": false,
+      "natural_match": false,
+      "frames": 3465,
+      "combats": [
+        {
+          "scene": "duel_freres",
+          "player": "Gohan",
+          "cpu": "Goten",
+          "arena": 6,
+          "entry_frame": 1468,
+          "result": "win",
+          "returned_page": 3
+        },
+        {
+          "scene": "duel_saiyans",
+          "player": "Vegeta",
+          "cpu": "Trunks",
+          "arena": 5,
+          "entry_frame": 2110,
+          "result": "win",
+          "returned_page": 7
+        },
+        {
+          "scene": "duel_enfants",
+          "player": "Goten",
+          "cpu": "Trunks",
+          "arena": 0,
+          "entry_frame": 2929,
+          "result": "win",
+          "returned_page": 14
+        }
+      ],
+      "rom_sha256": "51f7890fb2a433ddeb5b1ab6413f4321912f034f4a0b43ccb5b509ca21a3633a",
+      "buttons": [
+        [
+          1251,
+          [
+            8
+          ],
+          0
+        ],
+        [
+          1332,
+          [
+            8
+          ],
+          1
+        ],
+        [
+          1413,
+          [
+            8
+          ],
+          2
+        ],
+        [
+          1892,
+          [
+            8
+          ],
+          3
+        ],
+        [
+          1973,
+          [
+            8
+          ],
+          5
+        ],
+        [
+          2054,
+          [
+            8
+          ],
+          6
+        ],
+        [
+          2467,
+          [
+            8
+          ],
+          7
+        ],
+        [
+          2548,
+          [
+            8
+          ],
+          9
+        ],
+        [
+          2629,
+          [
+            8
+          ],
+          10
+        ],
+        [
+          2710,
+          [
+            8
+          ],
+          11
+        ],
+        [
+          2791,
+          [
+            8
+          ],
+          12
+        ],
+        [
+          2872,
+          [
+            8
+          ],
+          13
+        ],
+        [
+          3384,
+          [
+            8
+          ],
+          14
+        ],
+        [
+          3465,
+          [
+            8
+          ],
+          16
+        ]
+      ]
+    },
+    "lose": {
+      "second_player": false,
+      "lose": true,
+      "natural_match": false,
+      "frames": 3425,
+      "combats": [
+        {
+          "scene": "duel_freres",
+          "player": "Gohan",
+          "cpu": "Goten",
+          "arena": 6,
+          "entry_frame": 1468,
+          "result": "lose",
+          "returned_page": 4
+        },
+        {
+          "scene": "duel_saiyans",
+          "player": "Vegeta",
+          "cpu": "Trunks",
+          "arena": 5,
+          "entry_frame": 2140,
+          "result": "lose",
+          "returned_page": 8
+        },
+        {
+          "scene": "duel_enfants",
+          "player": "Goten",
+          "cpu": "Trunks",
+          "arena": 0,
+          "entry_frame": 2973,
+          "result": "lose",
+          "returned_page": 15
+        }
+      ],
+      "rom_sha256": "51f7890fb2a433ddeb5b1ab6413f4321912f034f4a0b43ccb5b509ca21a3633a",
+      "buttons": [
+        [
+          1251,
+          [
+            8
+          ],
+          0
+        ],
+        [
+          1332,
+          [
+            8
+          ],
+          1
+        ],
+        [
+          1413,
+          [
+            8
+          ],
+          2
+        ],
+        [
+          1922,
+          [
+            8
+          ],
+          4
+        ],
+        [
+          2003,
+          [
+            8
+          ],
+          5
+        ],
+        [
+          2084,
+          [
+            8
+          ],
+          6
+        ],
+        [
+          2511,
+          [
+            8
+          ],
+          8
+        ],
+        [
+          2592,
+          [
+            8
+          ],
+          9
+        ],
+        [
+          2673,
+          [
+            8
+          ],
+          10
+        ],
+        [
+          2754,
+          [
+            8
+          ],
+          11
+        ],
+        [
+          2835,
+          [
+            8
+          ],
+          12
+        ],
+        [
+          2916,
+          [
+            8
+          ],
+          13
+        ],
+        [
+          3344,
+          [
+            8
+          ],
+          15
+        ],
+        [
+          3425,
+          [
+            8
+          ],
+          16
+        ]
+      ]
+    },
+    "second-win": {
+      "second_player": true,
+      "lose": false,
+      "natural_match": false,
+      "frames": 3671,
+      "combats": [
+        {
+          "scene": "duel_freres",
+          "player": "Goten",
+          "cpu": "Gohan",
+          "arena": 6,
+          "entry_frame": 1549,
+          "result": "win",
+          "returned_page": 3
+        },
+        {
+          "scene": "duel_saiyans",
+          "player": "Trunks",
+          "cpu": "Vegeta",
+          "arena": 5,
+          "entry_frame": 2303,
+          "result": "win",
+          "returned_page": 7
+        },
+        {
+          "scene": "duel_enfants",
+          "player": "Trunks",
+          "cpu": "Goten",
+          "arena": 0,
+          "entry_frame": 3218,
+          "result": "win",
+          "returned_page": 14
+        }
+      ],
+      "rom_sha256": "51f7890fb2a433ddeb5b1ab6413f4321912f034f4a0b43ccb5b509ca21a3633a",
+      "buttons": [
+        [
+          1251,
+          [
+            8
+          ],
+          0
+        ],
+        [
+          1332,
+          [
+            8
+          ],
+          1
+        ],
+        [
+          1413,
+          [
+            5
+          ],
+          2
+        ],
+        [
+          1494,
+          [
+            8
+          ],
+          2
+        ],
+        [
+          2004,
+          [
+            8
+          ],
+          3
+        ],
+        [
+          2085,
+          [
+            8
+          ],
+          5
+        ],
+        [
+          2166,
+          [
+            5
+          ],
+          6
+        ],
+        [
+          2247,
+          [
+            8
+          ],
+          6
+        ],
+        [
+          2675,
+          [
+            8
+          ],
+          7
+        ],
+        [
+          2756,
+          [
+            8
+          ],
+          9
+        ],
+        [
+          2837,
+          [
+            8
+          ],
+          10
+        ],
+        [
+          2918,
+          [
+            8
+          ],
+          11
+        ],
+        [
+          2999,
+          [
+            8
+          ],
+          12
+        ],
+        [
+          3080,
+          [
+            5
+          ],
+          13
+        ],
+        [
+          3161,
+          [
+            8
+          ],
+          13
+        ],
+        [
+          3590,
+          [
+            8
+          ],
+          14
+        ],
+        [
+          3671,
+          [
+            8
+          ],
+          16
+        ]
+      ]
+    },
+    "second-lose": {
+      "second_player": true,
+      "lose": true,
+      "natural_match": false,
+      "frames": 3705,
+      "combats": [
+        {
+          "scene": "duel_freres",
+          "player": "Goten",
+          "cpu": "Gohan",
+          "arena": 6,
+          "entry_frame": 1549,
+          "result": "lose",
+          "returned_page": 4
+        },
+        {
+          "scene": "duel_saiyans",
+          "player": "Trunks",
+          "cpu": "Vegeta",
+          "arena": 5,
+          "entry_frame": 2271,
+          "result": "lose",
+          "returned_page": 8
+        },
+        {
+          "scene": "duel_enfants",
+          "player": "Trunks",
+          "cpu": "Goten",
+          "arena": 0,
+          "entry_frame": 3170,
+          "result": "lose",
+          "returned_page": 15
+        }
+      ],
+      "rom_sha256": "51f7890fb2a433ddeb5b1ab6413f4321912f034f4a0b43ccb5b509ca21a3633a",
+      "buttons": [
+        [
+          1251,
+          [
+            8
+          ],
+          0
+        ],
+        [
+          1332,
+          [
+            8
+          ],
+          1
+        ],
+        [
+          1413,
+          [
+            5
+          ],
+          2
+        ],
+        [
+          1494,
+          [
+            8
+          ],
+          2
+        ],
+        [
+          1972,
+          [
+            8
+          ],
+          4
+        ],
+        [
+          2053,
+          [
+            8
+          ],
+          5
+        ],
+        [
+          2134,
+          [
+            5
+          ],
+          6
+        ],
+        [
+          2215,
+          [
+            8
+          ],
+          6
+        ],
+        [
+          2627,
+          [
+            8
+          ],
+          8
+        ],
+        [
+          2708,
+          [
+            8
+          ],
+          9
+        ],
+        [
+          2789,
+          [
+            8
+          ],
+          10
+        ],
+        [
+          2870,
+          [
+            8
+          ],
+          11
+        ],
+        [
+          2951,
+          [
+            8
+          ],
+          12
+        ],
+        [
+          3032,
+          [
+            5
+          ],
+          13
+        ],
+        [
+          3113,
+          [
+            8
+          ],
+          13
+        ],
+        [
+          3624,
+          [
+            8
+          ],
+          15
+        ],
+        [
+          3705,
+          [
+            8
+          ],
+          16
+        ]
+      ]
+    },
+    "natural-lose": {
+      "second_player": false,
+      "lose": true,
+      "natural_match": true,
+      "frames": 11483,
+      "combats": [
+        {
+          "scene": "duel_freres",
+          "player": "Gohan",
+          "cpu": "Goten",
+          "arena": 6,
+          "entry_frame": 1468,
+          "result": "lose",
+          "returned_page": 4
+        },
+        {
+          "scene": "duel_saiyans",
+          "player": "Vegeta",
+          "cpu": "Trunks",
+          "arena": 5,
+          "entry_frame": 5153,
+          "result": "lose",
+          "returned_page": 8
+        },
+        {
+          "scene": "duel_enfants",
+          "player": "Goten",
+          "cpu": "Trunks",
+          "arena": 0,
+          "entry_frame": 8875,
+          "result": "lose",
+          "returned_page": 15
+        }
+      ],
+      "rom_sha256": "51f7890fb2a433ddeb5b1ab6413f4321912f034f4a0b43ccb5b509ca21a3633a",
+      "buttons": [
+        [
+          1251,
+          [
+            8
+          ],
+          0
+        ],
+        [
+          1332,
+          [
+            8
+          ],
+          1
+        ],
+        [
+          1413,
+          [
+            8
+          ],
+          2
+        ],
+        [
+          4935,
+          [
+            8
+          ],
+          4
+        ],
+        [
+          5016,
+          [
+            8
+          ],
+          5
+        ],
+        [
+          5097,
+          [
+            8
+          ],
+          6
+        ],
+        [
+          8413,
+          [
+            8
+          ],
+          8
+        ],
+        [
+          8494,
+          [
+            8
+          ],
+          9
+        ],
+        [
+          8575,
+          [
+            8
+          ],
+          10
+        ],
+        [
+          8656,
+          [
+            8
+          ],
+          11
+        ],
+        [
+          8737,
+          [
+            8
+          ],
+          12
+        ],
+        [
+          8818,
+          [
+            8
+          ],
+          13
+        ],
+        [
+          11402,
+          [
+            8
+          ],
+          15
+        ],
+        [
+          11483,
+          [
+            8
+          ],
+          16
+        ]
+      ]
+    }
+  },
+  "native_modes": {
+    "combat": {
+      "scenario": "combat",
+      "states": {
+        "1040": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1160": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1260": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        },
+        "1320": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        },
+        "1360": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        },
+        "1450": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        },
+        "1800": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 1,
+          "submenu": 2,
+          "page": 0,
+          "route": 0
+        }
+      },
+      "frame_sha256": {
+        "1040": "c78a0a4b101b7c08e0d036ec5b584f03a1cca57d7b019111f76c5b2f5720feab",
+        "1160": "3abde304298e7181134587944c3c42ea2689d7053a0b5c316cd4f6860ee060c8",
+        "1260": "f90480962e332e54f18fc6facea5bce81843fcf958d360b7c7eb3ee63bb91878",
+        "1320": "f90480962e332e54f18fc6facea5bce81843fcf958d360b7c7eb3ee63bb91878",
+        "1360": "f90480962e332e54f18fc6facea5bce81843fcf958d360b7c7eb3ee63bb91878",
+        "1450": "f90480962e332e54f18fc6facea5bce81843fcf958d360b7c7eb3ee63bb91878",
+        "1800": "f90480962e332e54f18fc6facea5bce81843fcf958d360b7c7eb3ee63bb91878"
+      },
+      "early_menu_frames": [
+        917,
+        918,
+        919,
+        920,
+        921,
+        922,
+        923,
+        924,
+        925,
+        926,
+        927,
+        928,
+        929,
+        930,
+        931,
+        932
+      ]
+    },
+    "championnat": {
+      "scenario": "championnat",
+      "states": {
+        "1040": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1160": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 2,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1260": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        },
+        "1320": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        },
+        "1360": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        },
+        "1450": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        },
+        "1800": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 14,
+          "main_cursor": 2,
+          "submenu": 3,
+          "page": 0,
+          "route": 0
+        }
+      },
+      "frame_sha256": {
+        "1040": "c78a0a4b101b7c08e0d036ec5b584f03a1cca57d7b019111f76c5b2f5720feab",
+        "1160": "1a83e06adec886dc0f8b7a73e18185a0b2f048a85e95b578ccdff78419595d2a",
+        "1260": "d2a23a7de3af6bf70d164a0ce45201371aca7624e30079d30cccab1cb6cf52e3",
+        "1320": "4bd5375991a8d5efa8b9883537183ec06546e26fa9a56e53203514983066a085",
+        "1360": "4bd5375991a8d5efa8b9883537183ec06546e26fa9a56e53203514983066a085",
+        "1450": "4bd5375991a8d5efa8b9883537183ec06546e26fa9a56e53203514983066a085",
+        "1800": "4bd5375991a8d5efa8b9883537183ec06546e26fa9a56e53203514983066a085"
+      },
+      "early_menu_frames": [
+        917,
+        918,
+        919,
+        920,
+        921,
+        922,
+        923,
+        924,
+        925,
+        926,
+        927,
+        928,
+        929,
+        930,
+        931,
+        932
+      ]
+    },
+    "option": {
+      "scenario": "option",
+      "states": {
+        "1040": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 0,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1160": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 0,
+          "page": 0,
+          "route": 0
+        },
+        "1260": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        },
+        "1320": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        },
+        "1360": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        },
+        "1450": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        },
+        "1800": {
+          "global_state": 6,
+          "frame_state": 6,
+          "screen": 12,
+          "main_cursor": 3,
+          "submenu": 4,
+          "page": 0,
+          "route": 0
+        }
+      },
+      "frame_sha256": {
+        "1040": "c78a0a4b101b7c08e0d036ec5b584f03a1cca57d7b019111f76c5b2f5720feab",
+        "1160": "1b526f4d58ba98bd06b1b429312655116f3f949c76c153ecb9d3c6478a8ff8d7",
+        "1260": "3c27044e1ded77367482e15037c9c34fa1c50fc7b625a6a0edec0dd9d5ce5f0a",
+        "1320": "3c27044e1ded77367482e15037c9c34fa1c50fc7b625a6a0edec0dd9d5ce5f0a",
+        "1360": "3c27044e1ded77367482e15037c9c34fa1c50fc7b625a6a0edec0dd9d5ce5f0a",
+        "1450": "3c27044e1ded77367482e15037c9c34fa1c50fc7b625a6a0edec0dd9d5ce5f0a",
+        "1800": "3c27044e1ded77367482e15037c9c34fa1c50fc7b625a6a0edec0dd9d5ce5f0a"
+      },
+      "early_menu_frames": [
+        917,
+        918,
+        919,
+        920,
+        921,
+        922,
+        923,
+        924,
+        925,
+        926,
+        927,
+        928,
+        929,
+        930,
+        931,
+        932
+      ]
+    }
+  },
+  "unit_tests": 40,
+  "gui_validation": "Linux Tk under Xvfb: fighter fields, arena change, save/reload, real ROM/IPS export, player choice, winner simulation and graph passed. New Windows controls not executed here.",
+  "intro_original_comparison": {
+    "120": "2cbbeef1249170a43854962fa5b19fba628470c70beb9ce23e15a0f05cb891f2",
+    "300": "2cbbeef1249170a43854962fa5b19fba628470c70beb9ce23e15a0f05cb891f2",
+    "500": "3cc870370c9009efc78a93ab2205283daa5cf563d5958882fb57f32b65be1558",
+    "700": "c7363acacd529ddcd79c40e618ec8b50ce8ef8b6563f6aa608f518c83cf31a1d",
+    "849": "6122f4322c28a46cc7a57c9db184930a2aa9c3b09b0ef9f2c95ff6b1f128e7f7"
+  },
+  "intro_identical_at_sampled_frames": true
+}

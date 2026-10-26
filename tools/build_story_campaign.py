@@ -22,6 +22,7 @@ ACTIVE=0x7e1e58
 RESUME=0x7e1e59
 MAP_BANK=0x7e1e60
 REQUEST=0x7e1e61
+COUNT=0x7e1e62
 
 class Asm(base.Asm65816):
     def finish(self):
@@ -87,9 +88,14 @@ def compile_campaign(data,rom):
     a.label('CheckA');a.lda(0x7e006d);a.emit(0x29,0x80);a.branch(0xf0,'Move')
     a.emit(0xab,0x28);a.jml('Dispatch')
     a.label('Move');a.lda(0x7e006e);a.emit(0x29,0x0c);a.branch(0xf0,'Done')
-    # Up/down rotate options; dialogue nodes ignore CHOICE in Render/Dispatch.
-    a.lda(CHOICE);a.emit(0x1a,0xc9,3);a.branch(0x90,'StoreChoice');a.emit(0xa9,0)
-    a.label('StoreChoice');a.sta(CHOICE);a.jsl('Render')
+    a.lda(0x7e006e);a.emit(0x29,8);a.branch(0xf0,'MoveDown')
+    a.lda(CHOICE);a.branch(0xd0,'MoveUpNormal');a.lda(COUNT)
+    a.label('MoveUpNormal');a.emit(0x3a);a.branch(0x80,'StoreChoice')
+    a.label('MoveDown');a.lda(CHOICE);a.emit(0x1a);a.sta(CHOICE);a.lda(COUNT)
+    # Compare against COUNT without using direct-page assumptions.
+    a.emit(0xcf,CHOICE&255,CHOICE>>8&255,CHOICE>>16);a.branch(0xd0,'RedrawChoice');a.emit(0xa9,0)
+    a.label('StoreChoice');a.sta(CHOICE)
+    a.label('RedrawChoice');a.jsl('Render')
     a.label('Done');a.emit(0xab,0x28,0x6b)
     a.label('Dispatch')
     a.emit(0xe2,0x20,0xc2,0x10)
@@ -124,7 +130,7 @@ def compile_campaign(data,rom):
         a.lda(CURRENT);a.emit(0xc9,n);a.branch(0xd0,f'render_skip{n}');a.jml(f'map{n}');a.label(f'render_skip{n}')
     a.jml('Rendered')
     for n,p in enumerate(pages):
-        a.label(f'map{n}')
+        a.label(f'map{n}');a.put(COUNT,len(p['variants']))
         # Clamp a shared 0..2 cursor to the number of choices on this page.
         a.lda(CHOICE);a.emit(0xc9,len(p['variants']));a.branch(0x90,f'clamped{n}');a.put(CHOICE,0);a.label(f'clamped{n}')
         for ci,(bank,address) in enumerate(p['variants']):
