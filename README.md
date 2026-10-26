@@ -33,7 +33,7 @@ python tools/verify_story_hooks.py "path/to/Dragon Ball Z - Ultime Menace (Franc
 python -m unittest discover -s tests -v
 ```
 
-The builder requires the exact French ROM SHA-256 recorded in docs/analysis-results.md. It validates original hook bytes, candidate free space, relocated state tables, output checksum and IPS generation. See docs/integration-next-steps.md for addresses and limitations.
+The builder requires the exact French ROM SHA-256 recorded in docs/analysis-results.md. It validates original hook bytes, candidate free space, relocated state tables, output checksum and IPS generation. See docs/integration-next-steps.md for addresses and limitations, and docs/testing-prototype.md for the emulator test checklist.
 
 ## Remaining work
 
