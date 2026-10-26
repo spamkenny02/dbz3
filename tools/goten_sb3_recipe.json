@@ -1,0 +1,102 @@
+{
+  "width": 32,
+  "height": 40,
+  "objects": [
+    {
+      "x": 0,
+      "y": 0,
+      "width": 8,
+      "height": 8,
+      "flip_x": false,
+      "flip_y": true,
+      "tiles": [
+        748320
+      ],
+      "palette": 775680
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "width": 8,
+      "height": 8,
+      "flip_x": false,
+      "flip_y": true,
+      "tiles": [
+        748288
+      ],
+      "palette": 775680
+    },
+    {
+      "x": 16,
+      "y": 0,
+      "width": 8,
+      "height": 8,
+      "flip_x": false,
+      "flip_y": true,
+      "tiles": [
+        748256
+      ],
+      "palette": 775680
+    },
+    {
+      "x": 16,
+      "y": 24,
+      "width": 16,
+      "height": 16,
+      "flip_x": false,
+      "flip_y": true,
+      "tiles": [
+        747424,
+        747456,
+        747936,
+        747968
+      ],
+      "palette": 775680
+    },
+    {
+      "x": 0,
+      "y": 24,
+      "width": 16,
+      "height": 16,
+      "flip_x": false,
+      "flip_y": true,
+      "tiles": [
+        9885,
+        747392,
+        747872,
+        747904
+      ],
+      "palette": 775680
+    },
+    {
+      "x": 16,
+      "y": 8,
+      "width": 16,
+      "height": 16,
+      "flip_x": false,
+      "flip_y": true,
+      "tiles": [
+        747552,
+        747584,
+        748064,
+        748096
+      ],
+      "palette": 775680
+    },
+    {
+      "x": 0,
+      "y": 8,
+      "width": 16,
+      "height": 16,
+      "flip_x": false,
+      "flip_y": true,
+      "tiles": [
+        747488,
+        747520,
+        748000,
+        748032
+      ],
+      "palette": 775680
+    }
+  ]
+}
