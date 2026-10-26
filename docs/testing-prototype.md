@@ -6,7 +6,7 @@ This is a development patch, not a release. It has passed static checks and unit
 
 1. Keep an untouched backup of your ROM.
 2. Confirm the base ROM is the French Ultime Menace image with SHA-256 `663116d015cad3398644608ca6f2506071ab23d38b03b4890e1a6caecb1a55aa`.
-3. Apply `Ultime-Menace-Story-Prototype.ips` to a copy using Floating IPS, Lunar IPS, or another IPS patcher.
+3. Apply `Ultime-Menace-Story-Prototype.ips` to a copy using Floating IPS, Lunar IPS, or another IPS patcher. The patch expands the image from 2 MiB to 4 MiB; use an emulator with standard 4 MiB LoROM support.
 4. Open the patched copy in Mesen or bsnes. Do not patch the La Légende Saien ROM.
 
 ## Expected prototype flow
